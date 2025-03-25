@@ -1,0 +1,4 @@
+django
+django-oauth-toolkit
+djangorestframework
+python-dotenv

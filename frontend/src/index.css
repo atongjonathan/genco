@@ -1,0 +1,363 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --n-color-accent: #2CD889;
+    --n-color-status-highlight: #2CD889;
+    --n-color-border: #2CD889;
+    --n-avatar-color: white;
+    --n-color-text-link: var(--n-color-accent);
+    --n-color-border-hover: var(--n-color-accent);
+    --n-progress-size: var(--n-space-xs)
+}
+
+body {
+
+    background-image: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100%;
+    margin: 0;
+}
+
+
+
+main {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+main>img {
+    height: 10%;
+    margin-bottom: 5%;
+    animation: fillUp ease-in-out infinite;
+}
+
+a {
+    color: var(--n-color-accent);
+}
+
+.avatar {
+    background-color: white;
+}
+
+.loader {
+    border: 4px solid white;
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    animation: spinloader 0.5s linear infinite;
+}
+
+.loader img {
+    height: 60px;
+    width: 60px;
+    animation: spinlogo 0.5s linear infinite;
+    padding: 10px;
+}
+
+.patient-item:hover {
+    --n-dropdown-item-background-color: var(--n-color-active);
+    --n-dropdown-item-color: var(--n-color-text);
+}
+
+.full-height {
+    position: absolute;
+    inset-block-start: calc(var(--n-size-top-bar) + var(--n-space-l));
+    inset-block-end: calc(var(--n-space-l));
+    /* if also footer is visible, use this instead of the above: */
+    /* inset-block-end: calc(var(--n-space-xxl) + var(--n-space-l)); */
+    inset-inline-start: var(--n-space-l);
+    inset-inline-end: var(--n-space-l);
+    min-block-size: 100px;
+    inline-size: auto;
+}
+
+
+
+
+.app-item:hover {
+    background-color: var(--n-color-nav-hover);
+    cursor: pointer;
+}
+
+/* nord-stack div {
+    background: var(--n-color-status-info-weak);
+    padding: var(--n-space-m);
+  } */
+
+
+/* Datatable css */
+nord-table table {
+    table-layout: fixed;
+}
+
+nord-table th[aria-sort] {
+    cursor: pointer;
+}
+
+nord-table th[aria-sort]:not([aria-sort="none"]) {
+    color: var(--n-color-text);
+}
+
+/* nord-table.is-resizing * {
+    cursor: col-resize !important;
+  } */
+
+
+/* Sort Button  */
+
+.sort-btn {
+    position: relative;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    margin-inline-start: calc(var(--n-space-s) / 2);
+    margin-inline-end: calc(var(--n-space-s) / 2);
+    padding: calc(var(--n-space-s) / 2);
+}
+
+:not(.is-resizing) th:hover .sort-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--n-color-icon-hover);
+    border-radius: var(--n-border-radius-s);
+    opacity: 0.05;
+}
+
+.sort-btn nord-icon {
+    display: block;
+    color: var(--n-color-icon);
+}
+
+[aria-sort]:not([aria-sort="none"]) .sort-btn nord-icon {
+    color: var(--n-color-accent);
+}
+
+/* Resizable handle */
+
+.resize-handle {
+    position: absolute;
+    z-index: 3;
+    inset-inline-end: 0;
+    inset-block: 0;
+    inline-size: var(--n-space-s);
+    cursor: col-resize;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.resize-handle:focus {
+    outline: none;
+}
+
+.resize-handle-inner {
+    width: 2px;
+    background: var(--n-color-border);
+    height: var(--n-space-m);
+}
+
+.resize-handle:is(:hover, .is-resizing) .resize-handle-inner {
+    background: var(--n-color-border-hover);
+}
+
+.resize-handle:focus-visible .resize-handle-inner {
+    background-color: var(--n-color-accent);
+}
+
+@media (max-width: 768px) {
+    nord-top-bar nord-input[type="search"]:focus~nord-dropdown {
+        display: none;
+    }
+
+    .login {
+        /* background: none !important; */
+        background-position: 10px 0 !important;
+        margin-left: 10px;
+
+    }
+
+    .stack {
+        flex-direction: column;
+    }
+
+    .login_stack {
+        margin-top: 200px !important;
+    }
+}
+
+@keyframes spinloader {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinlogo {
+    0% {
+        transform: rotate(360deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
+.layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tr:hover {
+    cursor: pointer;
+
+}
+
+.notification {
+    color: var(--n-color-accent);
+}
+
+.item {
+    cursor: pointer;
+}
+
+.spinner {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.close {
+    display: none;
+}
+
+
+
+
+.options {
+    min-inline-size: 460px;
+    max-inline-size: 375px;
+    max-block-size: 460px;
+    overflow-y: auto;
+}
+
+.full-height {
+    position: absolute;
+    inset-block-start: calc(var(--n-size-top-bar) + var(--n-space-xl));
+    inset-block-end: calc(var(--n-space-l));
+    /* if also footer is visible, use this instead of the above: */
+    inset-block-end: calc(var(--n-space-xxl) + var(--n-space-l));
+    inset-inline-start: var(--n-space-l);
+    inset-inline-end: var(--n-space-l);
+    min-block-size: 100px;
+    inline-size: auto;
+}
+
+.scrollable {
+    position: absolute;
+    inset-block-start: 0;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    block-size: 100%;
+    top: 4px;
+    overflow: auto;
+}
+
+@keyframes lineAnim {
+    0% {
+        left: -40%;
+    }
+
+    50% {
+        left: 20%;
+        width: 80%;
+    }
+
+    100% {
+        left: 100%;
+        width: 100%;
+    }
+}
+
+
+
+/* Login */
+
+.card {
+    background-color: var(--n-color-surface);
+
+}
+
+.login_stack {
+    inline-size: 90%;
+    max-inline-size: 340px;
+    margin: var(--n-space-xxl) auto;
+    background-color: var(--n-color-background);
+}
+
+.password {
+    position: relative;
+}
+
+.password a {
+    text-decoration: none;
+    font-size: var(--n-font-size-s);
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+}
+
+.header {
+    background-color: var(--colorBody);
+}
+
+.logo {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo nord-avatar {
+    cursor: pointer;
+}
+
+/* Sign Up */
+
+.signup_stack {
+    inline-size: 90%;
+    max-inline-size: 560px;
+    margin: 0 auto !important;
+    margin-top: var(--n-space-l) !important;
+    background-color: var(--n-color-background);
+}
+
+.department {
+    margin-left: 105px
+        /* width: 200px; */
+        /* background-color: yellow; */
+}
+
+.logo {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
