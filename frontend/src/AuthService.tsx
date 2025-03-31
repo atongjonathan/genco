@@ -10,24 +10,8 @@ export async function getUser() {
 
 
 export const handleOAuthCallback = async(callbackUrl: string) =>  await userManager.signinRedirectCallback(callbackUrl);
-// export async function handleOAuthCallback(callbackUrl: string, setError: (error: string) => void) {
-//     try {
-//         const user =
-//         return user;
-//     } catch (e) {
-//         setError(`${e}`)
-//         return null
-//     }
-// }
-export async function sendOAuthRequest() {
-    try {
-        return await userManager.signinRedirect();
-    } catch (error) {
+export const sendOAuthRequest = async ()=>  await userManager.signinRedirect();
 
-        return error
-    }
-
-}
 
 export async function renewToken() {
     const user = await userManager.signinSilent();
@@ -37,6 +21,8 @@ export async function renewToken() {
 }
 
 export async function logout() {
+    console.log("log dout");
+    
     await userManager.clearStaleState()
     await userManager.signoutRedirect();
 }

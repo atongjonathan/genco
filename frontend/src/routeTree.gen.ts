@@ -12,10 +12,24 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as OauthCallbackImport } from './routes/oauth-callback'
+import { Route as LoginImport } from './routes/login'
 import { Route as LoggedOutImport } from './routes/logged-out'
+import { Route as HomeImport } from './routes/home'
 import { Route as AboutImport } from './routes/about'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
-import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index'
+import { Route as IndexImport } from './routes/index'
+import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app/route'
+import { Route as AuthenticatedAppIndexImport } from './routes/_authenticated/app/index'
+import { Route as AuthenticatedAppUsersImport } from './routes/_authenticated/app/users'
+import { Route as AuthenticatedAppPricesImport } from './routes/_authenticated/app/prices'
+import { Route as AuthenticatedAppOffTakeImport } from './routes/_authenticated/app/off-take'
+import { Route as AuthenticatedAppLivestockDataImport } from './routes/_authenticated/app/livestock-data'
+import { Route as AuthenticatedAppHayImport } from './routes/_authenticated/app/hay'
+import { Route as AuthenticatedAppFodderDataImport } from './routes/_authenticated/app/fodder-data'
+import { Route as AuthenticatedAppFodderImport } from './routes/_authenticated/app/fodder'
+import { Route as AuthenticatedAppCreateUserImport } from './routes/_authenticated/app/create-user'
+import { Route as AuthenticatedAppCapacityDataImport } from './routes/_authenticated/app/capacity-data'
+import { Route as AuthenticatedAppBoreholeImport } from './routes/_authenticated/app/borehole'
 
 // Create/Update Routes
 
@@ -25,9 +39,21 @@ const OauthCallbackRoute = OauthCallbackImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LoggedOutRoute = LoggedOutImport.update({
   id: '/logged-out',
   path: '/logged-out',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const HomeRoute = HomeImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -42,16 +68,101 @@ const AuthenticatedRoute = AuthenticatedImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthenticatedIndexRoute = AuthenticatedIndexImport.update({
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthenticatedAppRouteRoute = AuthenticatedAppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedAppIndexRoute = AuthenticatedAppIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+
+const AuthenticatedAppUsersRoute = AuthenticatedAppUsersImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+
+const AuthenticatedAppPricesRoute = AuthenticatedAppPricesImport.update({
+  id: '/prices',
+  path: '/prices',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+
+const AuthenticatedAppOffTakeRoute = AuthenticatedAppOffTakeImport.update({
+  id: '/off-take',
+  path: '/off-take',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+
+const AuthenticatedAppLivestockDataRoute =
+  AuthenticatedAppLivestockDataImport.update({
+    id: '/livestock-data',
+    path: '/livestock-data',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppHayRoute = AuthenticatedAppHayImport.update({
+  id: '/hay',
+  path: '/hay',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+
+const AuthenticatedAppFodderDataRoute = AuthenticatedAppFodderDataImport.update(
+  {
+    id: '/fodder-data',
+    path: '/fodder-data',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any,
+)
+
+const AuthenticatedAppFodderRoute = AuthenticatedAppFodderImport.update({
+  id: '/fodder',
+  path: '/fodder',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+
+const AuthenticatedAppCreateUserRoute = AuthenticatedAppCreateUserImport.update(
+  {
+    id: '/create-user',
+    path: '/create-user',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any,
+)
+
+const AuthenticatedAppCapacityDataRoute =
+  AuthenticatedAppCapacityDataImport.update({
+    id: '/capacity-data',
+    path: '/capacity-data',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+
+const AuthenticatedAppBoreholeRoute = AuthenticatedAppBoreholeImport.update({
+  id: '/borehole',
+  path: '/borehole',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -66,11 +177,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeImport
+      parentRoute: typeof rootRoute
+    }
     '/logged-out': {
       id: '/logged-out'
       path: '/logged-out'
       fullPath: '/logged-out'
       preLoaderRoute: typeof LoggedOutImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/oauth-callback': {
@@ -80,24 +205,134 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OauthCallbackImport
       parentRoute: typeof rootRoute
     }
-    '/_authenticated/': {
-      id: '/_authenticated/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexImport
+    '/_authenticated/app': {
+      id: '/_authenticated/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/app/borehole': {
+      id: '/_authenticated/app/borehole'
+      path: '/borehole'
+      fullPath: '/app/borehole'
+      preLoaderRoute: typeof AuthenticatedAppBoreholeImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/capacity-data': {
+      id: '/_authenticated/app/capacity-data'
+      path: '/capacity-data'
+      fullPath: '/app/capacity-data'
+      preLoaderRoute: typeof AuthenticatedAppCapacityDataImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/create-user': {
+      id: '/_authenticated/app/create-user'
+      path: '/create-user'
+      fullPath: '/app/create-user'
+      preLoaderRoute: typeof AuthenticatedAppCreateUserImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/fodder': {
+      id: '/_authenticated/app/fodder'
+      path: '/fodder'
+      fullPath: '/app/fodder'
+      preLoaderRoute: typeof AuthenticatedAppFodderImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/fodder-data': {
+      id: '/_authenticated/app/fodder-data'
+      path: '/fodder-data'
+      fullPath: '/app/fodder-data'
+      preLoaderRoute: typeof AuthenticatedAppFodderDataImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/hay': {
+      id: '/_authenticated/app/hay'
+      path: '/hay'
+      fullPath: '/app/hay'
+      preLoaderRoute: typeof AuthenticatedAppHayImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/livestock-data': {
+      id: '/_authenticated/app/livestock-data'
+      path: '/livestock-data'
+      fullPath: '/app/livestock-data'
+      preLoaderRoute: typeof AuthenticatedAppLivestockDataImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/off-take': {
+      id: '/_authenticated/app/off-take'
+      path: '/off-take'
+      fullPath: '/app/off-take'
+      preLoaderRoute: typeof AuthenticatedAppOffTakeImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/prices': {
+      id: '/_authenticated/app/prices'
+      path: '/prices'
+      fullPath: '/app/prices'
+      preLoaderRoute: typeof AuthenticatedAppPricesImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/users': {
+      id: '/_authenticated/app/users'
+      path: '/users'
+      fullPath: '/app/users'
+      preLoaderRoute: typeof AuthenticatedAppUsersImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/': {
+      id: '/_authenticated/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AuthenticatedAppIndexImport
+      parentRoute: typeof AuthenticatedAppRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthenticatedAppRouteRouteChildren {
+  AuthenticatedAppBoreholeRoute: typeof AuthenticatedAppBoreholeRoute
+  AuthenticatedAppCapacityDataRoute: typeof AuthenticatedAppCapacityDataRoute
+  AuthenticatedAppCreateUserRoute: typeof AuthenticatedAppCreateUserRoute
+  AuthenticatedAppFodderRoute: typeof AuthenticatedAppFodderRoute
+  AuthenticatedAppFodderDataRoute: typeof AuthenticatedAppFodderDataRoute
+  AuthenticatedAppHayRoute: typeof AuthenticatedAppHayRoute
+  AuthenticatedAppLivestockDataRoute: typeof AuthenticatedAppLivestockDataRoute
+  AuthenticatedAppOffTakeRoute: typeof AuthenticatedAppOffTakeRoute
+  AuthenticatedAppPricesRoute: typeof AuthenticatedAppPricesRoute
+  AuthenticatedAppUsersRoute: typeof AuthenticatedAppUsersRoute
+  AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
+}
+
+const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
+  AuthenticatedAppBoreholeRoute: AuthenticatedAppBoreholeRoute,
+  AuthenticatedAppCapacityDataRoute: AuthenticatedAppCapacityDataRoute,
+  AuthenticatedAppCreateUserRoute: AuthenticatedAppCreateUserRoute,
+  AuthenticatedAppFodderRoute: AuthenticatedAppFodderRoute,
+  AuthenticatedAppFodderDataRoute: AuthenticatedAppFodderDataRoute,
+  AuthenticatedAppHayRoute: AuthenticatedAppHayRoute,
+  AuthenticatedAppLivestockDataRoute: AuthenticatedAppLivestockDataRoute,
+  AuthenticatedAppOffTakeRoute: AuthenticatedAppOffTakeRoute,
+  AuthenticatedAppPricesRoute: AuthenticatedAppPricesRoute,
+  AuthenticatedAppUsersRoute: AuthenticatedAppUsersRoute,
+  AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
+}
+
+const AuthenticatedAppRouteRouteWithChildren =
+  AuthenticatedAppRouteRoute._addFileChildren(
+    AuthenticatedAppRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteChildren {
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAppRouteRoute: typeof AuthenticatedAppRouteRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAppRouteRoute: AuthenticatedAppRouteRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -105,55 +340,154 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/home': typeof HomeRoute
   '/logged-out': typeof LoggedOutRoute
+  '/login': typeof LoginRoute
   '/oauth-callback': typeof OauthCallbackRoute
-  '/': typeof AuthenticatedIndexRoute
+  '/app': typeof AuthenticatedAppRouteRouteWithChildren
+  '/app/borehole': typeof AuthenticatedAppBoreholeRoute
+  '/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
+  '/app/create-user': typeof AuthenticatedAppCreateUserRoute
+  '/app/fodder': typeof AuthenticatedAppFodderRoute
+  '/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
+  '/app/hay': typeof AuthenticatedAppHayRoute
+  '/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
+  '/app/off-take': typeof AuthenticatedAppOffTakeRoute
+  '/app/prices': typeof AuthenticatedAppPricesRoute
+  '/app/users': typeof AuthenticatedAppUsersRoute
+  '/app/': typeof AuthenticatedAppIndexRoute
 }
 
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/home': typeof HomeRoute
   '/logged-out': typeof LoggedOutRoute
+  '/login': typeof LoginRoute
   '/oauth-callback': typeof OauthCallbackRoute
-  '/': typeof AuthenticatedIndexRoute
+  '/app/borehole': typeof AuthenticatedAppBoreholeRoute
+  '/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
+  '/app/create-user': typeof AuthenticatedAppCreateUserRoute
+  '/app/fodder': typeof AuthenticatedAppFodderRoute
+  '/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
+  '/app/hay': typeof AuthenticatedAppHayRoute
+  '/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
+  '/app/off-take': typeof AuthenticatedAppOffTakeRoute
+  '/app/prices': typeof AuthenticatedAppPricesRoute
+  '/app/users': typeof AuthenticatedAppUsersRoute
+  '/app': typeof AuthenticatedAppIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
+  '/home': typeof HomeRoute
   '/logged-out': typeof LoggedOutRoute
+  '/login': typeof LoginRoute
   '/oauth-callback': typeof OauthCallbackRoute
-  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/app': typeof AuthenticatedAppRouteRouteWithChildren
+  '/_authenticated/app/borehole': typeof AuthenticatedAppBoreholeRoute
+  '/_authenticated/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
+  '/_authenticated/app/create-user': typeof AuthenticatedAppCreateUserRoute
+  '/_authenticated/app/fodder': typeof AuthenticatedAppFodderRoute
+  '/_authenticated/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
+  '/_authenticated/app/hay': typeof AuthenticatedAppHayRoute
+  '/_authenticated/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
+  '/_authenticated/app/off-take': typeof AuthenticatedAppOffTakeRoute
+  '/_authenticated/app/prices': typeof AuthenticatedAppPricesRoute
+  '/_authenticated/app/users': typeof AuthenticatedAppUsersRoute
+  '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/about' | '/logged-out' | '/oauth-callback' | '/'
+  fullPaths:
+    | '/'
+    | ''
+    | '/about'
+    | '/home'
+    | '/logged-out'
+    | '/login'
+    | '/oauth-callback'
+    | '/app'
+    | '/app/borehole'
+    | '/app/capacity-data'
+    | '/app/create-user'
+    | '/app/fodder'
+    | '/app/fodder-data'
+    | '/app/hay'
+    | '/app/livestock-data'
+    | '/app/off-take'
+    | '/app/prices'
+    | '/app/users'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/logged-out' | '/oauth-callback' | '/'
+  to:
+    | '/'
+    | ''
+    | '/about'
+    | '/home'
+    | '/logged-out'
+    | '/login'
+    | '/oauth-callback'
+    | '/app/borehole'
+    | '/app/capacity-data'
+    | '/app/create-user'
+    | '/app/fodder'
+    | '/app/fodder-data'
+    | '/app/hay'
+    | '/app/livestock-data'
+    | '/app/off-take'
+    | '/app/prices'
+    | '/app/users'
+    | '/app'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
     | '/about'
+    | '/home'
     | '/logged-out'
+    | '/login'
     | '/oauth-callback'
-    | '/_authenticated/'
+    | '/_authenticated/app'
+    | '/_authenticated/app/borehole'
+    | '/_authenticated/app/capacity-data'
+    | '/_authenticated/app/create-user'
+    | '/_authenticated/app/fodder'
+    | '/_authenticated/app/fodder-data'
+    | '/_authenticated/app/hay'
+    | '/_authenticated/app/livestock-data'
+    | '/_authenticated/app/off-take'
+    | '/_authenticated/app/prices'
+    | '/_authenticated/app/users'
+    | '/_authenticated/app/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
+  HomeRoute: typeof HomeRoute
   LoggedOutRoute: typeof LoggedOutRoute
+  LoginRoute: typeof LoginRoute
   OauthCallbackRoute: typeof OauthCallbackRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
+  HomeRoute: HomeRoute,
   LoggedOutRoute: LoggedOutRoute,
+  LoginRoute: LoginRoute,
   OauthCallbackRoute: OauthCallbackRoute,
 }
 
@@ -167,30 +501,99 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/",
         "/_authenticated",
         "/about",
+        "/home",
         "/logged-out",
+        "/login",
         "/oauth-callback"
       ]
+    },
+    "/": {
+      "filePath": "index.tsx"
     },
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
-        "/_authenticated/"
+        "/_authenticated/app"
       ]
     },
     "/about": {
       "filePath": "about.tsx"
     },
+    "/home": {
+      "filePath": "home.tsx"
+    },
     "/logged-out": {
       "filePath": "logged-out.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
     },
     "/oauth-callback": {
       "filePath": "oauth-callback.tsx"
     },
-    "/_authenticated/": {
-      "filePath": "_authenticated/index.tsx",
-      "parent": "/_authenticated"
+    "/_authenticated/app": {
+      "filePath": "_authenticated/app/route.tsx",
+      "parent": "/_authenticated",
+      "children": [
+        "/_authenticated/app/borehole",
+        "/_authenticated/app/capacity-data",
+        "/_authenticated/app/create-user",
+        "/_authenticated/app/fodder",
+        "/_authenticated/app/fodder-data",
+        "/_authenticated/app/hay",
+        "/_authenticated/app/livestock-data",
+        "/_authenticated/app/off-take",
+        "/_authenticated/app/prices",
+        "/_authenticated/app/users",
+        "/_authenticated/app/"
+      ]
+    },
+    "/_authenticated/app/borehole": {
+      "filePath": "_authenticated/app/borehole.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/capacity-data": {
+      "filePath": "_authenticated/app/capacity-data.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/create-user": {
+      "filePath": "_authenticated/app/create-user.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/fodder": {
+      "filePath": "_authenticated/app/fodder.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/fodder-data": {
+      "filePath": "_authenticated/app/fodder-data.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/hay": {
+      "filePath": "_authenticated/app/hay.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/livestock-data": {
+      "filePath": "_authenticated/app/livestock-data.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/off-take": {
+      "filePath": "_authenticated/app/off-take.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/prices": {
+      "filePath": "_authenticated/app/prices.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/users": {
+      "filePath": "_authenticated/app/users.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/": {
+      "filePath": "_authenticated/app/index.tsx",
+      "parent": "/_authenticated/app"
     }
   }
 }

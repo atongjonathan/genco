@@ -136,9 +136,12 @@ with open(os.path.join(BASE_DIR, "genco.key"), encoding="utf-8") as file:
 
 OAUTH2_PROVIDER = {
     # this is the list of available scopes
+    "OAUTH2_VALIDATOR_CLASS": "app.oauth_validators.CustomOAuth2Validator",
     "OIDC_ENABLED": True,
     "OIDC_RSA_PRIVATE_KEY": contents,
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups',  "openid": "OpenID Connect scope"}
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups',  "openid": "OpenID Connect scope"},
+    "OIDC_RP_INITIATED_LOGOUT_ENABLED": True,
+    "OIDC_RP_INITIATED_LOGOUT_ALWAYS_PROMPT": True,
 
 }
 
