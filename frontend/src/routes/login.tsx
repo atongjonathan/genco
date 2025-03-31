@@ -3,8 +3,9 @@ import { Card, Stack, Button, Avatar, Input, Banner, Header, Layout } from "@nor
 import logo from "../assets/logo.png";
 import { useState } from "react";
 import { signin } from "@/data"; // Firebase login function
-import { useAuth } from "@/AuthContext";
+import { useAuth, User } from "@/AuthContext";
 import { useMutation } from "@tanstack/react-query"; // ✅ Import useMutation
+import { DocumentData } from "firebase/firestore";
 
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
@@ -25,18 +26,21 @@ function RouteComponent() {
     password: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleChange = (e: Event) => {
+    const input = e.target as HTMLInputElement
+     
+    setFormData({ ...formData, [input.name]: input.value });
   };
 
   // ✅ useMutation for handling login
   const mutation = useMutation({
     mutationFn: async () => {
-      return await signin(formData.email, formData.password);
+      return signin(formData.email, formData.password);
     },
-    onSuccess: (userCredential) => {
+    onSuccess: (userCredential:DocumentData) => {
       
-      login(userCredential); // ✅ Update Auth Context      
+      login(userCredential as User); // ✅ Update Auth Context      
       navigate({ to: "/app" }); // ✅ Redirect user after login
     },
     onError: (error) => {
