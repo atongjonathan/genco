@@ -43,6 +43,8 @@ const OfftakeModal = ({ open, setOpen, weight }: {
   // Extract price data (ensure it's available)
   const prices = pricesQuery.data ? pricesQuery.data[0] : null;
 
+  
+
   // Convert weight into the correct format & compute total amount
   const transformedData = weight
       ? weight.liveWeight.map((live, index) => {
@@ -59,6 +61,8 @@ const OfftakeModal = ({ open, setOpen, weight }: {
       })
       : [];
 
+
+
   // Calculate total amount
   const totalAmount = transformedData.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0);
 
@@ -67,13 +71,14 @@ const OfftakeModal = ({ open, setOpen, weight }: {
       { accessorKey: "index", header: "#", cell: ({ row }) => row.index + 1 },
       { accessorKey: "liveWeight", header: "Live Weight" },
       { accessorKey: "carcassWeight", header: "Carcass Weight" },
-      { accessorKey: "priceUsed", header: "Price Used" }, // New column
       { accessorKey: "amount", header: "Amount" },
   ];
 
   return weight && (
       <Modal size='m' open={open} onClose={() => setOpen(false)} scrollable>
-          <span>Total Amount: {totalAmount}</span>    
+        <h1>Total Amount: <span className='n-typescale-l'> {totalAmount}</span> </h1>
+        <h1>Total Goats: <span className='n-typescale-l'> {transformedData.length}</span> </h1>
+             
           <FarmersTable columns={columns} data={transformedData} onTotalChange={() => console.log("Sum")} />
           
           

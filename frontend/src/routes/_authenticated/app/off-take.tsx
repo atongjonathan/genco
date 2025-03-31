@@ -56,6 +56,20 @@ function RouteComponent() {
       header: "Farmer Name"
     },
     {
+      accessorKey: "phoneNumber",
+      header: "Phone Number"
+    },
+   ,
+    {
+      accessorKey: "location",
+      header: "Location"
+    },
+    
+    {
+      accessorKey: "region",
+      header: "Region"
+    },
+       {
       accessorKey: "noSheepGoats",
       header: "sheepGoats No",
       cell: ({ row }: { row: { [k: string]: any } }) => (
@@ -76,18 +90,6 @@ function RouteComponent() {
       ), // Row number starts from 1
     },
     {
-      accessorKey: "location",
-      header: "Location"
-    },
-    {
-      accessorKey: "phoneNumber",
-      header: "Phone Number"
-    },
-    {
-      accessorKey: "region",
-      header: "Region"
-    },
-    {
       accessorKey: "sheepGoatPrice",
       header: "Total Price",
       cell: (({ row }) => row.original.sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
@@ -100,7 +102,7 @@ function RouteComponent() {
 
   return (
     <>
-      <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Farmers</h1>
+      <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Offtake</h1>
         {
           exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
         }</Header>
