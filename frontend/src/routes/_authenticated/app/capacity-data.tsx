@@ -1,8 +1,5 @@
-import { fetchDataFromCollection, signin } from '@/data';
-import { createFileRoute, useLocation, useNavigate, useRouteContext } from '@tanstack/react-router'
-import { Table as TTable } from "@tanstack/table-core"
-
-import { livestockData } from "../../../../livestock-data"
+import { fetchDataFromCollection } from '@/data';
+import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
 import { Header, ProgressBar, Button, Stack, Icon } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
@@ -14,6 +11,7 @@ import CapacityForm from '@/CapacityForm';
 export const Route = createFileRoute('/_authenticated/app/capacity-data')({
     component: RouteComponent,
 })
+import { FilterFn } from '@tanstack/react-table';
 
 const parseDate = (dateStr: string | Date) => {
     if (typeof dateStr !== "string") return new Date(dateStr).getTime(); // Handle Date objects
@@ -36,11 +34,11 @@ const parseDate = (dateStr: string | Date) => {
 };
 
 export const dateFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
-    const rowValue = row.getValue(columnId);
+    const rowValue = row.getValue(columnId) as string | Date;
     if (!rowValue) return false;
 
     const rowDate = parseDate(rowValue); // Normalize row date
-    const [startDate, endDate] = filterValue.map(date => parseDate(date)); // Normalize filter values
+    const [startDate, endDate] = filterValue.map((date:string) => parseDate(date)); // Normalize filter values
 
     if (isNaN(rowDate)) {
         console.log("Invalid date format:", rowValue);
@@ -59,15 +57,13 @@ function RouteComponent() {
 
     const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
 
-    const [formData, setFormData] = useState<{ [k: string]: any } | null>(null);
-
     const columns: ColumnDef<FarmerRecord>[] = [
         {
             accessorKey: "index",
             header: "#",
             cell: ({ row }: { row: { [k: string]: any } }) => (
                 <>
-                    <EditForm open={open} setOpen={setOpen} formData={formData} setFormData={setFormData} FormComponent={CapacityForm} row={currentRow} collection='Capacity Building' />
+                    <EditForm open={open} setOpen={setOpen}  FormComponent={CapacityForm} row={currentRow} collection='Capacity Building' />
                     <Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
                         <Button onClick={() => {
                             setOpen((prev) => !prev)
@@ -114,7 +110,6 @@ function RouteComponent() {
         queryFn: () => fetchDataFromCollection("Capacity Building")
     })
 
-    const [total, settotal] = useState(0);
     const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
     document.title = "Capacity Data"
@@ -130,7 +125,8 @@ function RouteComponent() {
             capacityQuery.isFetching && <ProgressBar />
         }
         {
-            capacityQuery.data && <DataTable onTotalChange={settotal} columns={columns} data={capacityQuery.data} setExportFn={setExportFn} />
+            capacityQuery.data && <DataTable onTotalChange={()=>console.log("change")
+            } columns={columns} data={capacityQuery.data} setExportFn={setExportFn} />
         }
     </>
 }

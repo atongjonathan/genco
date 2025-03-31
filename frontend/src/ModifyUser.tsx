@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Dropdown, DropdownItem, Icon } from '@nordhealth/react'
+import { Button, ButtonGroup, Icon } from '@nordhealth/react'
 import React, { useCallback, useState } from 'react'
 import { UsersRowData } from './routes/_authenticated/app/users'
 import EditModal from './EditModal';

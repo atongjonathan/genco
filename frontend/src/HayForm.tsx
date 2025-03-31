@@ -1,14 +1,17 @@
 import { Input } from '@nordhealth/react'
 import React from 'react'
+import { EditForm } from './BoreholeForm';
 
-const HayForm = ({ row, formData, setFormData }) => {
+const HayForm = ({ formData, setFormData }:EditForm) => {
 
 
     // ✅ Handle input changes
-    const handleChange = (e) => {
-
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    
+  const handleChange = (e: Event) => {
+    const input = e.target as HTMLInputElement
+     
+    setFormData({ ...formData, [input.name]: input.value });
+  };
     return (
         <>
             <Input label="Date" type="text" name="Date" value={formData?.Date} onInput={handleChange} expand />

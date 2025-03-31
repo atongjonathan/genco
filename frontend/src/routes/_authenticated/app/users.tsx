@@ -5,7 +5,7 @@ import { Header, ProgressBar } from '@nordhealth/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { ColumnDef } from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
+import { DocumentData } from 'firebase/firestore'
 
 export type UsersRowData = {
   "name": "Martin KM2",
@@ -34,7 +34,7 @@ function RouteComponent() {
   document.title = "Users"
 
 
-  const columns: ColumnDef<UsersRowData>[] = [
+  const columns: ColumnDef<DocumentData>[] = [
     {
       accessorKey: "name",
       header: "Name",
@@ -53,11 +53,10 @@ function RouteComponent() {
     {
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => <ModifyUser row={row.original} />
+      cell: ({ row }) => <ModifyUser row={row.original as UsersRowData} />
     }
   ]
 
-  const [total, settotal] = useState(0);
   
   return <>
 
@@ -66,7 +65,7 @@ function RouteComponent() {
       usersQuery.isPending && <ProgressBar/>
     }   
     {
-      usersQuery.data && <DataTable onTotalChange={settotal} columns={columns} data={usersQuery.data} />
+      usersQuery.data && <DataTable  columns={columns} data={usersQuery.data} />
     }
 
   </>

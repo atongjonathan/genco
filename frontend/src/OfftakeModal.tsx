@@ -1,5 +1,4 @@
-import { Modal, Stack } from '@nordhealth/react';
-import React from 'react';
+import { Modal } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmersTable } from './FarmersTable';
 import { useQuery } from '@tanstack/react-query';

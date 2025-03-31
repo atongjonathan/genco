@@ -1,5 +1,5 @@
 import { fetchDataFromCollection, savePrices } from '@/data';
-import { Button, Card, Header, Input, ProgressBar, Stack } from '@nordhealth/react';
+import { Button, Card, Header, Input, ProgressBar } from '@nordhealth/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
@@ -44,8 +44,10 @@ function Prices() {
     onError: (error) => toast.error(`Error updating prices: ${error.message}`),
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e: Event) => {
+    const input = e.target as HTMLInputElement
+     
+    setFormData({ ...formData, [input.name]: input.value });
   };
   document.title = "Price Management"
 

@@ -1,8 +1,5 @@
-import { fetchDataFromCollection, signin } from '@/data';
-import { createFileRoute, useLocation, useNavigate, useRouteContext } from '@tanstack/react-router'
-import { Table as TTable } from "@tanstack/table-core"
-
-import { livestockData } from "../../../../livestock-data"
+import { fetchDataFromCollection } from '@/data';
+import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
 import { Header, ProgressBar, Button, Stack, Icon } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
@@ -24,9 +21,8 @@ function RouteComponent() {
   document.title = "Borehole Storage"
 
 
-  const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
+  const [currentRow, setcCurrentRow] = useState<Record<string, any>|null>(null);
 
-  const [formData, setFormData] = useState<{ [k: string]: any } | null>(null);
 
   const columns: ColumnDef<FarmerRecord>[] = [
     {
@@ -34,7 +30,7 @@ function RouteComponent() {
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
         <>
-          <EditForm open={open} setOpen={setOpen} formData={formData} setFormData={setFormData} FormComponent={BoreholeForm} row={currentRow} collection='BoreholeStorage' />
+          <EditForm open={open} setOpen={setOpen} FormComponent={BoreholeForm} row={currentRow} collection='BoreholeStorage' />
           <Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
             <Button onClick={() => {
               setOpen((prev) => !prev)
@@ -77,7 +73,7 @@ function RouteComponent() {
   })
 
   const [total, settotal] = useState(0);
-  const [exportFn, setExportFn] = useState<(() => void) | null>(null);
+  const [exportFn, setExportFn] = useState<(() => any) | null>(null);
 
 
   return <>

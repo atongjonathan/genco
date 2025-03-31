@@ -1,14 +1,15 @@
 import { Input } from '@nordhealth/react'
-import React from 'react'
-
-const BoreholeForm = ({ row, formData, setFormData }) => {
 
 
-  // ✅ Handle input changes
-  const handleChange = (e) => {
+export type EditForm = { formData: any, setFormData: any }
+const BoreholeForm = ({ formData, setFormData }: EditForm) => {
 
 
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleChange = (e: Event) => {
+    const input = e.target as HTMLInputElement
+
+    setFormData({ ...formData, [input.name]: input.value });
   };
   return (
     <>

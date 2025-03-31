@@ -1,7 +1,6 @@
 // Import Firebase modules
 // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 // const { initializeApp } = require('firebase-admin/app');
-import { log } from "console";
 import { initializeApp } from "firebase/app";
 
 import {
@@ -14,7 +13,8 @@ import {
     updateDoc,
     deleteDoc,
     addDoc,
-    where
+    where,
+    DocumentData
 } from "firebase/firestore";
 
 import {
@@ -24,6 +24,7 @@ import {
     createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { PricesT } from "./routes/_authenticated/app/prices";
+import { UsersRowData } from "./routes/_authenticated/app/users";
 // import { getAnalytics } from "firebase/analytics";
 // import { buttonsdiv } from "./livestock.js";
 
@@ -54,12 +55,11 @@ export const auth = getAuth(app);
 // const analytics = getAnalytics(app);
 
 // Authentication Functions
-export let userRole;
 
 
 export const fetchUsers = async () => {
     const querySnapshot = await getDocs(collection(db, 'users'));
-    const users = []
+    const users: DocumentData[] = []
     querySnapshot.forEach((doc) => {
 
         let docData = doc.data()
@@ -69,7 +69,7 @@ export const fetchUsers = async () => {
     )
     return users
 }
-export const updateDocWithId = async (docId: string, updateData: { [k:string]:any }, collection:string) => {
+export const updateDocWithId = async (docId: string, updateData: { [k: string]: any }, collection: string) => {
     if (!db) throw new Error('Firestore is not initialized');
     if (!docId) throw new Error('docId is required');
 
@@ -85,40 +85,12 @@ export const updateUser = async (userId: string, updateData: { status: string; n
         status: updateData.status,
     });
 };
-export const signin = async (email, password) => {
+export const signin = async (email:string, password:string) => {
 
-    // Sign in the user with Firebase Authentication
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+     await signInWithEmailAndPassword(auth, email, password);
     const users = await fetchUsers()
 
     return users.find((user) => user.email === email)
-
-    // if (!querySnapshot.empty) {
-    //     const userData = querySnapshot.docs[0].data();
-    //     userRole = userData.role;
-
-    //     // Store user role and authentication status in localStorage
-    //     localStorage.setItem("isAuthenticated", 'true');
-    //     localStorage.setItem("userRole", userRole);
-
-    //     // Redirect based on role
-    //     if (userRole === "chief-admin") {
-    //         window.location.href = "dashboard.html";
-    //         // Ensure buttons are visible for chief admin
-
-    //     } else if (userRole === "admin") {
-    //         window.location.href = "dashboard.html";
-    //         // Hide buttons for admin
-
-    //     } else if (userRole === "android-user") {
-    //         alert('Unauthorized access!');
-    //     }
-
-
-    //     // return userRole
-    // } else {
-    //     alert("User not found in Firestore.");
-    // }
 
 
 };
@@ -166,19 +138,7 @@ export const fetchAllData = async () => {
 };
 
 // Search function
-export const searchData = (dataset, query) => {
-    if (!query) return dataset;
 
-    const lowerCaseQuery = String(query).toLowerCase();
-    return dataset.filter((item) =>
-        Object.values(item).some((value) => {
-            if (typeof value === "string" || typeof value === "number") {
-                return String(value).toLowerCase().includes(lowerCaseQuery);
-            }
-            return false;
-        })
-    );
-};
 
 // Delete data function
 export const CdeleteUser = async (userId: string) => {
@@ -192,7 +152,7 @@ export const savePrices = async (prices: PricesT) => {
 }
 
 // Update data function
-export const updateData = async (collectionName, docId, newData) => {
+export const updateData = async (collectionName:string, docId:string, newData:DocumentData) => {
     try {
         const docRef = doc(db, collectionName, docId);
         await updateDoc(docRef, newData);
@@ -249,5 +209,3 @@ export const checkUserRole = () => {
 };
 
 
-// Call checkUserRole on page load to ensure buttons are shown/hidden correctly
-window.onload = checkUserRole();

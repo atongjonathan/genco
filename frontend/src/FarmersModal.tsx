@@ -10,11 +10,7 @@ const FarmersModal = ({ open, setOpen, farmers }: {
     setOpen: (value: boolean) => void, 
     farmers: { [k: string]: any }[] | null
 }) => {
-    const pricesQuery = useQuery({
-        queryKey: ["pricesQuery"],
-        queryFn: () => fetchDataFromCollection("prices"),
-        staleTime: Infinity,
-      });
+    
     const columns: ColumnDef<any>[] = [
         { accessorKey: "index", header: "#", cell: ({ row }) => row.index + 1 },
         { accessorKey: "name", header: "Farmer Name" },

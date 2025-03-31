@@ -1,9 +1,8 @@
-import { Card, Stack, Button, Avatar, Input, Select, Banner, Header } from "@nordhealth/react";
+import { Card, Stack, Button, Input, Select, Banner, Header } from "@nordhealth/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import logo from "../../../assets/logo.png"
 import { addDoc, collection } from "firebase/firestore";
-import { auth, db, registerUser } from "@/data";
+import { db, registerUser } from "@/data";
 import { useMutation } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/app/create-user")({
@@ -25,8 +24,9 @@ function RouteComponent() {
   const [loginError, setLoginError] = useState<{ message: string; variant: "danger" | "warning" | "success" } | null>(null);
 
   // ✅ Handle input changes
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e: Event) => {
+    const input = e.target as HTMLInputElement
+    setFormData({ ...formData, [input.name]: input.value });
   };
 
   // ✅ Define the mutation for registering a user

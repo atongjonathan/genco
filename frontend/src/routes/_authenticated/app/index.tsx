@@ -1,7 +1,6 @@
-import { Header, ProgressBar, Select, Stack } from '@nordhealth/react';
+import { Header, ProgressBar, Select , Stack } from '@nordhealth/react';
 import { createFileRoute } from '@tanstack/react-router'
 import { Doughnut } from 'react-chartjs-2';
-// import { livestockData } from "../../../../livestock-data"
 import type { ChartData, ChartOptions } from 'chart.js';
 import "chart.js/auto";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -74,7 +73,6 @@ function RouteComponent() {
     staleTime:Infinity
   })
 
-  console.log(livestockQuery.data?.length);
   
 
   const [filteredLivestock, setfilteredLivestock] = useState<FarmerRecord[]>([]);
@@ -154,7 +152,6 @@ function RouteComponent() {
         setMonth(month)
         
         const newData = filterDataByMonth(filteredLivestock, month)
-        console.log(newData.length, filteredLivestock.length);
         setfilteredLivestock(newData)
       }}>
         <option value="0">January</option>
@@ -180,7 +177,10 @@ function RouteComponent() {
 
       <section className="n-grid-2">
         <div>
-          <Doughnut width={30} data={data} options={options} />
+          {
+            data &&  <Doughnut width={30} data={data} options={options} />
+          }
+         
 
         </div>
         <div>
