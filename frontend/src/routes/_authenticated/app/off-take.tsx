@@ -1,13 +1,16 @@
 import { fetchDataFromCollection } from '@/data';
 import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
-import { Button, Header, Icon, ProgressBar, Stack } from '@nordhealth/react';
+import { Button, ButtonGroup, Header, Icon, ProgressBar, Stack } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmerRecord } from '@/GOTChart';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { dateFilterFn } from './capacity-data';
 import OfftakeModal from '@/OfftakeModal';
+import EditForm from '@/EditForm';
+import OfftakeForm from '@/OfftakeForm';
+import DeleteModal from '@/DeleteModal';
 export const Route = createFileRoute('/_authenticated/app/off-take')({
   component: RouteComponent,
 })
@@ -27,9 +30,12 @@ function RouteComponent() {
 
 
 
-  const [open, setopen] = useState(false);
+  const [offtakeopen, setofftakeopen] = useState(false);
 
   const [weight, setWeight] = useState<Weight | null>(null);
+  const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
 
   document.title = "Offtake Data"
 
@@ -37,10 +43,26 @@ function RouteComponent() {
     {
       accessorKey: "index",
       header: "#",
-      cell: ({ row }: { row: { [k: string]: any } }) => (<Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
-        <Button color='green' ><Icon name='interface-edit' /></Button>
-        {row.index + 1}
-      </Stack>), // Row number starts from 1
+      cell: ({ row }: { row: { [k: string]: any } }) => (
+        <ButtonGroup variant='spaced'>
+        <EditForm open={open} setOpen={setOpen} FormComponent={OfftakeForm} row={currentRow} collection='Livestock Offtake Data' />
+
+        <Button onClick={() => {
+          setOpen((prev) => !prev)
+          
+          setcCurrentRow(row)
+        }}>
+          <Icon name='interface-edit' label='Edit' />
+        </Button>
+        <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Livestock Offtake Data' />
+        <Button variant='danger' onClick={() => {
+          setcCurrentRow(row.original)
+          setDeleteOpen((prev) => !prev)
+        }}>
+          <Icon name='interface-delete' label='Delete' />
+        </Button>
+      </ButtonGroup>
+      )
     },
     {
       accessorKey: "date",
@@ -71,10 +93,10 @@ function RouteComponent() {
       header: "sheepGoats No",
       cell: ({ row }: { row: { [k: string]: any } }) => (
         <>
-          <OfftakeModal open={open} setOpen={setopen} weight={weight} />
+          <OfftakeModal open={offtakeopen} setOpen={setofftakeopen} weight={weight} />
           <Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
             <Button color='green' onClick={() => {
-              setopen((prev) => !prev)
+              setofftakeopen((prev) => !prev)
               setWeight({
                 carcassWeight: row.original.carcassWeight,
                 liveWeight: row.original.liveWeight

@@ -69,7 +69,7 @@ export const Route = createFileRoute('/_authenticated/app')({
                         <NavItem slot='subnav' active={pathname === "/app/borehole"} onClick={() => navigate({
                             to: "/app/borehole"
                         })}>
-                            Borehole Storage
+                            Borehole
 
                         </NavItem>
                         Infrastracture

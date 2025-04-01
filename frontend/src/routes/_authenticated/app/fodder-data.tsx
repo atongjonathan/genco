@@ -1,14 +1,15 @@
 import { fetchDataFromCollection } from '@/data';
 import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
-import { Button, Header, Icon, ProgressBar, Stack } from '@nordhealth/react';
+import { Button, ButtonGroup, Header, Icon, ProgressBar, Stack } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmerRecord } from '@/GOTChart';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import FarmersModal from '@/FarmersModal';
 import EditForm from '@/EditForm';
 import FodderForm from '@/FodderForm';
+import DeleteModal from '@/DeleteModal';
 
 export const Route = createFileRoute('/_authenticated/app/fodder-data')({
 
@@ -22,6 +23,8 @@ function RouteComponent() {
   const [open, setOpen] = useState(false);
 
   const [farmopen, setfarmopen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+
   
 
   const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
@@ -30,17 +33,25 @@ function RouteComponent() {
       accessorKey: "index",
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
-        <>
-            <EditForm open={open} setOpen={setOpen}  FormComponent={FodderForm} row={currentRow} collection='FodderFarmers' />
-            <Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
-                <Button onClick={() => {
-                    setOpen((prev) => !prev)
-                    setcCurrentRow(row)
-                }} color='green'><Icon name='interface-edit' /></Button>
-                {row.index + 1}
-            </Stack>,
-        </>
-    )
+        <ButtonGroup variant='spaced'>
+        <EditForm open={open} setOpen={setOpen} FormComponent={FodderForm} row={currentRow} collection='FodderFarmers' />
+
+        <Button onClick={() => {
+          setOpen((prev) => !prev)
+          
+          setcCurrentRow(row)
+        }}>
+          <Icon name='interface-edit' label='Edit' />
+        </Button>
+        <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='FodderFarmers' />
+        <Button variant='danger' onClick={() => {
+          setcCurrentRow(row.original)
+          setDeleteOpen((prev) => !prev)
+        }}>
+          <Icon name='interface-delete' label='Delete' />
+        </Button>
+      </ButtonGroup>
+      )
     },
 
     {

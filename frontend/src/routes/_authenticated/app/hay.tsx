@@ -1,13 +1,14 @@
 import { fetchDataFromCollection } from '@/data';
 import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
-import { Header, ProgressBar, Button, Stack, Icon } from '@nordhealth/react';
+import { Header, ProgressBar, Button, Stack, Icon, ButtonGroup } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmerRecord } from '@/GOTChart';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import EditForm from '@/EditForm';
 import HayForm from '@/HayForm';
+import DeleteModal from '@/DeleteModal';
 
 export const Route = createFileRoute(
   '/_authenticated/app/hay',
@@ -24,6 +25,7 @@ function RouteComponent() {
 
 
   const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
 
 
   const hayQuery = useQuery({
@@ -35,16 +37,24 @@ function RouteComponent() {
       accessorKey: "index",
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
-        <>
-          <EditForm open={open} setOpen={setOpen}  FormComponent={HayForm} row={currentRow} collection='HayStorage' />
-          <Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
-            <Button onClick={() => {
-              setOpen((prev) => !prev)
-              setcCurrentRow(row)
-            }} color='green'><Icon name='interface-edit' /></Button>
-            {row.index + 1}
-          </Stack>,
-        </>
+        <ButtonGroup variant='spaced'>
+        <EditForm open={open} setOpen={setOpen} FormComponent={HayForm} row={currentRow} collection='HayStorage' />
+
+        <Button onClick={() => {
+          setOpen((prev) => !prev)
+          
+          setcCurrentRow(row)
+        }}>
+          <Icon name='interface-edit' label='Edit' />
+        </Button>
+        <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='HayStorage' />
+        <Button variant='danger' onClick={() => {
+          setcCurrentRow(row.original)
+          setDeleteOpen((prev) => !prev)
+        }}>
+          <Icon name='interface-delete' label='Delete' />
+        </Button>
+      </ButtonGroup>
       )
     },
     {

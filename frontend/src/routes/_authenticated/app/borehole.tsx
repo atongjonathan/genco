@@ -58,22 +58,22 @@ function RouteComponent() {
     },
     {
       accessorKey: "Borehole Location",
-      header: "Location"
+      header: "Borehole Location"
     },
     {
       accessorKey: "People Using Borehole",
-      header: "People Using",
+      header: "No of People Using",
 
+    },
+   
+    {
+      accessorKey: "Water Used",
+      header: "Amount of Water Used per week" 
     },
     {
       accessorKey: "Region",
       header: "Region"
     },
-    {
-      accessorKey: "Water Used",
-      header: "Water Used"
-    },
-
 
 
   ]
@@ -87,7 +87,7 @@ function RouteComponent() {
 
 
   return <>
-    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Boerhole Storage</h1>
+    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Borehole</h1>
       {
         exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
       }</Header>

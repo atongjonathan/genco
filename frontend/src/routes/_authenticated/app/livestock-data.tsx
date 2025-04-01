@@ -1,12 +1,15 @@
 import { fetchDataFromCollection } from '@/data';
 import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
-import { Button, Header, ProgressBar, Stack } from '@nordhealth/react';
+import { Button, ButtonGroup, Header, Icon, ProgressBar, Stack } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmerRecord } from '@/GOTChart';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { dateFilterFn } from './capacity-data';
+import EditForm from '@/EditForm';
+import DeleteModal from '@/DeleteModal';
+import LivestockForm from '@/LivestockForm';
 
 export const Route = createFileRoute('/_authenticated/app/livestock-data')({
 
@@ -19,22 +22,40 @@ export const Route = createFileRoute('/_authenticated/app/livestock-data')({
 function RouteComponent() {
   const [open, setOpen] = useState<boolean>(false);
 
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+
+  
+
+  const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
   const columns: ColumnDef<FarmerRecord>[] = [
     {
       accessorKey: "index",
       header: "#",
-      cell: ({ row }: { row: { [k: string]: any } }) => (<Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
-        {/* <Button onClick={() => {
-                setOpen((prev) => !prev)
-            }} color='green'><Icon name='interface-edit'/></Button>
-            <EditLivestock open={open} setOpen={setOpen} row={row} collection='Livestock Farmers'/> */}
-        {row.index + 1}
-      </Stack>), // Row number starts from 1
+      cell: ({ row }: { row: { [k: string]: any } }) => (
+        <ButtonGroup variant='spaced'>
+          <EditForm open={open} setOpen={setOpen} FormComponent={LivestockForm} row={currentRow} collection='Livestock Offtake Data' />
+
+          <Button onClick={() => {
+            setOpen((prev) => !prev)
+
+            setcCurrentRow(row)
+          }}>
+            <Icon name='interface-edit' label='Edit' />
+          </Button>
+          <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Livestock Offtake Data' />
+          <Button variant='danger' onClick={() => {
+            setcCurrentRow(row.original)
+            setDeleteOpen((prev) => !prev)
+          }}>
+            <Icon name='interface-delete' label='Delete' />
+          </Button>
+        </ButtonGroup>
+      )
     },
     {
       accessorKey: "dateSubmitted",
       header: "Date",
-      filterFn: dateFilterFn 
+      filterFn: dateFilterFn
 
     },
     {
@@ -116,19 +137,19 @@ function RouteComponent() {
     {
       accessorKey: "vaccineDate",
       header: "Date Administ.",
-      filterFn: dateFilterFn 
+      filterFn: dateFilterFn
 
     },
     {
       accessorKey: "dewormingSchedule",
       header: "Deworming D",
-      filterFn: dateFilterFn 
+      filterFn: dateFilterFn
 
     },
     {
       accessorKey: "dippingDate",
       header: "Dipping date",
-      filterFn: dateFilterFn 
+      filterFn: dateFilterFn
 
     },
     {
@@ -158,25 +179,25 @@ function RouteComponent() {
     queryKey: ["livestockQuery"],
     queryFn: () => fetchDataFromCollection("Livestock Farmers")
   })
-  
+
   document.title = "Livestock Data"
 
   const [total, settotal] = useState(0);
 
-  const [exportFn, setExportFn] = useState<(()=>void) | null>(null);
-  
+  const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
 
-  
+
+
 
   return <>
     <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Farmers</h1>
-    <h1 slot='end'>Total Goats:  <span className='n-typescale-l'>{total}</span> </h1>
+      <h1 slot='end'>Total Goats:  <span className='n-typescale-l'>{total}</span> </h1>
 
-{
-  exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
-}
-    
+      {
+        exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+      }
+
 
     </Header>
     {
