@@ -101,7 +101,7 @@ function RouteComponent() {
 
 
   return <>
-    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Farmers</h1>
+    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Farmers Registration</h1>
     {
   exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
 }

@@ -69,8 +69,9 @@ function RouteComponent() {
     },
     {
       accessorKey: "Bales Size",
-      header: "Bales Size"
+      header: "Bales Balance"
     },
+  
   ]
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
   document.title = "Hay Storage"

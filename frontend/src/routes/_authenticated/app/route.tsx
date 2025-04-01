@@ -37,17 +37,12 @@ export const Route = createFileRoute('/_authenticated/app')({
                             Data
 
                         </NavItem>
-                        <NavItem slot='subnav' active={pathname === "/app/off-take"} onClick={() => navigate({
-                            to: "/app/off-take"
-                        })}>
-                            Offtake
 
-                        </NavItem>
-                        Livestock farmers
+                        Livestock farmers registration
 
                     </NavItem>
                     <NavItem>
-                    <NavItem slot='subnav' active={pathname === "/app/fodder"} onClick={() => navigate({
+                        <NavItem slot='subnav' active={pathname === "/app/fodder"} onClick={() => navigate({
                             to: "/app/fodder"
                         })}>
                             Dashboard
@@ -59,17 +54,10 @@ export const Route = createFileRoute('/_authenticated/app')({
                             Data
 
                         </NavItem>
-                        Fodder farmers
+                        Fodder farmers registration
 
                     </NavItem>
-
-                    <NavItem active={pathname === "/app/capacity-data"} onClick={() => navigate({
-                        to: "/app/capacity-data"
-                    })}>
-                        Capacity Building
-
-                    </NavItem>
-
+             
 
                     <NavItem>
                         <NavItem slot='subnav' active={pathname === "/app/hay"} onClick={() => navigate({
@@ -87,6 +75,20 @@ export const Route = createFileRoute('/_authenticated/app')({
                         Infrastracture
 
                     </NavItem>
+
+                    <NavItem active={pathname === "/app/capacity-data"} onClick={() => navigate({
+                        to: "/app/capacity-data"
+                    })}>
+                        Capacity Building
+
+                    </NavItem>
+                    <NavItem active={pathname === "/app/off-take"} onClick={() => navigate({
+                        to: "/app/off-take"
+                    })}>
+                        Livestock Offtake
+
+                    </NavItem>
+
                     <NavItem>
                         <NavItem slot='subnav' active={pathname === "/app/users"} onClick={() => navigate({
                             to: "/app/users"

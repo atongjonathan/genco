@@ -77,7 +77,7 @@ function RouteComponent() {
 
 
   return <>
-    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Capacity Building</h1>
+    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Boerhole Storage</h1>
       {
         exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
       }</Header>
