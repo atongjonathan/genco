@@ -41,6 +41,9 @@ function RouteComponent() {
   const { maleFarmers: maleFodderFarmers, femaleFarmers: femaleFodderFarmers } = countFarmersByGender(filteredfodder);
   const totalFodderFarmers = maleFodderFarmers + femaleFodderFarmers;
 
+  console.log(maleFodderFarmers);
+  
+
   // Prevent division by zero
   const malepercentage1 = totalFodderFarmers > 0 ? ((maleFodderFarmers / totalFodderFarmers) * 100).toFixed(2) : "0.00";
   const femalepercentage1 = totalFodderFarmers > 0 ? ((femaleFodderFarmers / totalFodderFarmers) * 100).toFixed(2) : "0.00";
@@ -73,7 +76,12 @@ function RouteComponent() {
     },
   };
 
-  console.log(filteredfodder);
+
+  useEffect(() => {
+    if(fodderQuery.data)
+      setfilteredfodder(fodderQuery.data)
+  
+  }, []);
 
 
   return (

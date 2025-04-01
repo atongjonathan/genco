@@ -32,6 +32,8 @@ function RouteComponent() {
 
   document.title = "Fodder Offtake Data"
 
+  
+
   const columns: ColumnDef<FarmerRecord>[] = [
     {
       accessorKey: "index",

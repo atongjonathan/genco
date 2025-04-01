@@ -1,5 +1,5 @@
 import { addDocument } from '@/data';
-import { Banner, Button, Header, Input, ProgressBar, Stack } from '@nordhealth/react';
+import { Banner, Button, Header, Input, ProgressBar, Select, Stack } from '@nordhealth/react';
 import { createFileRoute } from '@tanstack/react-router';
 import { useRef, useState } from 'react';
 import { read, utils } from "xlsx";
@@ -120,13 +120,23 @@ function RouteComponent() {
 
       <form onSubmit={handleFileUpload}>
         <Stack>
-          <Input label='Category'
-            type="text"
+          <Select label='Category'
             placeholder="Enter category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
-          />
+          >
+            <option value="prices">Prices</option>
+            <option value="BoreholeStorage">BoreholeStorage</option>
+            <option value="Capacity Building">Capacity Building</option>
+            <option value="FodderFarmers">FodderFarmers</option>
+            <option value="Fodder Offtake Data">Fodder Offtake Data</option>
+            <option value="FodderFarmers">FodderFarmers</option>
+            <option value="HayStorage">HayStorage</option>
+            <option value="Livestock Farmers">Livestock Farmers</option>
+            <option value="Livestock Offtake Data">Livestock Offtake Data</option>
+
+          </Select>
           <input type="file" ref={fileInputRef} accept=".csv,.xls,.xlsx" required />
           <Button type="submit">Upload</Button>
         </Stack>

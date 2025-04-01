@@ -25,6 +25,9 @@ import {
   } from "@nordhealth/react";
   import SortButton from '@/components/SortButton';
   import { useEffect } from 'react';
+import { getPriceForWeight } from './OfftakeModal';
+import { useQuery } from '@tanstack/react-query';
+import { fetchDataFromCollection } from './data';
   
   // Generic type constrained to object for safe property access
   interface DataTableProps<TData extends object, TValue> {
@@ -58,6 +61,11 @@ import {
     });
   
     const rowCount = table.getRowModel().rows.length;
+    const pricesQuery = useQuery({
+      queryKey: ["pricesQuery"],
+      queryFn: () => fetchDataFromCollection("prices"),
+      staleTime: Infinity,
+    });
   
     const hasColumn = (key: string) =>
       columns.some((col) => col["accessorKey" as keyof typeof col] === key);
@@ -84,17 +92,34 @@ import {
   
     // Export function (does NOT execute on mount)
     const exportData = () => {
-      const rowData = table.getRowModel().rows.map((row) =>
-        Object.fromEntries(
-          Object.entries(row.original).map(([key, value]) => [
-            key,
-            typeof value === 'object' ? JSON.stringify(value) : value,
-          ])
-        )
-      );
+      const rowData = table.getRowModel().rows.flatMap((row) => {
+        const farmerData = row.original;
+    
+        // Check if `liveWeight` and `carcassWeight` exist and are arrays
+        if (Array.isArray(farmerData.liveWeight) && Array.isArray(farmerData.carcassWeight)) {
+          return farmerData.liveWeight.map((weight, index) => {
+            const carcass = farmerData.carcassWeight[index] || "";
+            const { price } = getPriceForWeight(parseFloat(weight), pricesQuery.data?.[0] || {});
+    
+            return {
+              ...farmerData,  // Keep farmer details same
+              liveWeight: weight,
+              carcassWeight: carcass,
+              totalPrice: price,
+            };
+          });
+        }
+    
+        // If not an array, return the row unchanged
+        return {
+          ...farmerData,
+        };
+      });
+    
       const csv = generateCsv(csvConfig)(rowData);
       download(csvConfig)(csv);
     };
+    
   
     // Store the function in state (DO NOT EXECUTE IT HERE)
     useEffect(() => {

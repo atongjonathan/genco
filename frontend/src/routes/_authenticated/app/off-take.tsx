@@ -28,6 +28,7 @@ function RouteComponent() {
     staleTime: Infinity
   })
 
+  
 
 
   const [offtakeopen, setofftakeopen] = useState(false);

@@ -38,23 +38,23 @@ function RouteComponent() {
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
         <ButtonGroup variant='spaced'>
-        <EditForm open={open} setOpen={setOpen} FormComponent={HayForm} row={currentRow} collection='HayStorage' />
+          <EditForm open={open} setOpen={setOpen} FormComponent={HayForm} row={currentRow} collection='HayStorage' />
 
-        <Button onClick={() => {
-          setOpen((prev) => !prev)
-          
-          setcCurrentRow(row)
-        }}>
-          <Icon name='interface-edit' label='Edit' />
-        </Button>
-        <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='HayStorage' />
-        <Button variant='danger' onClick={() => {
-          setcCurrentRow(row.original)
-          setDeleteOpen((prev) => !prev)
-        }}>
-          <Icon name='interface-delete' label='Delete' />
-        </Button>
-      </ButtonGroup>
+          <Button onClick={() => {
+            setOpen((prev) => !prev)
+
+            setcCurrentRow(row)
+          }}>
+            <Icon name='interface-edit' label='Edit' />
+          </Button>
+          <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='HayStorage' />
+          <Button variant='danger' onClick={() => {
+            setcCurrentRow(row.original)
+            setDeleteOpen((prev) => !prev)
+          }}>
+            <Icon name='interface-delete' label='Delete' />
+          </Button>
+        </ButtonGroup>
       )
     },
     {
@@ -66,12 +66,8 @@ function RouteComponent() {
       header: "Facility"
     },
     {
-      accessorKey: "Region",
-      header: "Region"
-    },
-    {
-      accessorKey: "Revenue From Sales",
-      header: "Revenue From Sales"
+      accessorKey: "Bales Given/Sold",
+      header: "Bales Given/Sold"
     },
     {
       accessorKey: "Bales Stored",
@@ -81,7 +77,15 @@ function RouteComponent() {
       accessorKey: "Bales Size",
       header: "Bales Balance"
     },
-  
+    {
+      accessorKey: "Revenue From Sales",
+      header: "Revenue From Sales"
+    },
+    {
+      accessorKey: "Region",
+      header: "Region"
+    },
+
   ]
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
   document.title = "Hay Storage"
@@ -96,7 +100,7 @@ function RouteComponent() {
       hayQuery.isFetching && <ProgressBar />
     }
     {
-      hayQuery.data && <DataTable  columns={columns} data={hayQuery.data} setExportFn={setExportFn} />
+      hayQuery.data && <DataTable columns={columns} data={hayQuery.data} setExportFn={setExportFn} />
     }
   </>
 }
