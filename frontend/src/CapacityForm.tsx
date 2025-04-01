@@ -1,15 +1,15 @@
 import { Input } from '@nordhealth/react'
-import React from 'react'
+import { EditForm } from './BoreholeForm';
 
-const CapacityForm = ({ row, formData, setFormData }) => {
-
-
-  // ✅ Handle input changes
-  const handleChange = (e) => {
+const CapacityForm = ({ formData, setFormData }:EditForm) => {
 
 
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e: Event) => {
+    const input = e.target as HTMLInputElement
+     
+    setFormData({ ...formData, [input.name]: input.value });
+  }
+  
   return (
     <>
       <Input label="Name" type="text" name="Name" value={formData?.Name} onInput={handleChange} expand />

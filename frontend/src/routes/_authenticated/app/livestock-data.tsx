@@ -1,34 +1,19 @@
-import { fetchDataFromCollection, signin } from '@/data';
-import { createFileRoute, useLocation, useNavigate, useRouteContext } from '@tanstack/react-router'
-import { Table as TTable } from "@tanstack/table-core"
-
-import { livestockData } from "../../../../livestock-data"
+import { fetchDataFromCollection } from '@/data';
+import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
-import { Button, Header, Icon, ProgressBar, Stack } from '@nordhealth/react';
+import { Button, Header, ProgressBar, Stack } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmerRecord } from '@/GOTChart';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import EditLivestock from '@/EditForm';
+import { dateFilterFn } from './capacity-data';
 
 export const Route = createFileRoute('/_authenticated/app/livestock-data')({
 
   component: RouteComponent,
 })
 
-const dateFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
-  const rowValue = row.getValue(columnId);
-  if (!rowValue) return false;
 
-  const rowDate = new Date(rowValue).getTime(); // Convert row value to timestamp
-  const [startDate, endDate] = filterValue.map(date => new Date(date).getTime());
-
-  if (!startDate && !endDate) return true; // No filters applied
-  if (startDate && rowDate <= startDate) return false; // Before start date
-  if (endDate && rowDate >= endDate) return false; // After end date
-
-  return true;
-};
 
 
 function RouteComponent() {

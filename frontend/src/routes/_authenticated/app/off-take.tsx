@@ -1,14 +1,11 @@
-import { fetchDataFromCollection, signin } from '@/data';
-import { createFileRoute, useLocation, useNavigate, useRouteContext } from '@tanstack/react-router'
-import { Table as TTable } from "@tanstack/table-core"
-
+import { fetchDataFromCollection } from '@/data';
+import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
 import { Button, Header, Icon, ProgressBar, Stack } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmerRecord } from '@/GOTChart';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import FarmersModal from '@/FarmersModal';
+import {  useState } from 'react';
 import { dateFilterFn } from './capacity-data';
 import OfftakeModal from '@/OfftakeModal';
 export const Route = createFileRoute('/_authenticated/app/off-take')({
@@ -92,7 +89,7 @@ function RouteComponent() {
     {
       accessorKey: "sheepGoatPrice",
       header: "Total Price",
-      cell: (({ row }) => row.original.sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
+      cell: (({ row }) => (row.original as any).sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
     }
   ]
 

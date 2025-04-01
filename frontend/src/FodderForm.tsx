@@ -1,14 +1,14 @@
 import { Input } from '@nordhealth/react'
-import React from 'react'
+import { EditForm } from './BoreholeForm';
 
-const FodderForm = ({ row, formData, setFormData }) => {
-
-
-  // ✅ Handle input changes
-  const handleChange = (e) => {
+const FodderForm = ({ formData, setFormData }:EditForm) => {
 
 
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleChange = (e: Event) => {
+    const input = e.target as HTMLInputElement
+     
+    setFormData({ ...formData, [input.name]: input.value });
   };
   return (
     <>

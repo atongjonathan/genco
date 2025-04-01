@@ -1,20 +1,13 @@
-import { Modal, Stack } from '@nordhealth/react';
-import React, { useState } from 'react';
+import { Modal } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmersTable } from './FarmersTable';
-import { useQuery } from '@tanstack/react-query';
-import { fetchDataFromCollection } from './data';
 
 const FarmersModal = ({ open, setOpen, farmers }: { 
     open: boolean, 
     setOpen: (value: boolean) => void, 
     farmers: { [k: string]: any }[] | null
 }) => {
-    const pricesQuery = useQuery({
-        queryKey: ["pricesQuery"],
-        queryFn: () => fetchDataFromCollection("prices"),
-        staleTime: Infinity,
-      });
+    
     const columns: ColumnDef<any>[] = [
         { accessorKey: "index", header: "#", cell: ({ row }) => row.index + 1 },
         { accessorKey: "name", header: "Farmer Name" },

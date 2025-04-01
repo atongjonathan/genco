@@ -1,8 +1,5 @@
-import { fetchDataFromCollection, signin } from '@/data';
-import { createFileRoute, useLocation, useNavigate, useRouteContext } from '@tanstack/react-router'
-import { Table as TTable } from "@tanstack/table-core"
-
-import { livestockData } from "../../../../livestock-data"
+import { fetchDataFromCollection } from '@/data';
+import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
 import { Header, ProgressBar, Button, Stack, Icon } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
@@ -21,7 +18,6 @@ export const Route = createFileRoute(
 
 
 function RouteComponent() {
-  const [total, settotal] = useState(0);
 
   const [open, setOpen] = useState(false);
 
@@ -29,7 +25,6 @@ function RouteComponent() {
 
   const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
 
-  const [formData, setFormData] = useState<{ [k: string]: any } | null>(null);
 
   const hayQuery = useQuery({
     queryKey: ["hayQuery"],
@@ -41,7 +36,7 @@ function RouteComponent() {
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
         <>
-          <EditForm open={open} setOpen={setOpen} formData={formData} setFormData={setFormData} FormComponent={HayForm} row={currentRow} collection='HayStorage' />
+          <EditForm open={open} setOpen={setOpen}  FormComponent={HayForm} row={currentRow} collection='HayStorage' />
           <Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
             <Button onClick={() => {
               setOpen((prev) => !prev)
@@ -91,7 +86,7 @@ function RouteComponent() {
       hayQuery.isFetching && <ProgressBar />
     }
     {
-      hayQuery.data && <DataTable onTotalChange={settotal} columns={columns} data={hayQuery.data} setExportFn={setExportFn} />
+      hayQuery.data && <DataTable  columns={columns} data={hayQuery.data} setExportFn={setExportFn} />
     }
   </>
 }

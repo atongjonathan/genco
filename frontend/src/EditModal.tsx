@@ -1,14 +1,10 @@
-import { Button, ButtonGroup, Input, Modal, Select, Stack, Toast } from '@nordhealth/react'
-import React, { useState } from 'react'
+import { Button, ButtonGroup, Modal, Select } from '@nordhealth/react'
+import  { useState } from 'react'
 import { UsersRowData } from './routes/_authenticated/app/users'
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import {  updateUser } from './data';
 import { toast } from 'sonner';
 
-type toastOptions = {
-    variant: "default" | "danger" | undefined,
-    text: string
-}
 const EditModal = ({ open, setOpen, user }: { open: boolean, setOpen: (value: boolean) => void, user: UsersRowData }) => {
     const [status, setStatus] = useState<string>(user.status);
     const queryClient = new QueryClient()

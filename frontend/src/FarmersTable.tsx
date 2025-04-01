@@ -1,5 +1,4 @@
 import {
-    createColumnHelper,
     flexRender,
     getCoreRowModel,
     useReactTable,
@@ -10,7 +9,7 @@ import {
 } from '@tanstack/react-table'
 import { PiCaretDoubleRightBold, PiCaretDoubleLeftBold } from "react-icons/pi";
 
-import { Badge, Button, ButtonGroup, Card, DatePicker, EmptyState, Icon, Input, Select, Stack, Table, Tooltip } from "@nordhealth/react";
+import {  Button, ButtonGroup, EmptyState, Icon, Input, Select, Stack, Table, Tooltip } from "@nordhealth/react";
 import SortButton from '@/components/SortButton';
 import { useEffect } from 'react';
 // import { useTableSearchParams } from "tanstack-table-search-params";
@@ -43,32 +42,24 @@ export function FarmersTable<TData, TValue>({
 
     })
     const rowCount = table.getRowModel().rows.length;
-    const hasColumn = (key: string) => columns.some(col => col.accessorKey === key);
-
-    let maleGoats = 0
-    if (hasColumn("maleGoats")) {
-        maleGoats = table.getFilteredRowModel().rows.reduce(
-            (sum, row) => parseInt(row.original.maleGoats) ? sum + parseInt(row.original.maleGoats) : sum,
-            0
-        );
-    }
-    let femaleGoats = 0
-    if (hasColumn("femaleGoats")) {
-        maleGoats = table.getFilteredRowModel().rows.reduce(
-            (sum, row) => row.original.femaleGoats? sum + parseInt(row.original.femaleGoats): sum,
-            0
-        );
-    }
+    const hasColumn = (key: string) => columns.some(col => col["accessorKey" as keyof typeof col] === key);
 
 
 
-
-
+   // When reading values from row.original, cast to any so we can access properties
+   const totalGoats = table.getFilteredRowModel().rows.reduce((sum, row) => {
+    const original = row.original as any;
+    const male =
+      hasColumn("maleGoats") ? parseInt(String(original.maleGoats)) || 0 : 0;
+    const female =
+      hasColumn("femaleGoats") ? parseInt(String(original.femaleGoats)) || 0 : 0;
+    return sum + male + female;
+  }, 0);
 
 
     useEffect(() => {
-        onTotalChange(maleGoats + femaleGoats);
-    }, [maleGoats, femaleGoats, onTotalChange]);
+        onTotalChange(totalGoats);
+      }, [totalGoats, onTotalChange]);
 
     return (
         <>
@@ -133,7 +124,7 @@ export function FarmersTable<TData, TValue>({
 
                                         table.getRowModel().rows.map((row) => (
                                             <tr key={row.id}>
-                                                {row.getVisibleCells().map((cell: Cell<TData, unknown>, index: number, array: Cell<TData, unknown>[]) => (
+                                                {row.getVisibleCells().map((cell: Cell<TData, unknown>) => (
                                                     <td title={cell.getValue() as string}
                                                         key={cell.id}
                                                         className={
@@ -280,28 +271,6 @@ function Filter({ table, header }: FilterProps) {
                     column.setFilterValue([columnFilterValue[0], input.value]);
                 }}
                 placeholder="Max"
-            />
-        </div>
-    ) : typeof firstValue === 'string' && (column.id.toLowerCase().includes("date") ||  column.id.toLowerCase().includes("schedule")) ? (
-        // Date Range Filter
-        <div className="flex space-x-2" onClick={e => e.stopPropagation()}>
-            <Input hideLabel type="date"   title={columnFilterValue[0] ?? "Select a date"}  // 👈 Show full date on hover
-   style={{ "--n-input-inline-size": `${800 / table.getHeaderGroups().length} px `} as React.CSSProperties}
-                value={columnFilterValue[0] ?? ''}
-                onInput={e => {
-                    let input = e.target as HTMLInputElement;
-                    column.setFilterValue([input.value, columnFilterValue[1]]);
-                }}
-                placeholder="Start Date"
-            />
-            <Input hideLabel type="date"   title={columnFilterValue[1] ?? "Select a date"}  // 👈 Show full date on hover
-   style={{ "--n-input-inline-size": `${800 / table.getHeaderGroups().length} px `} as React.CSSProperties}
-                value={columnFilterValue[1] ?? ''}
-                onInput={e => {
-                    let input = e.target as HTMLInputElement;
-                    column.setFilterValue([columnFilterValue[0], input.value]);
-                }}
-                placeholder="End Date"
             />
         </div>
     ) : (
