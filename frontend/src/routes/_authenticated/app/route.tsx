@@ -57,7 +57,7 @@ export const Route = createFileRoute('/_authenticated/app')({
                         Fodder farmers registration
 
                     </NavItem>
-             
+
 
                     <NavItem>
                         <NavItem slot='subnav' active={pathname === "/app/hay"} onClick={() => navigate({
@@ -88,6 +88,12 @@ export const Route = createFileRoute('/_authenticated/app')({
                         Livestock Offtake
 
                     </NavItem>
+                    <NavItem active={pathname === "/app/fodder-offtake"} onClick={() => navigate({
+                        to: "/app/fodder-offtake"
+                    })}>
+                        Fodder Offtake
+
+                    </NavItem>
 
                     <NavItem>
                         <NavItem slot='subnav' active={pathname === "/app/users"} onClick={() => navigate({
@@ -101,12 +107,17 @@ export const Route = createFileRoute('/_authenticated/app')({
                         })}>
                             Create User
                         </NavItem>
-                        <NavItem slot='subnav' active={pathname === "/app/prices"} onClick={() => navigate({
-                            to: "/app/prices"
-                        })}>
-                            Prices
-                        </NavItem>
-                        Manage Site
+                        Manage Users
+                    </NavItem>
+                    <NavItem active={pathname === "/app/prices"} onClick={() => navigate({
+                        to: "/app/prices"
+                    })}>
+                        Prices Management
+                    </NavItem>
+                    <NavItem active={pathname === "/app/upload"} onClick={() => navigate({
+                        to: "/app/upload"
+                    })}>
+                        Upload
                     </NavItem>
                     <Dropdown expand slot="footer">
                         <Button variant="plain" slot="toggle" aria-describedby="periUser-tooltip" expand>

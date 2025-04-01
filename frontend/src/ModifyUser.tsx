@@ -19,7 +19,7 @@ const ModifyUser = ({ row }: { row: UsersRowData }) => {
             }}>
                 <Icon name='interface-edit' label='Edit' />
             </Button>
-            <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} user={row} />
+            <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={row} collection='users'/>
             <Button variant='danger' onClick={() => {
                 setDeleteOpen((prev) => !prev)
             }}>

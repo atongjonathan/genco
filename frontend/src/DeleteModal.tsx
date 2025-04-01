@@ -1,23 +1,24 @@
 import { Button, ButtonGroup, Input, Modal, Select, Stack, Toast } from '@nordhealth/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { UsersRowData } from './routes/_authenticated/app/users'
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { CdeleteUser } from './data';
+import {  deleteDocument } from './data';
 
-const DeleteModal = ({ open, setOpen, user }: { open: boolean, setOpen: (value: boolean) => void, user: UsersRowData }) => {
-    const [status, setStatus] = useState<string>(user.status);
+const DeleteModal = ({ open, setOpen, row, collection }: { open: boolean, setOpen: (value: boolean) => void, row: Record<string, any> | null, collection:string }) => {
     const queryClient = new QueryClient()
+   
     // const [toast, setToast] = useState<toastOptions | null>(null);
 
 
     const updateMutation = useMutation({
-        mutationKey: ['updateMutation', status],
+        mutationKey: ['updateMutation'],
         mutationFn: (id:string) => {
-            return CdeleteUser(id)
+            
+            return deleteDocument(collection, id)
         },
         onSuccess: async () => {
-            toast.success("User deleted successfully")
+            toast.success("Document deleted successfully")
 
             await queryClient.invalidateQueries({
                 queryKey: ['usersQuery'],
@@ -28,7 +29,7 @@ const DeleteModal = ({ open, setOpen, user }: { open: boolean, setOpen: (value: 
         },
         onError: (err) => {
             console.log(err);
-            toast.error("User deletion failed")
+            toast.error("Document deletion failed")
 
 
 
@@ -39,13 +40,13 @@ const DeleteModal = ({ open, setOpen, user }: { open: boolean, setOpen: (value: 
     return (
         <Modal open={open} onClose={() => setOpen(false)}>
 
-            <h2 slot="header" id="title">Delete {user.name ?? user.email} user?</h2>
+            <h2 slot="header" id="title">Delete {row?.docId } document?</h2>
 
-            <p className='n-reset'>All user information will be deleted.</p>
+            <p className='n-reset'>All document information will be deleted.</p>
             <ButtonGroup slot="footer" variant="spaced">
                 <Button onClick={() => setOpen(false)} expand value="cancel">Cancel</Button>
                 <Button loading={updateMutation.isPending} expand type="submit" value="add" variant="danger" onClick={() => {
-                    updateMutation.mutate(user.docId)
+                    updateMutation.mutate(row?.docId ?? row?.id)
                 }}>Delete</Button>
             </ButtonGroup>
         </Modal>

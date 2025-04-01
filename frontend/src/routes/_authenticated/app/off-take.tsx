@@ -5,7 +5,7 @@ import { Button, Header, Icon, ProgressBar, Stack } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmerRecord } from '@/GOTChart';
 import { useQuery } from '@tanstack/react-query';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { dateFilterFn } from './capacity-data';
 import OfftakeModal from '@/OfftakeModal';
 export const Route = createFileRoute('/_authenticated/app/off-take')({
@@ -25,7 +25,7 @@ function RouteComponent() {
     staleTime: Infinity
   })
 
-  console.log(offtakeQuery.data);
+
 
   const [open, setopen] = useState(false);
 
@@ -56,17 +56,17 @@ function RouteComponent() {
       accessorKey: "phoneNumber",
       header: "Phone Number"
     },
-   ,
+    ,
     {
       accessorKey: "location",
       header: "Location"
     },
-    
+
     {
       accessorKey: "region",
       header: "Region"
     },
-       {
+    {
       accessorKey: "noSheepGoats",
       header: "sheepGoats No",
       cell: ({ row }: { row: { [k: string]: any } }) => (

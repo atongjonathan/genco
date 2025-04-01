@@ -21,10 +21,12 @@ import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app/route'
 import { Route as AuthenticatedAppIndexImport } from './routes/_authenticated/app/index'
 import { Route as AuthenticatedAppUsersImport } from './routes/_authenticated/app/users'
+import { Route as AuthenticatedAppUploadImport } from './routes/_authenticated/app/upload'
 import { Route as AuthenticatedAppPricesImport } from './routes/_authenticated/app/prices'
 import { Route as AuthenticatedAppOffTakeImport } from './routes/_authenticated/app/off-take'
 import { Route as AuthenticatedAppLivestockDataImport } from './routes/_authenticated/app/livestock-data'
 import { Route as AuthenticatedAppHayImport } from './routes/_authenticated/app/hay'
+import { Route as AuthenticatedAppFodderOfftakeImport } from './routes/_authenticated/app/fodder-offtake'
 import { Route as AuthenticatedAppFodderDataImport } from './routes/_authenticated/app/fodder-data'
 import { Route as AuthenticatedAppFodderImport } from './routes/_authenticated/app/fodder'
 import { Route as AuthenticatedAppCreateUserImport } from './routes/_authenticated/app/create-user'
@@ -92,6 +94,12 @@ const AuthenticatedAppUsersRoute = AuthenticatedAppUsersImport.update({
   getParentRoute: () => AuthenticatedAppRouteRoute,
 } as any)
 
+const AuthenticatedAppUploadRoute = AuthenticatedAppUploadImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+
 const AuthenticatedAppPricesRoute = AuthenticatedAppPricesImport.update({
   id: '/prices',
   path: '/prices',
@@ -116,6 +124,13 @@ const AuthenticatedAppHayRoute = AuthenticatedAppHayImport.update({
   path: '/hay',
   getParentRoute: () => AuthenticatedAppRouteRoute,
 } as any)
+
+const AuthenticatedAppFodderOfftakeRoute =
+  AuthenticatedAppFodderOfftakeImport.update({
+    id: '/fodder-offtake',
+    path: '/fodder-offtake',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 
 const AuthenticatedAppFodderDataRoute = AuthenticatedAppFodderDataImport.update(
   {
@@ -247,6 +262,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppFodderDataImport
       parentRoute: typeof AuthenticatedAppRouteImport
     }
+    '/_authenticated/app/fodder-offtake': {
+      id: '/_authenticated/app/fodder-offtake'
+      path: '/fodder-offtake'
+      fullPath: '/app/fodder-offtake'
+      preLoaderRoute: typeof AuthenticatedAppFodderOfftakeImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
     '/_authenticated/app/hay': {
       id: '/_authenticated/app/hay'
       path: '/hay'
@@ -275,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppPricesImport
       parentRoute: typeof AuthenticatedAppRouteImport
     }
+    '/_authenticated/app/upload': {
+      id: '/_authenticated/app/upload'
+      path: '/upload'
+      fullPath: '/app/upload'
+      preLoaderRoute: typeof AuthenticatedAppUploadImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
     '/_authenticated/app/users': {
       id: '/_authenticated/app/users'
       path: '/users'
@@ -300,10 +329,12 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppCreateUserRoute: typeof AuthenticatedAppCreateUserRoute
   AuthenticatedAppFodderRoute: typeof AuthenticatedAppFodderRoute
   AuthenticatedAppFodderDataRoute: typeof AuthenticatedAppFodderDataRoute
+  AuthenticatedAppFodderOfftakeRoute: typeof AuthenticatedAppFodderOfftakeRoute
   AuthenticatedAppHayRoute: typeof AuthenticatedAppHayRoute
   AuthenticatedAppLivestockDataRoute: typeof AuthenticatedAppLivestockDataRoute
   AuthenticatedAppOffTakeRoute: typeof AuthenticatedAppOffTakeRoute
   AuthenticatedAppPricesRoute: typeof AuthenticatedAppPricesRoute
+  AuthenticatedAppUploadRoute: typeof AuthenticatedAppUploadRoute
   AuthenticatedAppUsersRoute: typeof AuthenticatedAppUsersRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
 }
@@ -314,10 +345,12 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppCreateUserRoute: AuthenticatedAppCreateUserRoute,
   AuthenticatedAppFodderRoute: AuthenticatedAppFodderRoute,
   AuthenticatedAppFodderDataRoute: AuthenticatedAppFodderDataRoute,
+  AuthenticatedAppFodderOfftakeRoute: AuthenticatedAppFodderOfftakeRoute,
   AuthenticatedAppHayRoute: AuthenticatedAppHayRoute,
   AuthenticatedAppLivestockDataRoute: AuthenticatedAppLivestockDataRoute,
   AuthenticatedAppOffTakeRoute: AuthenticatedAppOffTakeRoute,
   AuthenticatedAppPricesRoute: AuthenticatedAppPricesRoute,
+  AuthenticatedAppUploadRoute: AuthenticatedAppUploadRoute,
   AuthenticatedAppUsersRoute: AuthenticatedAppUsersRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
 }
@@ -353,10 +386,12 @@ export interface FileRoutesByFullPath {
   '/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/app/fodder': typeof AuthenticatedAppFodderRoute
   '/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
+  '/app/fodder-offtake': typeof AuthenticatedAppFodderOfftakeRoute
   '/app/hay': typeof AuthenticatedAppHayRoute
   '/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
   '/app/off-take': typeof AuthenticatedAppOffTakeRoute
   '/app/prices': typeof AuthenticatedAppPricesRoute
+  '/app/upload': typeof AuthenticatedAppUploadRoute
   '/app/users': typeof AuthenticatedAppUsersRoute
   '/app/': typeof AuthenticatedAppIndexRoute
 }
@@ -374,10 +409,12 @@ export interface FileRoutesByTo {
   '/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/app/fodder': typeof AuthenticatedAppFodderRoute
   '/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
+  '/app/fodder-offtake': typeof AuthenticatedAppFodderOfftakeRoute
   '/app/hay': typeof AuthenticatedAppHayRoute
   '/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
   '/app/off-take': typeof AuthenticatedAppOffTakeRoute
   '/app/prices': typeof AuthenticatedAppPricesRoute
+  '/app/upload': typeof AuthenticatedAppUploadRoute
   '/app/users': typeof AuthenticatedAppUsersRoute
   '/app': typeof AuthenticatedAppIndexRoute
 }
@@ -397,10 +434,12 @@ export interface FileRoutesById {
   '/_authenticated/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/_authenticated/app/fodder': typeof AuthenticatedAppFodderRoute
   '/_authenticated/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
+  '/_authenticated/app/fodder-offtake': typeof AuthenticatedAppFodderOfftakeRoute
   '/_authenticated/app/hay': typeof AuthenticatedAppHayRoute
   '/_authenticated/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
   '/_authenticated/app/off-take': typeof AuthenticatedAppOffTakeRoute
   '/_authenticated/app/prices': typeof AuthenticatedAppPricesRoute
+  '/_authenticated/app/upload': typeof AuthenticatedAppUploadRoute
   '/_authenticated/app/users': typeof AuthenticatedAppUsersRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
 }
@@ -421,10 +460,12 @@ export interface FileRouteTypes {
     | '/app/create-user'
     | '/app/fodder'
     | '/app/fodder-data'
+    | '/app/fodder-offtake'
     | '/app/hay'
     | '/app/livestock-data'
     | '/app/off-take'
     | '/app/prices'
+    | '/app/upload'
     | '/app/users'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
@@ -441,10 +482,12 @@ export interface FileRouteTypes {
     | '/app/create-user'
     | '/app/fodder'
     | '/app/fodder-data'
+    | '/app/fodder-offtake'
     | '/app/hay'
     | '/app/livestock-data'
     | '/app/off-take'
     | '/app/prices'
+    | '/app/upload'
     | '/app/users'
     | '/app'
   id:
@@ -462,10 +505,12 @@ export interface FileRouteTypes {
     | '/_authenticated/app/create-user'
     | '/_authenticated/app/fodder'
     | '/_authenticated/app/fodder-data'
+    | '/_authenticated/app/fodder-offtake'
     | '/_authenticated/app/hay'
     | '/_authenticated/app/livestock-data'
     | '/_authenticated/app/off-take'
     | '/_authenticated/app/prices'
+    | '/_authenticated/app/upload'
     | '/_authenticated/app/users'
     | '/_authenticated/app/'
   fileRoutesById: FileRoutesById
@@ -543,10 +588,12 @@ export const routeTree = rootRoute
         "/_authenticated/app/create-user",
         "/_authenticated/app/fodder",
         "/_authenticated/app/fodder-data",
+        "/_authenticated/app/fodder-offtake",
         "/_authenticated/app/hay",
         "/_authenticated/app/livestock-data",
         "/_authenticated/app/off-take",
         "/_authenticated/app/prices",
+        "/_authenticated/app/upload",
         "/_authenticated/app/users",
         "/_authenticated/app/"
       ]
@@ -571,6 +618,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/app/fodder-data.tsx",
       "parent": "/_authenticated/app"
     },
+    "/_authenticated/app/fodder-offtake": {
+      "filePath": "_authenticated/app/fodder-offtake.tsx",
+      "parent": "/_authenticated/app"
+    },
     "/_authenticated/app/hay": {
       "filePath": "_authenticated/app/hay.tsx",
       "parent": "/_authenticated/app"
@@ -585,6 +636,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/app/prices": {
       "filePath": "_authenticated/app/prices.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/upload": {
+      "filePath": "_authenticated/app/upload.tsx",
       "parent": "/_authenticated/app"
     },
     "/_authenticated/app/users": {

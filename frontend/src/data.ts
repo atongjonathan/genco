@@ -14,7 +14,8 @@ import {
     deleteDoc,
     addDoc,
     where,
-    DocumentData
+    DocumentData,
+    serverTimestamp
 } from "firebase/firestore";
 
 import {
@@ -143,8 +144,8 @@ export const fetchAllData = async () => {
 
 
 // Delete data function
-export const CdeleteUser = async (userId: string) => {
-    return await deleteDoc(doc(db, 'users', userId))
+export const deleteDocument = async ( collection:string, docId:string) => {
+    return await deleteDoc(doc(db, collection, docId))
 
 
 };
@@ -168,6 +169,11 @@ export const updateData = async (collectionName: string, docId: string, newData:
 
 // Upload Excel file function
 
+
+export async function addDocument(category: string, row: DocumentData) {
+    row.timestamp = serverTimestamp();
+    return await addDoc(collection(db, category), row);
+}
 
 // Register a new user
 export const registerUser = async (userData: {

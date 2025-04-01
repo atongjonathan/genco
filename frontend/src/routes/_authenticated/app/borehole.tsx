@@ -1,14 +1,15 @@
 import { fetchDataFromCollection } from '@/data';
 import { createFileRoute } from '@tanstack/react-router'
 import { DataTable } from '@/TanstackTable';
-import { Header, ProgressBar, Button, Stack, Icon } from '@nordhealth/react';
+import { Header, ProgressBar, Button, Stack, Icon, ButtonGroup } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmerRecord } from '@/GOTChart';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { dateFilterFn } from './capacity-data';
 import EditForm from '@/EditForm';
 import BoreholeForm from '@/BoreholeForm';
+import DeleteModal from '@/DeleteModal';
 export const Route = createFileRoute('/_authenticated/app/borehole')({
   component: RouteComponent,
 })
@@ -21,7 +22,8 @@ function RouteComponent() {
   document.title = "Borehole Storage"
 
 
-  const [currentRow, setcCurrentRow] = useState<Record<string, any>|null>(null);
+  const [currentRow, setcCurrentRow] = useState<Record<string, any> | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
 
 
   const columns: ColumnDef<FarmerRecord>[] = [
@@ -29,16 +31,24 @@ function RouteComponent() {
       accessorKey: "index",
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
-        <>
+        <ButtonGroup variant='spaced'>
           <EditForm open={open} setOpen={setOpen} FormComponent={BoreholeForm} row={currentRow} collection='BoreholeStorage' />
-          <Stack direction='horizontal' alignItems='center' justifyContent='start' className='text-center'>
-            <Button onClick={() => {
-              setOpen((prev) => !prev)
-              setcCurrentRow(row)
-            }} color='green'><Icon name='interface-edit' /></Button>
-            {row.index + 1}
-          </Stack>,
-        </>
+
+          <Button onClick={() => {
+            setOpen((prev) => !prev)
+            
+            setcCurrentRow(row)
+          }}>
+            <Icon name='interface-edit' label='Edit' />
+          </Button>
+          <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='BoreholeStorage' />
+          <Button variant='danger' onClick={() => {
+            setcCurrentRow(row.original)
+            setDeleteOpen((prev) => !prev)
+          }}>
+            <Icon name='interface-delete' label='Delete' />
+          </Button>
+        </ButtonGroup>
       )
     },
     {
