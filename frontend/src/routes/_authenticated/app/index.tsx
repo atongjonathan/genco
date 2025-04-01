@@ -83,8 +83,10 @@ function RouteComponent() {
   // const femalepercentge1 = ((femaleFodderFarmers / totalFodderFarmers) * 100).toFixed(2);
   const totalLivestockFarmers = filteredLivestock.length;
   const { maleLivestockFarmers, femaleLivestockFarmers, malesLivestock, femalesLivestock } = countFarmersByGender(filteredLivestock);
-  const malepercentage = ((femalesLivestock / totalLivestockFarmers) * 100).toFixed(2);
+  const malepercentage = ((maleLivestockFarmers / totalLivestockFarmers) * 100).toFixed(2);
   const femalepercentge = ((femaleLivestockFarmers / totalLivestockFarmers) * 100).toFixed(2);
+
+  
 
   // const totalLivestockFarmers = filteredLivestock.length;
   // const totalFodderFarmers = maleFodderFarmers + femaleFodderFarmers;
