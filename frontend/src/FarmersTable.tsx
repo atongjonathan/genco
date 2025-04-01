@@ -273,28 +273,6 @@ function Filter({ table, header }: FilterProps) {
                 placeholder="Max"
             />
         </div>
-    ) : typeof firstValue === 'string' && (column.id.toLowerCase().includes("date") ||  column.id.toLowerCase().includes("schedule")) ? (
-        // Date Range Filter
-        <div className="flex space-x-2" onClick={e => e.stopPropagation()}>
-            <Input hideLabel type="date"   title={columnFilterValue[0] ?? "Select a date"}  // 👈 Show full date on hover
-   style={{ "--n-input-inline-size": `${800 / table.getHeaderGroups().length} px `} as React.CSSProperties}
-                value={columnFilterValue[0] ?? ''}
-                onInput={e => {
-                    let input = e.target as HTMLInputElement;
-                    column.setFilterValue([input.value, columnFilterValue[1]]);
-                }}
-                placeholder="Start Date"
-            />
-            <Input hideLabel type="date"   title={columnFilterValue[1] ?? "Select a date"}  // 👈 Show full date on hover
-   style={{ "--n-input-inline-size": `${800 / table.getHeaderGroups().length} px `} as React.CSSProperties}
-                value={columnFilterValue[1] ?? ''}
-                onInput={e => {
-                    let input = e.target as HTMLInputElement;
-                    column.setFilterValue([columnFilterValue[0], input.value]);
-                }}
-                placeholder="End Date"
-            />
-        </div>
     ) : (
         // Default Text Input Filter
         <Input hideLabel   style={{ "--n-input-inline-size": `${800 / table.getHeaderGroups().length} px `} as React.CSSProperties}

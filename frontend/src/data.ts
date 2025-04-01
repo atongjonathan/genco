@@ -85,14 +85,16 @@ export const updateUser = async (userId: string, updateData: { status: string; n
         status: updateData.status,
     });
 };
-export const signin = async (email:string, password:string) => {
+export const signin = async (email: string, password: string): Promise<DocumentData> => {
+    await signInWithEmailAndPassword(auth, email, password);
+    const users = await fetchUsers();
+    const user = users.find((user) => user.email === email);
 
-     await signInWithEmailAndPassword(auth, email, password);
-    const users = await fetchUsers()
+    if (!user) {
+        throw new Error("User not found");
+    }
 
-    return users.find((user) => user.email === email)
-
-
+    return user;
 };
 
 export const signoutuser = async () => {
@@ -152,7 +154,7 @@ export const savePrices = async (prices: PricesT) => {
 }
 
 // Update data function
-export const updateData = async (collectionName:string, docId:string, newData:DocumentData) => {
+export const updateData = async (collectionName: string, docId: string, newData: DocumentData) => {
     try {
         const docRef = doc(db, collectionName, docId);
         await updateDoc(docRef, newData);

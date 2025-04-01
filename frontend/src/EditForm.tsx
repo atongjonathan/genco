@@ -1,6 +1,5 @@
 import { Banner, Button, ButtonGroup, Modal, Stack } from '@nordhealth/react'
 import React, { useEffect, useState } from 'react'
-import { UsersRowData } from './routes/_authenticated/app/users'
 import { useMutation } from '@tanstack/react-query';
 import { updateDocWithId } from './data';
 import { toast } from 'sonner';
