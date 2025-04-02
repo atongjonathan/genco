@@ -1,7 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header, ProgressBar, Select, Stack } from "@nordhealth/react";
 import { Doughnut, Bar } from "react-chartjs-2";
-import { ChartData, ChartOptions, Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
+import { 
+  ChartData, 
+  ChartOptions, 
+  Chart as ChartJS, 
+  ArcElement, 
+  Tooltip, 
+  Legend, 
+  BarElement, 
+  CategoryScale, 
+  LinearScale 
+} from "chart.js";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDataFromCollection } from "@/data";
@@ -13,7 +23,7 @@ export const Route = createFileRoute("/_authenticated/app/capacity")({
   component: RouteComponent,
 });
 
-// 🟢 Count farmers by gender
+// 🟢 Helper: Count farmers by gender
 function countFarmersByGender(data: Record<string, any>[]) {
   return data.reduce(
     (acc, item) => {
@@ -26,19 +36,18 @@ function countFarmersByGender(data: Record<string, any>[]) {
   );
 }
 
-// 🟢 Count farmers by region
+// 🟢 Helper: Aggregate farmers by region
 function countFarmersByRegion(data: Record<string, any>[]) {
   return data.reduce((acc, item) => {
-    const region = item.region || "Unknown";
+    const region = item.region?.trim() || "Unknown";  // Handle missing or empty regions
     acc[region] = (acc[region] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 }
 
-// 🟢 Filter data by month
-function filterDataByMonth<T extends { dateSubmitted?: string | Date }>(data: T[], month: number): T[] {
+// 🟢 Helper: Filter data by selected month
+function filterDataByMonth<T extends { date?: string | Date }>(data: T[], month: number): T[] {
   return data.filter(item => {
-    
     if (!item.date) return false;
     return new Date(item.date).getMonth() === month;
   });
@@ -52,25 +61,27 @@ function RouteComponent() {
   const [month, setMonth] = useState<number>(currentMonth);
   const [filteredCapacity, setFilteredCapacity] = useState<Record<string, any>[]>([]);
 
+  // 🔄 Fetch Capacity Data
   const capacityQuery = useQuery({
     queryKey: ["capacityQuery"],
     queryFn: () => fetchDataFromCollection("Capacity Building"),
     staleTime: Infinity,
   });
 
+  // ⏳ Update filtered data when capacity data changes
   useEffect(() => {
     if (capacityQuery.data) {
       setFilteredCapacity(filterDataByMonth(capacityQuery.data, month));
     }
   }, [capacityQuery.data, month]);
 
-  // Compute farmer statistics
+  // 📊 Compute Stats
   const totalFarmers = filteredCapacity.length;
   const { maleFarmers, femaleFarmers } = countFarmersByGender(filteredCapacity);
   const malePercentage = ((maleFarmers / totalFarmers) * 100 || 0).toFixed(2);
   const femalePercentage = ((femaleFarmers / totalFarmers) * 100 || 0).toFixed(2);
 
-  // 🟢 Gender Distribution Chart Data
+  // 📊 Gender Distribution Chart Data
   const genderData: ChartData<"doughnut"> = {
     labels: [`Male: ${maleFarmers} (${malePercentage}%)`, `Female: ${femaleFarmers} (${femalePercentage}%)`],
     datasets: [
@@ -91,7 +102,7 @@ function RouteComponent() {
     aspectRatio: 1.6,
   };
 
-  // 🟢 Farmers Per Region Chart Data
+  // 📊 Farmers Per Region Chart Data
   const farmersPerRegion = countFarmersByRegion(filteredCapacity);
   const regionLabels = Object.keys(farmersPerRegion);
   const regionCounts = Object.values(farmersPerRegion);
@@ -102,11 +113,12 @@ function RouteComponent() {
       {
         label: "Number of Farmers",
         data: regionCounts,
-        backgroundColor: ["#4BC0C0", "#FFCE56", "#FF6384", "#36A2EB", "#9966FF"],
+        backgroundColor: ["#4BC0C0", "#FFCE56", "#FF6384", "#36A2EB", "#9966FF"], // 🟢 Your original colors
         borderWidth: 1,
       },
     ],
   };
+  
 
   const regionOptions: ChartOptions<"bar"> = {
     indexAxis: "y",
