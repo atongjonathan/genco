@@ -1,191 +1,173 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Header, ProgressBar, Select, Stack } from '@nordhealth/react';
-import { Doughnut } from 'react-chartjs-2';
-import { ChartData, ChartOptions, Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchDataFromCollection } from '@/data';
-import Widget from '@/Widget';
+import { createFileRoute } from "@tanstack/react-router";
+import { Header, ProgressBar, Select, Stack } from "@nordhealth/react";
+import { Doughnut, Bar } from "react-chartjs-2";
+import { ChartData, ChartOptions, Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from "chart.js";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchDataFromCollection } from "@/data";
+import Widget from "@/Widget";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-export const Route = createFileRoute('/_authenticated/app/capacity')({
+export const Route = createFileRoute("/_authenticated/app/capacity")({
   component: RouteComponent,
-})
+});
 
-function countFarmersByGender(data: Record<string, any>) {
-  if (!Array.isArray(data)) {
-    console.error("Invalid data format");
-    return { maleFarmers: 0, femaleFarmers: 0 };
-  }
-
-  let maleFarmers = 0;
-  let femaleFarmers = 0;
-
-
-  for (const item of data) {
-    
-    // console.log(item);
-    // Count based on gender field
-    if (item.Gender) {
-      
-      const genderLower = item.Gender.toLowerCase();
-      if (genderLower === "male") maleFarmers++;
-      if (genderLower === "female") femaleFarmers++;
-    }
-
-  }
-
-  return { maleFarmers, femaleFarmers };
+// 🟢 Count farmers by gender
+function countFarmersByGender(data: Record<string, any>[]) {
+  return data.reduce(
+    (acc, item) => {
+      const gender = item.Gender?.toLowerCase();
+      if (gender === "male") acc.maleFarmers++;
+      if (gender === "female") acc.femaleFarmers++;
+      return acc;
+    },
+    { maleFarmers: 0, femaleFarmers: 0 }
+  );
 }
+
+// 🟢 Count farmers by region
+function countFarmersByRegion(data: Record<string, any>[]) {
+  return data.reduce((acc, item) => {
+    const region = item.region || "Unknown";
+    acc[region] = (acc[region] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+}
+
+// 🟢 Filter data by month
 function filterDataByMonth<T extends { dateSubmitted?: string | Date }>(data: T[], month: number): T[] {
-  if (!data || !Array.isArray(data)) {
-    console.error("Invalid data format");
-    return [];
-  }
   return data.filter(item => {
-    if (!item.date) return false;
-    const date = new Date(item.date);
     
-    return date.getMonth() === month;
+    if (!item.date) return false;
+    return new Date(item.date).getMonth() === month;
   });
 }
+
+// 📌 Route Component
 function RouteComponent() {
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
+  document.title = "Capacity Dashboard";
+
+  const currentMonth = new Date().getMonth();
   const [month, setMonth] = useState<number>(currentMonth);
+  const [filteredCapacity, setFilteredCapacity] = useState<Record<string, any>[]>([]);
+
   const capacityQuery = useQuery({
     queryKey: ["capacityQuery"],
-    queryFn: () => fetchDataFromCollection("Capacity Building")
-  })
-
-  const [filteredCapacity, setfilteredCapacity] = useState<Record<string, any>[]>([]);
-
-
-  const totalLivestockFarmers = filteredCapacity?.length
-  const { maleFarmers, femaleFarmers, malesLivestock, femalesLivestock } = countFarmersByGender(filteredCapacity);
-  
-  const malepercentage = ((maleFarmers / totalLivestockFarmers) * 100).toFixed(2);
-  const femalepercentge = ((femaleFarmers / totalLivestockFarmers) * 100).toFixed(2);
-
-  
-
-  useEffect(() => {
-    console.log(malepercentage);
-    
-  
-    return () => {
-      
-    }
-  }, [malepercentage]);
-
-  // const totalLivestockFarmers = filteredLivestock.length;
-  // const totalFodderFarmers = maleFodderFarmers + femaleFodderFarmers;
-  // const farmerstrained = malesCapacity + femalesCapacity;
-  const totalGoats = filteredCapacity.reduce((sum, item) => {
-    const maleGoats = Number(item.maleGoats) || 0;
-    const femaleGoats = Number(item.femaleGoats) || 0;
-    return sum + maleGoats + femaleGoats;
-  }, 0);
-
-  const data: ChartData = {
-    labels: [
-      `Male: ${maleFarmers}   ${malepercentage}%  `,
-      `Female : ${femaleFarmers}   ${femalepercentge}%`,
-    ],  
-    datasets: [
-      {
-        data: [maleFarmers, femaleFarmers],
-        backgroundColor: ['#0000FF', 'orange'],
-        borderWidth: 1,
-      }
-    ]
-  }
-  const options: ChartOptions = {
-    responsive: true,
-    plugins: {
-      title: {
-        display: true,
-        text: 'Livestock Farmers By Gender',
-      },
-      legend: {
-        position: 'bottom',
-      },
-    },
-    aspectRatio: 1.6,
-  }
-
-
-
+    queryFn: () => fetchDataFromCollection("Capacity Building"),
+    staleTime: Infinity,
+  });
 
   useEffect(() => {
     if (capacityQuery.data) {
-      // console.log("Original data:", livestockQuery.data);
-  
-      // Always filter from the original fetched data
-      const filtered = filterDataByMonth(capacityQuery.data, month);      
-
-        
-      setfilteredCapacity(filtered);
+      setFilteredCapacity(filterDataByMonth(capacityQuery.data, month));
     }
-  }, [capacityQuery.data, month]); // Add 'month' to dependency array
+  }, [capacityQuery.data, month]);
 
-  return <>
-    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Capacity Dashboard</h1>
+  // Compute farmer statistics
+  const totalFarmers = filteredCapacity.length;
+  const { maleFarmers, femaleFarmers } = countFarmersByGender(filteredCapacity);
+  const malePercentage = ((maleFarmers / totalFarmers) * 100 || 0).toFixed(2);
+  const femalePercentage = ((femaleFarmers / totalFarmers) * 100 || 0).toFixed(2);
 
+  // 🟢 Gender Distribution Chart Data
+  const genderData: ChartData<"doughnut"> = {
+    labels: [`Male: ${maleFarmers} (${malePercentage}%)`, `Female: ${femaleFarmers} (${femalePercentage}%)`],
+    datasets: [
+      {
+        data: [maleFarmers, femaleFarmers],
+        backgroundColor: ["#0000FF", "orange"],
+        borderWidth: 1,
+      },
+    ],
+  };
 
-    </Header>
-    {
-      capacityQuery.isFetching && <ProgressBar />
-    }
-    <Stack>
-      <Select title="Month" label='Month' hideLabel hint='Current Month' value={month.toString()} expand onChange={(e) => {
-        let element = e.target as HTMLInputElement
-        let value = element.value
-        let month = parseInt(value)
-        setMonth(month)
+  const genderOptions: ChartOptions<"doughnut"> = {
+    responsive: true,
+    plugins: {
+      title: { display: true, text: "Farmers By Gender" },
+      legend: { position: "bottom" },
+    },
+    aspectRatio: 1.6,
+  };
 
-        const newData = filterDataByMonth(filteredCapacity, month)
-        console.log(newData);
-        
-        
-        setfilteredCapacity(newData)
-      }}>
-        <option value="0">January</option>
-        <option value="1">February</option>
-        <option value="2">March</option>
-        <option value="3">April</option>
-        <option value="4">May</option>
-        <option value="5">June</option>
-        <option value="6">July</option>
-        <option value="7">August</option>
-        <option value="8">September</option>
-        <option value="9">October</option>
-        <option value="10">November</option>
-        <option value="11">December</option>
+  // 🟢 Farmers Per Region Chart Data
+  const farmersPerRegion = countFarmersByRegion(filteredCapacity);
+  const regionLabels = Object.keys(farmersPerRegion);
+  const regionCounts = Object.values(farmersPerRegion);
 
-      </Select>
-      <Stack className="stack" direction="horizontal" gap="l">
+  const regionData: ChartData<"bar"> = {
+    labels: regionLabels,
+    datasets: [
+      {
+        label: "Number of Farmers",
+        data: regionCounts,
+        backgroundColor: ["#4BC0C0", "#FFCE56", "#FF6384", "#36A2EB", "#9966FF"],
+        borderWidth: 1,
+      },
+    ],
+  };
 
-        <Widget title='Farmers' value={totalLivestockFarmers} />
+  const regionOptions: ChartOptions<"bar"> = {
+    indexAxis: "y",
+    responsive: true,
+    plugins: {
+      title: { display: true, text: "Farmers Per Region" },
+      legend: { position: "bottom" },
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { display: false } },
+    },
+  };
 
+  return (
+    <>
+      <Header slot="header">
+        <h1 className="n-typescale-m font-semibold">Capacity Dashboard</h1>
+      </Header>
+
+      {capacityQuery.isFetching && <ProgressBar />}
+
+      <Stack>
+        {/* 📌 Month Selection */}
+        <Select
+          title="Month"
+          label="Month"
+          hideLabel
+          hint="Current Month"
+          value={month.toString()}
+          expand
+          onChange={(e) => {
+            const selectedMonth = parseInt(e.target.value);
+            setMonth(selectedMonth);
+            if (capacityQuery.data) {
+              setFilteredCapacity(filterDataByMonth(capacityQuery.data, selectedMonth));
+            }
+          }}
+        >
+          {Array.from({ length: 12 }, (_, i) => (
+            <option key={i} value={i}>
+              {new Date(0, i).toLocaleString("default", { month: "long" })}
+            </option>
+          ))}
+        </Select>
+
+        {/* 📌 Widgets */}
+        <Stack className="stack" direction="horizontal" gap="l">
+          <Widget title="Total Farmers" value={totalFarmers} />
+        </Stack>
+
+        {/* 📌 Charts Section */}
+        <section className="n-grid-2">
+          <div>
+            {totalFarmers > 0 ? <Doughnut data={genderData} options={genderOptions} /> : <p>No data available.</p>}
+          </div>
+          <div>
+            {totalFarmers > 0 ? <Bar data={regionData} options={regionOptions} /> : <p>No data available.</p>}
+          </div>
+        </section>
       </Stack>
-      
-      <section className="n-grid-2">
-        <div>
-          {
-            data &&  <Doughnut width={30} data={data} options={options} />
-          }
-         
-
-        </div>
-        <div>
-          {/* <GOTChart filteredLivestock={filteredLivestock} /> */}
-
-        </div>
-
-      </section>
-    </Stack>
-
-  </>
+    </>
+  );
 }

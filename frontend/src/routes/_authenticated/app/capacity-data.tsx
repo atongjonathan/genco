@@ -39,6 +39,7 @@ export const dateFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
     if (!rowValue) return false;
 
     const rowDate = parseDate(rowValue); // Normalize row date
+    
     const [startDate, endDate] = filterValue.map((date:string) => parseDate(date)); // Normalize filter values
 
     if (isNaN(rowDate)) {

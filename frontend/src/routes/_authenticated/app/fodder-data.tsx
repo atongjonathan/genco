@@ -10,6 +10,7 @@ import FarmersModal from '@/FarmersModal';
 import EditForm from '@/EditForm';
 import FodderForm from '@/FodderForm';
 import DeleteModal from '@/DeleteModal';
+import { dateFilterFn } from './capacity-data';
 
 export const Route = createFileRoute('/_authenticated/app/fodder-data')({
 
@@ -74,7 +75,8 @@ function RouteComponent() {
     },
     {
       accessorKey: "dateSubmitted",
-      header: "dateSubmitted"
+      header: "dateSubmitted",
+      filterFn:dateFilterFn
     },
     {
       accessorKey: "location",
