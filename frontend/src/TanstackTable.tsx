@@ -109,43 +109,55 @@ export function DataTable<TData extends object, TValue>({
 
   // Store the function in state (DO NOT EXECUTE IT HERE)
   useEffect(() => {
-
-
     if (setExportFn && pricesQuery.data) {
       // Export function (does NOT execute on mount)
       const exportData = () => {
         const rowData = table.getRowModel().rows.flatMap((row) => {
           const farmerData = row.original;
-          // console.log(farmerData);
-
-          const prices = farmerData.liveWeight.map((weight) => {
-            const { price } = getPriceForWeight(parseFloat(weight) || 0, pricesQuery.data?.[0] || {});
-            return price;
-          });
-
-
-
-
-          // Check if `liveWeight` and `carcassWeight` exist and are arrays
+  
+          // 🟢 Step 1: Handle multiple farmers
+          let farmersArray = [];
+          try {
+            farmersArray = Array.isArray(farmerData.farmers)
+              ? farmerData.farmers
+              : JSON.parse(farmerData.farmers || "[]"); // Parse safely
+          } catch (error) {
+            console.error("Error parsing farmers field:", error);
+          }
+  
+          if (Array.isArray(farmersArray) && farmersArray.length > 0) {
+            return farmersArray.map((farmer) => ({
+              "Farmer Name": farmer.name || "Unknown",
+              "Phone Number": farmer.phoneNo || "N/A",
+              "ID Number": farmer.idNo || "N/A",
+              "Gender": farmer.gender || "N/A",
+              "Location": farmerData.location,
+              "Region": farmerData.region,
+              "Land Size": farmerData.landSize,
+              "Yield Per Harvest": farmerData.yieldPerHarvest,
+              "Model": farmerData.model,
+              "Total Acres Pasture": farmerData.totalAcresPasture,
+              "Total Bales": farmerData.totalBales,
+            }));
+          }
+  
+          // 🟢 Step 2: Handle liveWeight & carcassWeight as multiple rows
           if (Array.isArray(farmerData.liveWeight) && Array.isArray(farmerData.carcassWeight)) {
-
-
+            const prices = farmerData.liveWeight.map((weight) => {
+              const { price } = getPriceForWeight(parseFloat(weight) || 0, pricesQuery.data?.[0] || {});
+              return price;
+            });
+  
             return farmerData.liveWeight.map((weight, index) => {
               const carcass = farmerData.carcassWeight[index] || "";
               const { price } = getPriceForWeight(parseFloat(weight), pricesQuery.data?.[0] || {});
-
-
-              const data = {
+  
+              return {
                 "Date": farmerData.date,
                 "Farmer Name": farmerData.farmerName,
                 "Phone Number": farmerData.phoneNumber,
                 "Location": farmerData.location,
                 "Region": farmerData.region,
-
-              }
-
-              return {
-                ...data,  // Keep farmer details same
                 liveWeight: weight,
                 carcassWeight: carcass,
                 price: price,
@@ -153,20 +165,22 @@ export function DataTable<TData extends object, TValue>({
               };
             });
           }
-
-          // If not an array, return the row unchanged
-          return {
-            ...farmerData,
-          };
+  
+          // 🟢 Step 3: Return the row unchanged if no special conditions apply
+          delete farmerData["id"];
+          return { ...farmerData };
         });
-
-
+  
+  
+        // Uncomment when ready to download:
         const csv = generateCsv(csvConfig)(rowData);
         download(csvConfig)(csv);
       };
+  
       setExportFn(() => exportData); // Store function reference, not execute it
     }
   }, [data, pricesQuery.data, setExportFn]);
+  
 
   useEffect(() => {
     if (onTotalChange) {
