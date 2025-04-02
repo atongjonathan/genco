@@ -4,7 +4,7 @@ import { DataTable } from '@/TanstackTable'
 import { Header, ProgressBar } from '@nordhealth/react'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, ColumnMeta, RowData } from '@tanstack/react-table'
 import { DocumentData } from 'firebase/firestore'
 
 export type UsersRowData = {
@@ -42,11 +42,15 @@ function RouteComponent() {
     {
       accessorKey: "email",
       header: "Email",
+      meta: {
+        className: "n-table-ellipsis"
+
+      } as ColumnMeta<DocumentData, RowData>
     },
     {
       accessorKey: "role",
       header: "Role",
-    },{
+    }, {
       accessorKey: "status",
       header: "Status",
     },
@@ -57,15 +61,15 @@ function RouteComponent() {
     }
   ]
 
-  
+
   return <>
 
     <Header slot="header"><h1 className='n-typescale-m font-semibold'>Users</h1></Header>
     {
-      usersQuery.isPending && <ProgressBar/>
-    }   
+      usersQuery.isPending && <ProgressBar />
+    }
     {
-      usersQuery.data && <DataTable  columns={columns} data={usersQuery.data} />
+      usersQuery.data && <DataTable columns={columns} data={usersQuery.data} />
     }
 
   </>

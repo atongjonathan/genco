@@ -28,7 +28,7 @@ function RouteComponent() {
     staleTime: Infinity
   })
 
-  
+
 
 
   const [offtakeopen, setofftakeopen] = useState(false);
@@ -46,23 +46,23 @@ function RouteComponent() {
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
         <ButtonGroup variant='spaced'>
-        <EditForm open={open} setOpen={setOpen} FormComponent={OfftakeForm} row={currentRow} collection='Livestock Offtake Data' />
+          <EditForm open={open} setOpen={setOpen} FormComponent={OfftakeForm} row={currentRow} collection='Livestock Offtake Data' />
 
-        <Button onClick={() => {
-          setOpen((prev) => !prev)
-          
-          setcCurrentRow(row)
-        }}>
-          <Icon name='interface-edit' label='Edit' />
-        </Button>
-        <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Livestock Offtake Data' />
-        <Button variant='danger' onClick={() => {
-          setcCurrentRow(row.original)
-          setDeleteOpen((prev) => !prev)
-        }}>
-          <Icon name='interface-delete' label='Delete' />
-        </Button>
-      </ButtonGroup>
+          <Button onClick={() => {
+            setOpen((prev) => !prev)
+
+            setcCurrentRow(row)
+          }}>
+            <Icon name='interface-edit' label='Edit' />
+          </Button>
+          <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Livestock Offtake Data' />
+          <Button variant='danger' onClick={() => {
+            setcCurrentRow(row.original)
+            setDeleteOpen((prev) => !prev)
+          }}>
+            <Icon name='interface-delete' label='Delete' />
+          </Button>
+        </ButtonGroup>
       )
     },
     {
@@ -122,7 +122,10 @@ function RouteComponent() {
 
   return (
     <>
-      <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Offtake</h1>
+
+      <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Offtake  {
+        total != 0 && <span>| {total}</span>
+      } </h1>
         {
           exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
         }</Header>

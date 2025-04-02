@@ -15,7 +15,6 @@ function RouteComponent() {
     (async () => {
       try {
         const response = await handleOAuthCallback(location.href);
-        console.log(response);
         setRedirectTo('/');
       } catch (err) {
         setError(err);

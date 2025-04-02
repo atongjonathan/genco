@@ -59,7 +59,6 @@ function RouteComponent() {
         return row;
       });
 
-      console.log(parsedData);
       await uploadToFirestore(parsedData, category);
     };
     reader.readAsArrayBuffer(file);

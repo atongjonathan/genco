@@ -109,11 +109,15 @@ function RouteComponent() {
             accessorKey: "Location",
             header: "Location"
         },
+      
+        {
+            accessorKey: "region",
+            header: "Region"
+        },
         {
             accessorKey: "Modules",
             header: "Modules"
         },
-
 
     ]
     const capacityQuery = useQuery({
@@ -122,6 +126,8 @@ function RouteComponent() {
     })
 
     const [exportFn, setExportFn] = useState<(() => void) | null>(null);
+
+    
 
     document.title = "Capacity Data"
 

@@ -30,7 +30,6 @@ const EditForm = ({ open, setOpen, row, collection, FormComponent }:
         mutationFn: () => {
             delete formData["Bales Given/Sold"]
             const { id, timestamp, ...rem } = formData
-            console.log(rem);
 
             return updateDocWithId(id, rem, collection)
         },

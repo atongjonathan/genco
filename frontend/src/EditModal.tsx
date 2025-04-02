@@ -7,7 +7,6 @@ import { toast } from 'sonner';
 
 const EditModal = ({ open, setOpen, user }: { open: boolean, setOpen: (value: boolean) => void, user: UsersRowData }) => {
     const [status, setStatus] = useState<string>(user.status);
-    const queryClient = new QueryClient()
     // const [toast, setToast] = useState<toastOptions | null>(null);
 
 
@@ -19,10 +18,6 @@ const EditModal = ({ open, setOpen, user }: { open: boolean, setOpen: (value: bo
         onSuccess: async () => {
             toast.success("User updated successfully")
 
-            const refetch = await queryClient.refetchQueries({
-                queryKey: ['usersQuery']
-            });
-            console.log(refetch);
             
             setOpen(false)
             // window.location.reload()

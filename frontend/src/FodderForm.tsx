@@ -12,6 +12,7 @@ const FodderForm = ({ formData, setFormData }:EditForm) => {
   };
   return (
     <>
+      <Input label="Date" type="text" name="location" value={formData?.location} onInput={handleChange} expand />
       <Input label="Location" type="text" name="location" value={formData?.location} onInput={handleChange} expand />
       <Input label="Model" name="model" value={formData?.model} onInput={handleChange} expand />
       <Input label='region' name='region' value={formData?.region} onInput={handleChange} expand />

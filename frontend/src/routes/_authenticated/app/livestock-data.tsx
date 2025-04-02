@@ -191,15 +191,13 @@ function RouteComponent() {
 
 
   return <>
-    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Farmers</h1>
-      <h1 slot='end'>Total Goats:  <span className='n-typescale-l'>{total}</span> </h1>
-
-      {
-        exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
-      }
-
-
-    </Header>
+    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Farmers {
+        total != 0 && <span>| Total Goats: {total}</span>
+      } </h1>
+        {
+          exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+        }</Header>
+ 
     {
       livestockQuery.isFetching && <ProgressBar />
     }

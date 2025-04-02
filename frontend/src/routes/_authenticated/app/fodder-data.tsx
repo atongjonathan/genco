@@ -27,6 +27,8 @@ function RouteComponent() {
 
   
 
+  
+
   const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
   const columns: ColumnDef<FarmerRecord>[] = [
     {

@@ -41,7 +41,6 @@ function RouteComponent() {
   const { maleFarmers: maleFodderFarmers, femaleFarmers: femaleFodderFarmers } = countFarmersByGender(filteredfodder);
   const totalFodderFarmers = maleFodderFarmers + femaleFodderFarmers;
 
-  console.log(maleFodderFarmers);
   
 
   // Prevent division by zero
