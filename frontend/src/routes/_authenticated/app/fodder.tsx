@@ -1,4 +1,4 @@
-import { Header, Stack } from '@nordhealth/react';
+import { Header, Select, Stack } from '@nordhealth/react';
 import { createFileRoute } from '@tanstack/react-router';
 import { Doughnut } from 'react-chartjs-2';
 import { ChartData, ChartOptions, Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -21,7 +21,30 @@ function countFarmersByGender(data: { [k: string]: any }[]) {
   return { maleFarmers, femaleFarmers, Male, Female };
 }
 
+function filterDataByMonth<T extends { dateSubmitted?: string | Date }>(data: T[], month: number): T[] {
+  if (!data || !Array.isArray(data)) {
+    console.error("Invalid data format");
+    return [];
+    
+  }
+  
+  console.log(data);
+  
+  return data.filter(item => {
+    if (!item.timestamp) return false;
+    console.log(item.timestamp);
+    
+    const date = new Date(item.timestamp.seconds * 1000);    
+    return date.getMonth() === month;
+  });
+}
+
 function RouteComponent() {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const [month, setMonth] = useState<number>(currentMonth);
+
+
   const fodderQuery = useQuery({
     queryKey: ["fodderQuery"],
     queryFn: () => fetchDataFromCollection("FodderFarmers"),
@@ -33,15 +56,21 @@ function RouteComponent() {
 
   useEffect(() => {
     if (fodderQuery.data) {
-      setfilteredfodder(fodderQuery.data ?? []); // Ensure it's always an array
+      console.log((fodderQuery.data));
+      
+
+      setfilteredfodder(fodderQuery.data); // Ensure it's always an array
     }
   }, [fodderQuery.data]);
 
   // Count farmers by gender
-  const { maleFarmers: maleFodderFarmers, femaleFarmers: femaleFodderFarmers } = countFarmersByGender(filteredfodder);
+  const { maleFarmers: maleFodderFarmers, femaleFarmers: femaleFodderFarmers } = countFarmersByGender(filteredfodder ?? []);
   const totalFodderFarmers = maleFodderFarmers + femaleFodderFarmers;
 
-  
+  console.log(totalFodderFarmers);
+
+
+
 
   // Prevent division by zero
   const malepercentage1 = totalFodderFarmers > 0 ? ((maleFodderFarmers / totalFodderFarmers) * 100).toFixed(2) : "0.00";
@@ -74,13 +103,16 @@ function RouteComponent() {
       },
     },
   };
+  // const totalFodderFarmers = filteredfodder.length;
 
 
   useEffect(() => {
-    if(fodderQuery.data)
+    if (fodderQuery.data)
+      console.log(fodderQuery.data);
+      
       setfilteredfodder(fodderQuery.data)
-  
-  }, []);
+
+  }, [fodderQuery.data]);
 
 
   return (
@@ -89,10 +121,35 @@ function RouteComponent() {
         <h1 className="n-typescale-m font-semibold">Fodder Dashboard</h1>
 
       </Header>
-      <Stack className="stack" direction="horizontal" gap="l">
+      <Stack >
+        <Select title="Month" label='Month' hideLabel hint='Current Month' value={month?.toString()} expand onChange={(e) => {
+          let element = e.target as HTMLInputElement
+          let value = element.value
+          let month = parseInt(value)
+          setMonth(month)
 
-        <Widget title='Fodder Farmers' value={filteredfodder.length} />
-      </Stack>
+          const newData = filterDataByMonth(filteredfodder, month)
+          setfilteredfodder(newData)
+        }}>
+          <option value="0">January</option>
+          <option value="1">February</option>
+          <option value="2">March</option>
+          <option value="3">April</option>
+          <option value="4">May</option>
+          <option value="5">June</option>
+          <option value="6">July</option>
+          <option value="7">August</option>
+          <option value="8">September</option>
+          <option value="9">October</option>
+          <option value="10">November</option>
+          <option value="11">December</option>
+
+        </Select>
+
+
+        <Stack direction="horizontal" gap="l">
+          <Widget title='Fodder Farmers' value={fodderQuery.data?.length} />
+        </Stack>      </Stack>
       <section className="n-grid-2">
         <div>
           <Doughnut width={30} data={data} options={options} />

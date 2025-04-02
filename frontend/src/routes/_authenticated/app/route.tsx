@@ -75,13 +75,24 @@ export const Route = createFileRoute('/_authenticated/app')({
                         Infrastracture
 
                     </NavItem>
+                    <NavItem>
+                        <NavItem slot='subnav' active={pathname === "/app/capacity"} onClick={() => navigate({
+                            to: "/app/capacity"
+                        })}>
+                            Dashboard
 
-                    <NavItem active={pathname === "/app/capacity-data"} onClick={() => navigate({
-                        to: "/app/capacity-data"
-                    })}>
+                        </NavItem>
+                        <NavItem slot='subnav' active={pathname === "/app/capacity-data"} onClick={() => navigate({
+                            to: "/app/capacity-data"
+                        })}>
+                            Data
+
+                        </NavItem>
                         Capacity Building
 
                     </NavItem>
+
+
                     <NavItem active={pathname === "/app/off-take"} onClick={() => navigate({
                         to: "/app/off-take"
                     })}>

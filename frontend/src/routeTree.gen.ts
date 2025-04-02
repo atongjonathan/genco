@@ -31,6 +31,7 @@ import { Route as AuthenticatedAppFodderDataImport } from './routes/_authenticat
 import { Route as AuthenticatedAppFodderImport } from './routes/_authenticated/app/fodder'
 import { Route as AuthenticatedAppCreateUserImport } from './routes/_authenticated/app/create-user'
 import { Route as AuthenticatedAppCapacityDataImport } from './routes/_authenticated/app/capacity-data'
+import { Route as AuthenticatedAppCapacityImport } from './routes/_authenticated/app/capacity'
 import { Route as AuthenticatedAppBoreholeImport } from './routes/_authenticated/app/borehole'
 
 // Create/Update Routes
@@ -161,6 +162,12 @@ const AuthenticatedAppCapacityDataRoute =
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
 
+const AuthenticatedAppCapacityRoute = AuthenticatedAppCapacityImport.update({
+  id: '/capacity',
+  path: '/capacity',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
+
 const AuthenticatedAppBoreholeRoute = AuthenticatedAppBoreholeImport.update({
   id: '/borehole',
   path: '/borehole',
@@ -232,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/borehole'
       fullPath: '/app/borehole'
       preLoaderRoute: typeof AuthenticatedAppBoreholeImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
+    '/_authenticated/app/capacity': {
+      id: '/_authenticated/app/capacity'
+      path: '/capacity'
+      fullPath: '/app/capacity'
+      preLoaderRoute: typeof AuthenticatedAppCapacityImport
       parentRoute: typeof AuthenticatedAppRouteImport
     }
     '/_authenticated/app/capacity-data': {
@@ -325,6 +339,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppBoreholeRoute: typeof AuthenticatedAppBoreholeRoute
+  AuthenticatedAppCapacityRoute: typeof AuthenticatedAppCapacityRoute
   AuthenticatedAppCapacityDataRoute: typeof AuthenticatedAppCapacityDataRoute
   AuthenticatedAppCreateUserRoute: typeof AuthenticatedAppCreateUserRoute
   AuthenticatedAppFodderRoute: typeof AuthenticatedAppFodderRoute
@@ -341,6 +356,7 @@ interface AuthenticatedAppRouteRouteChildren {
 
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppBoreholeRoute: AuthenticatedAppBoreholeRoute,
+  AuthenticatedAppCapacityRoute: AuthenticatedAppCapacityRoute,
   AuthenticatedAppCapacityDataRoute: AuthenticatedAppCapacityDataRoute,
   AuthenticatedAppCreateUserRoute: AuthenticatedAppCreateUserRoute,
   AuthenticatedAppFodderRoute: AuthenticatedAppFodderRoute,
@@ -382,6 +398,7 @@ export interface FileRoutesByFullPath {
   '/oauth-callback': typeof OauthCallbackRoute
   '/app': typeof AuthenticatedAppRouteRouteWithChildren
   '/app/borehole': typeof AuthenticatedAppBoreholeRoute
+  '/app/capacity': typeof AuthenticatedAppCapacityRoute
   '/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
   '/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/app/fodder': typeof AuthenticatedAppFodderRoute
@@ -405,6 +422,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/oauth-callback': typeof OauthCallbackRoute
   '/app/borehole': typeof AuthenticatedAppBoreholeRoute
+  '/app/capacity': typeof AuthenticatedAppCapacityRoute
   '/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
   '/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/app/fodder': typeof AuthenticatedAppFodderRoute
@@ -430,6 +448,7 @@ export interface FileRoutesById {
   '/oauth-callback': typeof OauthCallbackRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteRouteWithChildren
   '/_authenticated/app/borehole': typeof AuthenticatedAppBoreholeRoute
+  '/_authenticated/app/capacity': typeof AuthenticatedAppCapacityRoute
   '/_authenticated/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
   '/_authenticated/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/_authenticated/app/fodder': typeof AuthenticatedAppFodderRoute
@@ -456,6 +475,7 @@ export interface FileRouteTypes {
     | '/oauth-callback'
     | '/app'
     | '/app/borehole'
+    | '/app/capacity'
     | '/app/capacity-data'
     | '/app/create-user'
     | '/app/fodder'
@@ -478,6 +498,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/oauth-callback'
     | '/app/borehole'
+    | '/app/capacity'
     | '/app/capacity-data'
     | '/app/create-user'
     | '/app/fodder'
@@ -501,6 +522,7 @@ export interface FileRouteTypes {
     | '/oauth-callback'
     | '/_authenticated/app'
     | '/_authenticated/app/borehole'
+    | '/_authenticated/app/capacity'
     | '/_authenticated/app/capacity-data'
     | '/_authenticated/app/create-user'
     | '/_authenticated/app/fodder'
@@ -584,6 +606,7 @@ export const routeTree = rootRoute
       "parent": "/_authenticated",
       "children": [
         "/_authenticated/app/borehole",
+        "/_authenticated/app/capacity",
         "/_authenticated/app/capacity-data",
         "/_authenticated/app/create-user",
         "/_authenticated/app/fodder",
@@ -600,6 +623,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/app/borehole": {
       "filePath": "_authenticated/app/borehole.tsx",
+      "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/capacity": {
+      "filePath": "_authenticated/app/capacity.tsx",
       "parent": "/_authenticated/app"
     },
     "/_authenticated/app/capacity-data": {

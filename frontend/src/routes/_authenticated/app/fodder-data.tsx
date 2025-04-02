@@ -69,8 +69,12 @@ function RouteComponent() {
         </>)
 
       }
-
+    
       
+    },
+    {
+      accessorKey: "dateSubmitted",
+      header: "dateSubmitted"
     },
     {
       accessorKey: "location",
