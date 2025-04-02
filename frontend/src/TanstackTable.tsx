@@ -112,7 +112,7 @@ export function DataTable<TData extends object, TValue>({
     if (setExportFn && pricesQuery.data) {
       // Export function (does NOT execute on mount)
       const exportData = () => {
-        const rowData = table.getRowModel().rows.flatMap((row) => {
+        const rowData = table.getPrePaginationRowModel().rows.flatMap((row) => {
           const farmerData = row.original;
   
           // 🟢 Step 1: Handle multiple farmers
@@ -168,11 +168,14 @@ export function DataTable<TData extends object, TValue>({
   
           // 🟢 Step 3: Return the row unchanged if no special conditions apply
           delete farmerData["id"];
+          delete farmerData["timestamp"];
           return { ...farmerData };
         });
   
   
         // Uncomment when ready to download:
+        console.log(rowData);
+        
         const csv = generateCsv(csvConfig)(rowData);
         download(csvConfig)(csv);
       };
