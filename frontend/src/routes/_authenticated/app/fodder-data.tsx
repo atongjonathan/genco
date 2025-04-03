@@ -74,9 +74,12 @@ function RouteComponent() {
       
     },
     {
-      accessorKey: "dateSubmitted",
-      header: "dateSubmitted",
-      filterFn:dateFilterFn
+      accessorKey: "Date",
+      header: "Date",
+      filterFn:dateFilterFn,
+      meta:{
+        className:"n-table-ellipsis"
+      }
     },
     {
       accessorKey: "location",
@@ -111,7 +114,7 @@ function RouteComponent() {
 
   const fodderQuery = useQuery({
     queryKey: ["fodderQuery"],
-    queryFn: () => fetchDataFromCollection("FodderFarmers"),
+    queryFn: () => fetchDataFromCollection("Fodder Farmers"),
     staleTime: Infinity
   })
   const [exportFn, setExportFn] = useState<(()=>void) | null>(null);

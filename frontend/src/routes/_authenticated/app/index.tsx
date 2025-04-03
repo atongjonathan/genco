@@ -33,7 +33,7 @@ function countFarmersByGender(data: FarmerRecord[]) {
 }
 
 // 🟢 Count farmers per region
-function countFarmersByRegion(data: FarmerRecord[]) {
+export function countFarmersByRegion(data: FarmerRecord[]) {
   return data.reduce((acc, item) => {
     const region = item.region || "Unknown";
     acc[region] = (acc[region] || 0) + 1;
@@ -169,7 +169,10 @@ function RouteComponent() {
           </div>
           <div>
             <GOTChart filteredLivestock={filteredLivestock} />
-            {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} /> : <p>No regional data available.</p>}
+          </div>
+          <div>
+          {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} /> : <p>No regional data available.</p>}
+
           </div>
         </section>
       </Stack>

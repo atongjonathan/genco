@@ -53,6 +53,8 @@ export function DataTable<TData extends object, TValue>({
     columns,
     initialState: {
       pagination: { pageSize: 10 },
+
+      sorting: [{ id: 'date', desc: true }, { id: 'Date', desc: true }, { id: 'dateSubmitted', desc: true }],
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -114,7 +116,7 @@ export function DataTable<TData extends object, TValue>({
       const exportData = () => {
         const rowData = table.getPrePaginationRowModel().rows.flatMap((row) => {
           const farmerData = row.original;
-  
+
           // 🟢 Step 1: Handle multiple farmers
           let farmersArray = [];
           try {
@@ -124,7 +126,7 @@ export function DataTable<TData extends object, TValue>({
           } catch (error) {
             console.error("Error parsing farmers field:", error);
           }
-  
+
           if (Array.isArray(farmersArray) && farmersArray.length > 0) {
             return farmersArray.map((farmer) => ({
               "Farmer Name": farmer.name || "Unknown",
@@ -140,15 +142,15 @@ export function DataTable<TData extends object, TValue>({
               "Total Bales": farmerData.totalBales,
             }));
           }
-  
+
           // 🟢 Step 2: Handle liveWeight & carcassWeight as multiple rows
           if (Array.isArray(farmerData.liveWeight) && Array.isArray(farmerData.carcassWeight)) {
 
-  
+
             return farmerData.liveWeight.map((weight, index) => {
               const carcass = farmerData.carcassWeight[index] || "";
               const price = farmerData.pricePerGoatAndSheep[index] || "";
-  
+
               return {
                 "Date": farmerData.date,
                 "Farmer Name": farmerData.farmerName,
@@ -158,29 +160,29 @@ export function DataTable<TData extends object, TValue>({
                 liveWeight: weight,
                 carcassWeight: carcass,
                 price: price,
-                "Total Price":  farmerData.sheepGoatPrice,
+                "Total Price": farmerData.sheepGoatPrice,
               };
             });
           }
-  
+
           // 🟢 Step 3: Return the row unchanged if no special conditions apply
           delete farmerData["id"];
           delete farmerData["timestamp"];
           return { ...farmerData };
         });
-  
-  
+
+
         // Uncomment when ready to download:
         // console.log(rowData);
-        
+
         const csv = generateCsv(csvConfig)(rowData);
         download(csvConfig)(csv);
       };
-  
+
       setExportFn(() => exportData); // Store function reference, not execute it
     }
   }, [data, pricesQuery.data, setExportFn]);
-  
+
 
   useEffect(() => {
     if (onTotalChange) {

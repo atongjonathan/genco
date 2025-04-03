@@ -1,11 +1,12 @@
 import { Header, Select, Stack } from '@nordhealth/react';
 import { createFileRoute } from '@tanstack/react-router';
-import { Doughnut } from 'react-chartjs-2';
+import { Bar, Doughnut } from "react-chartjs-2";
 import { ChartData, ChartOptions, Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDataFromCollection } from '@/data';
 import Widget from '@/Widget';
+import { countFarmersByRegion } from '.';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -25,19 +26,32 @@ function filterDataByMonth<T extends { dateSubmitted?: string | Date }>(data: T[
   if (!data || !Array.isArray(data)) {
     console.error("Invalid data format");
     return [];
-    
+
   }
-  
-  console.log(data);
-  
+
+
   return data.filter(item => {
-    if (!item.timestamp) return false;
-    console.log(item.timestamp);
+    if (!item.Date) return false;
+
+    console.log(item);
     
-    const date = new Date(item.timestamp.seconds * 1000);    
+
+    const date = new Date(item.Date);
     return date.getMonth() === month;
   });
 }
+
+function transformData(data) {
+  return data.flatMap(entry =>
+    entry.farmers.map(farmer => ({
+      ...farmer, ...entry
+    }))
+  );
+}
+
+
+
+
 
 function RouteComponent() {
   const currentDate = new Date();
@@ -47,27 +61,18 @@ function RouteComponent() {
 
   const fodderQuery = useQuery({
     queryKey: ["fodderQuery"],
-    queryFn: () => fetchDataFromCollection("FodderFarmers"),
+    queryFn: () => fetchDataFromCollection("Fodder Farmers"),
     staleTime: Infinity
   });
   document.title = "Fodder Dashboard"
 
   const [filteredfodder, setfilteredfodder] = useState<{ [k: string]: string }[]>([]);
 
-  useEffect(() => {
-    if (fodderQuery.data) {
-      console.log((fodderQuery.data));
-      
 
-      setfilteredfodder(fodderQuery.data); // Ensure it's always an array
-    }
-  }, [fodderQuery.data]);
 
   // Count farmers by gender
   const { maleFarmers: maleFodderFarmers, femaleFarmers: femaleFodderFarmers } = countFarmersByGender(filteredfodder ?? []);
   const totalFodderFarmers = maleFodderFarmers + femaleFodderFarmers;
-
-  console.log(totalFodderFarmers);
 
 
 
@@ -103,14 +108,43 @@ function RouteComponent() {
       },
     },
   };
+
+  const farmersPerRegion = countFarmersByRegion(filteredfodder)
+
+  const barData: ChartData<"bar"> = {
+    labels: Object.keys(farmersPerRegion),
+    datasets: [
+      {
+        label: "Number of Farmers",
+        data: Object.values(farmersPerRegion),
+        backgroundColor: ["#4BC0C0", "#FFCE56", "#FF6384", "#36A2EB", "#9966FF"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const barOptions: ChartOptions<"bar"> = {
+    indexAxis: "y",
+    responsive: true,
+    plugins: {
+      title: { display: true, text: "Farmers per Region" },
+      legend: { position: "bottom" },
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { grid: { display: false } },
+    },
+  };
   // const totalFodderFarmers = filteredfodder.length;
 
 
   useEffect(() => {
-    if (fodderQuery.data)
-      console.log(fodderQuery.data);
+    if (fodderQuery.data) {
       
-      setfilteredfodder(fodderQuery.data)
+      setfilteredfodder(transformData(fodderQuery.data))
+    }
+
+
 
   }, [fodderQuery.data]);
 
@@ -128,7 +162,9 @@ function RouteComponent() {
           let month = parseInt(value)
           setMonth(month)
 
-          const newData = filterDataByMonth(filteredfodder, month)
+        let fullData = transformData(fodderQuery.data)
+
+          const newData = filterDataByMonth(fullData, month)
           setfilteredfodder(newData)
         }}>
           <option value="0">January</option>
@@ -148,11 +184,15 @@ function RouteComponent() {
 
 
         <Stack direction="horizontal" gap="l">
-          <Widget title='Fodder Farmers' value={fodderQuery.data?.length} />
+          <Widget title='Fodder Farmers' value={filteredfodder.length} />
         </Stack>      </Stack>
       <section className="n-grid-2">
         <div>
           <Doughnut width={30} data={data} options={options} />
+        </div>
+        <div>
+        {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} /> : <p>No regional data available.</p>}
+
         </div>
       </section>
     </>
