@@ -26,6 +26,7 @@ import {
 } from "firebase/auth";
 import { PricesT } from "./routes/_authenticated/app/prices";
 import { UsersRowData } from "./routes/_authenticated/app/users";
+import { log } from "console";
 // import { getAnalytics } from "firebase/analytics";
 // import { buttonsdiv } from "./livestock.js";
 
@@ -170,9 +171,30 @@ export const updateData = async (collectionName: string, docId: string, newData:
 // Upload Excel file function
 
 
+// Function to detect and parse stringified arrays
+const parseStringifiedArrays = (obj) => {
+    for (let key in obj) {
+        if (obj[key].startsWith("[")) {
+            try {                
+                let parsed = JSON.parse(obj[key]);
+                if (Array.isArray(parsed)) {
+                    obj[key] = parsed; // Replace string with actual array
+                }
+            } catch (error) {
+                console.log(error);
+                
+                // Ignore errors (value is not a JSON-parsable array)
+            }
+        }
+    }
+    return obj
+};
 export async function addDocument(category: string, row: DocumentData) {
-    row.timestamp = serverTimestamp();
-    return await addDoc(collection(db, category), row);
+    let newRow = parseStringifiedArrays(row)
+        
+    
+    newRow.timestamp = serverTimestamp();
+    return await addDoc(collection(db, category), newRow);
 }
 
 // Register a new user
