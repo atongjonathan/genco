@@ -17,7 +17,8 @@ export const Route = createFileRoute('/_authenticated/app/off-take')({
 
 type Weight = {
   liveWeight: string[],
-  carcassWeight: string[]
+  carcassWeight: string[],
+  pricePerGoatAndSheep:string[],
 }
 
 function RouteComponent() {
@@ -30,6 +31,7 @@ function RouteComponent() {
 
 
 
+  
 
   const [offtakeopen, setofftakeopen] = useState(false);
 
@@ -100,7 +102,8 @@ function RouteComponent() {
               setofftakeopen((prev) => !prev)
               setWeight({
                 carcassWeight: row.original.carcassWeight,
-                liveWeight: row.original.liveWeight
+                liveWeight: row.original.liveWeight,
+                pricePerGoatAndSheep:row.original.pricePerGoatAndSheep,
               })
             }}>  {row.original.noSheepGoats}</Button>
 

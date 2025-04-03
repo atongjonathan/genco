@@ -59,26 +59,29 @@ function RouteComponent() {
     },
     {
       accessorKey: "Date",
-      header: "Date"
+      header: "Date",
+      meta: {
+        className: "n-table-ellipsis"
+      }
     },
     {
-      accessorKey: "Hay Storage Facility",
+      accessorKey: "HayStorageFacility",
       header: "Facility"
     },
     {
-      accessorKey: "Bales Given/Sold",
-      header: "Bales Given/Sold"
+      accessorKey: "BalesSold",
+      header: "Bales Sold"
     },
     {
-      accessorKey: "Bales Stored",
+      accessorKey: "BalesStored",
       header: "Bales Stored"
     },
     {
-      accessorKey: "Bales Size",
+      accessorKey: "BalesSize",
       header: "Bales Balance"
     },
     {
-      accessorKey: "Revenue From Sales",
+      accessorKey: "RevenueFromSales",
       header: "Revenue From Sales"
     },
     {
@@ -87,6 +90,7 @@ function RouteComponent() {
     },
 
   ]
+  
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
   document.title = "Hay Storage"
 

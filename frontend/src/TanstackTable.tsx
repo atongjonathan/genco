@@ -143,14 +143,11 @@ export function DataTable<TData extends object, TValue>({
   
           // 🟢 Step 2: Handle liveWeight & carcassWeight as multiple rows
           if (Array.isArray(farmerData.liveWeight) && Array.isArray(farmerData.carcassWeight)) {
-            const prices = farmerData.liveWeight.map((weight) => {
-              const { price } = getPriceForWeight(parseFloat(weight) || 0, pricesQuery.data?.[0] || {});
-              return price;
-            });
+
   
             return farmerData.liveWeight.map((weight, index) => {
               const carcass = farmerData.carcassWeight[index] || "";
-              const { price } = getPriceForWeight(parseFloat(weight), pricesQuery.data?.[0] || {});
+              const price = farmerData.pricePerGoatAndSheep[index] || "";
   
               return {
                 "Date": farmerData.date,
@@ -161,7 +158,7 @@ export function DataTable<TData extends object, TValue>({
                 liveWeight: weight,
                 carcassWeight: carcass,
                 price: price,
-                "Total Price": prices.reduce((sum, price) => sum + Number(price), 0),
+                "Total Price":  farmerData.sheepGoatPrice,
               };
             });
           }
@@ -174,7 +171,7 @@ export function DataTable<TData extends object, TValue>({
   
   
         // Uncomment when ready to download:
-        console.log(rowData);
+        // console.log(rowData);
         
         const csv = generateCsv(csvConfig)(rowData);
         download(csvConfig)(csv);

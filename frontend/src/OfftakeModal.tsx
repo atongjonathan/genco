@@ -1,8 +1,7 @@
 import { Modal } from '@nordhealth/react';
 import { ColumnDef } from "@tanstack/react-table";
 import { FarmersTable } from './FarmersTable';
-import { useQuery } from '@tanstack/react-query';
-import { fetchDataFromCollection } from './data';
+
   // Function to get price based on weight
   export const getPriceForWeight = (weight: number, prices: any) => {
     if (!prices) return { price: 0, label: "N/A" };
@@ -23,6 +22,7 @@ import { fetchDataFromCollection } from './data';
 type Weight = {
   liveWeight: string[];
   carcassWeight: string[];
+  pricePerGoatAndSheep:string[];
 };
 
 const OfftakeModal = ({ open, setOpen, weight }: { 
@@ -31,31 +31,23 @@ const OfftakeModal = ({ open, setOpen, weight }: {
   weight: Weight | null; 
 }) => {
   // Fetch prices
-  const pricesQuery = useQuery({
-      queryKey: ["pricesQuery"],
-      queryFn: () => fetchDataFromCollection("prices"),
-      staleTime: Infinity,
-  });
+
 
 
 
   // Extract price data (ensure it's available)
-  const prices = pricesQuery.data ? pricesQuery.data[0] : null;
 
   
 
   // Convert weight into the correct format & compute total amount
   const transformedData = weight
       ? weight.liveWeight.map((live, index) => {
-          const liveWeightNum = parseFloat(live) || 0;
-          const { price, label } = getPriceForWeight(liveWeightNum, prices);
           
           return {
               index: index + 1,  // 1-based index for display
               liveWeight: live,
               carcassWeight: weight.carcassWeight[index], // Safe to access directly
-              priceUsed: label, // Show price tier (e.g., "14-14.999")
-              amount: price // Store price value
+              amount: weight.pricePerGoatAndSheep[index] // Store price value
           };
       })
       : [];

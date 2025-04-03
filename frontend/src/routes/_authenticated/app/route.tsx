@@ -120,11 +120,11 @@ export const Route = createFileRoute('/_authenticated/app')({
                         </NavItem>
                         Manage Users
                     </NavItem>
-                    <NavItem active={pathname === "/app/prices"} onClick={() => navigate({
+                    {/* <NavItem active={pathname === "/app/prices"} onClick={() => navigate({
                         to: "/app/prices"
                     })}>
                         Prices Management
-                    </NavItem>
+                    </NavItem> */}
                     <NavItem active={pathname === "/app/upload"} onClick={() => navigate({
                         to: "/app/upload"
                     })}>
