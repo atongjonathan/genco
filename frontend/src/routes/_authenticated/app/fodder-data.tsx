@@ -26,9 +26,9 @@ function RouteComponent() {
   const [farmopen, setfarmopen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
 
-  
 
-  
+
+
 
   const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
   const columns: ColumnDef<FarmerRecord>[] = [
@@ -37,23 +37,23 @@ function RouteComponent() {
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
         <ButtonGroup variant='spaced'>
-        <EditForm open={open} setOpen={setOpen} FormComponent={FodderForm} row={currentRow} collection='FodderFarmers' />
+          <EditForm open={open} setOpen={setOpen} FormComponent={FodderForm} row={currentRow} collection='FodderFarmers' />
 
-        <Button onClick={() => {
-          setOpen((prev) => !prev)
-          
-          setcCurrentRow(row)
-        }}>
-          <Icon name='interface-edit' label='Edit' />
-        </Button>
-        <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='FodderFarmers' />
-        <Button variant='danger' onClick={() => {
-          setcCurrentRow(row.original)
-          setDeleteOpen((prev) => !prev)
-        }}>
-          <Icon name='interface-delete' label='Delete' />
-        </Button>
-      </ButtonGroup>
+          <Button onClick={() => {
+            setOpen((prev) => !prev)
+
+            setcCurrentRow(row)
+          }}>
+            <Icon name='interface-edit' label='Edit' />
+          </Button>
+          <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='FodderFarmers' />
+          <Button variant='danger' onClick={() => {
+            setcCurrentRow(row.original)
+            setDeleteOpen((prev) => !prev)
+          }}>
+            <Icon name='interface-delete' label='Delete' />
+          </Button>
+        </ButtonGroup>
       )
     },
 
@@ -66,19 +66,19 @@ function RouteComponent() {
           <Button onClick={() => {
             setfarmopen((prev) => !prev)
             setfarmers(row.original.farmers)
-            }} color='green' disabled={!row.original.farmers?.length}>{row.original.farmers?.length ?? 0}</Button>
+          }} color='green' disabled={!row.original.farmers?.length}>{row.original.farmers?.length ?? 0}</Button>
         </>)
 
       }
-    
-      
+
+
     },
     {
       accessorKey: "Date",
       header: "Date",
-      filterFn:dateFilterFn,
-      meta:{
-        className:"n-table-ellipsis"
+      filterFn: dateFilterFn,
+      meta: {
+        className: "n-table-ellipsis"
       }
     },
     {
@@ -117,16 +117,16 @@ function RouteComponent() {
     queryFn: () => fetchDataFromCollection("Fodder Farmers"),
     staleTime: Infinity
   })
-  const [exportFn, setExportFn] = useState<(()=>void) | null>(null);
+  const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
   document.title = "Fodder Data"
 
 
   return <>
     <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Farmers Registration</h1>
-    {
-  exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
-}
+      {
+        exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+      }
     </Header>
     {
       fodderQuery.isFetching && <ProgressBar />

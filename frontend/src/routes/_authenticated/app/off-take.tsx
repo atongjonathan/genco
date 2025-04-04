@@ -18,7 +18,7 @@ export const Route = createFileRoute('/_authenticated/app/off-take')({
 type Weight = {
   liveWeight: string[],
   carcassWeight: string[],
-  pricePerGoatAndSheep:string[],
+  pricePerGoatAndSheep: string[],
 }
 
 function RouteComponent() {
@@ -29,9 +29,9 @@ function RouteComponent() {
     staleTime: Infinity
   })
 
-  
 
-  
+
+
 
   const [offtakeopen, setofftakeopen] = useState(false);
 
@@ -75,7 +75,10 @@ function RouteComponent() {
     },
     {
       accessorKey: "farmerName",
-      header: "Farmer Name"
+      header: "Farmer Name",
+      meta: {
+        className: "n-table-ellipsis"
+      }
     },
     {
       accessorKey: "gender",
@@ -111,7 +114,7 @@ function RouteComponent() {
               setWeight({
                 carcassWeight: row.original.carcassWeight,
                 liveWeight: row.original.liveWeight,
-                pricePerGoatAndSheep:row.original.pricePerGoatAndSheep,
+                pricePerGoatAndSheep: row.original.pricePerGoatAndSheep,
               })
             }}>  {row.original.noSheepGoats}</Button>
 
