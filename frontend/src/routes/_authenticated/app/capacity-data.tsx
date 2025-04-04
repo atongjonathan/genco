@@ -39,17 +39,29 @@ export const dateFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
     if (!rowValue) return false;
 
     const rowDate = parseDate(rowValue); // Normalize row date
-    
-    const [startDate, endDate] = filterValue.map((date:string) => parseDate(date)); // Normalize filter values
+
+    const [startDate, endDate] = filterValue.map((date: string) => parseDate(date)); // Normalize filter values
 
     if (isNaN(rowDate)) {
         console.log("Invalid date format:", rowValue);
         return false;
     }
-    if (isNaN(startDate) && isNaN(endDate)) return true; // No filters applied
-    if (!isNaN(startDate) && rowDate < startDate) return false; // Before start date
-    if (!isNaN(endDate) && rowDate > endDate) return false; // After end date
 
+    console.log(new Date(rowDate), new Date(startDate));
+    
+
+    if (isNaN(startDate) && isNaN(endDate)) {
+        console.log("No filters applied");
+        return true;
+    } // 
+    if (!isNaN(startDate) && rowDate < startDate) {
+        console.log(" Before start date");
+        return false;
+    }
+    if (!isNaN(endDate) && rowDate > endDate) {
+        console.log("After end date");
+        return false;
+    }
     return true;
 };
 
@@ -58,7 +70,7 @@ function RouteComponent() {
 
 
     const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
-  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+    const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
 
 
     const columns: ColumnDef<FarmerRecord>[] = [
@@ -67,24 +79,24 @@ function RouteComponent() {
             header: "#",
             cell: ({ row }: { row: { [k: string]: any } }) => (
                 <ButtonGroup variant='spaced'>
-                <EditForm open={open} setOpen={setOpen} FormComponent={CapacityForm} row={currentRow} collection='Capacity Building' />
-        
-                <Button onClick={() => {
-                  setOpen((prev) => !prev)
-                  
-                  setcCurrentRow(row)
-                }}>
-                  <Icon name='interface-edit' label='Edit' />
-                </Button>
-                <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Capacity Building' />
-                <Button variant='danger' onClick={() => {
-                  setcCurrentRow(row.original)
-                  setDeleteOpen((prev) => !prev)
-                }}>
-                  <Icon name='interface-delete' label='Delete' />
-                </Button>
-              </ButtonGroup>
-              )
+                    <EditForm open={open} setOpen={setOpen} FormComponent={CapacityForm} row={currentRow} collection='Capacity Building' />
+
+                    <Button onClick={() => {
+                        setOpen((prev) => !prev)
+
+                        setcCurrentRow(row)
+                    }}>
+                        <Icon name='interface-edit' label='Edit' />
+                    </Button>
+                    <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Capacity Building' />
+                    <Button variant='danger' onClick={() => {
+                        setcCurrentRow(row.original)
+                        setDeleteOpen((prev) => !prev)
+                    }}>
+                        <Icon name='interface-delete' label='Delete' />
+                    </Button>
+                </ButtonGroup>
+            )
 
             // Row number starts from 1
         },
@@ -110,7 +122,7 @@ function RouteComponent() {
             accessorKey: "Location",
             header: "Location"
         },
-      
+
         {
             accessorKey: "region",
             header: "Region"
@@ -128,7 +140,7 @@ function RouteComponent() {
 
     const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
-    
+
 
     document.title = "Capacity Data"
 
@@ -143,7 +155,7 @@ function RouteComponent() {
             capacityQuery.isFetching && <ProgressBar />
         }
         {
-            capacityQuery.data && <DataTable onTotalChange={()=>console.log("change")
+            capacityQuery.data && <DataTable onTotalChange={() => console.log("change")
             } columns={columns} data={capacityQuery.data} setExportFn={setExportFn} />
         }
     </>

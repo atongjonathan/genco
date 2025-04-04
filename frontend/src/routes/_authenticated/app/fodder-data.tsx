@@ -121,9 +121,17 @@ function RouteComponent() {
 
   document.title = "Fodder Data"
 
+  const [total, settotal] = useState(0);
+  
+
 
   return <>
-    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Farmers Registration</h1>
+    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Farmers Registration
+    {
+        total != 0 && <span> {total}</span>
+      }
+    </h1>
+   
       {
         exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
       }
@@ -132,7 +140,7 @@ function RouteComponent() {
       fodderQuery.isFetching && <ProgressBar />
     }
     {
-      fodderQuery.data && <DataTable columns={columns} data={fodderQuery.data} setExportFn={setExportFn} />
+      fodderQuery.data && <DataTable columns={columns} data={fodderQuery.data} setExportFn={setExportFn} onTotalChange={settotal} />
     }
 
   </>

@@ -97,6 +97,13 @@ export function DataTable<TData extends object, TValue>({
     return sum + price;
   }, 0);
 
+  const totalLandSize = table.getFilteredRowModel().rows.reduce((sum, row) => {
+    const original = row.original as any;
+    const price =
+      hasColumn("landSize") ? parseInt(String(original.landSize)) || 0 : 0;
+    return sum + price;
+  }, 0);
+
   const filename =
     document.title + `- ${new Date().toISOString().replace(/[:.]/g, '-')}`;
 
@@ -192,6 +199,13 @@ export function DataTable<TData extends object, TValue>({
       }
       if (hasColumn("maleGoats")) {
         onTotalChange(`| Total Goats: ${totalGoats} | Total Farmers: ${table.getRowCount().toLocaleString()} `);
+
+      }
+      if (hasColumn("landSize")) {
+        const totalFarmers = table.getPrePaginationRowModel().rows.flatMap((row) =>  row.original.farmers.map((farmer)=>({...farmer}))
+        )
+                
+        onTotalChange(`| Total Land Size: ${totalLandSize} | Total Farmers: ${totalFarmers.length} `);
 
       }
 
