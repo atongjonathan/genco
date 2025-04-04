@@ -78,6 +78,14 @@ function RouteComponent() {
       header: "Farmer Name"
     },
     {
+      accessorKey: "gender",
+      header: "Gender"
+    },
+    {
+      accessorKey: "idNumber",
+      header: "ID No"
+    },
+    {
       accessorKey: "phoneNumber",
       header: "Phone Number"
     },
