@@ -192,7 +192,7 @@ function RouteComponent() {
 
   return <>
     <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Farmers {
-        total != 0 && <span>| Total Goats: {total}</span>
+        total != 0 && <span>{total}</span>
       } </h1>
         {
           exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>

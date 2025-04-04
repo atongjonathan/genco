@@ -93,17 +93,17 @@ function RouteComponent() {
       accessorKey: "landSize",
       header: "Land Size"
     },
-    // {
-    //   accessorKey: "totalAcresPastures",
-    //   header: "Total Acres Under Pasture"
-    // },
+    {
+      accessorKey: "totalAcresPasture",
+      header: "Total Acres Under Pasture"
+    },
     {
       accessorKey: "totalBales",
-      header: "Total bales harvested"
+      header: "Total Bales harvested"
     },
     {
       accessorKey: "yieldPerHarvest",
-      header: "Yield per Harvest"
+      header: "Yield Harvested Per Acre"
     }, {
       accessorKey: "region",
       header: "Region"

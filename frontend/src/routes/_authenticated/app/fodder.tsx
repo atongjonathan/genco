@@ -186,7 +186,7 @@ function RouteComponent() {
         <Stack direction="horizontal" gap="l">
           <Widget title='Fodder Farmers' value={filteredfodder.length} />
         </Stack>      </Stack>
-      <section className="n-grid-2">
+      <section className="n-stack n-grid-2">
         <div>
           <Doughnut width={30} data={data} options={options} />
         </div>

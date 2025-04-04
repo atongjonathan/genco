@@ -187,11 +187,11 @@ export function DataTable<TData extends object, TValue>({
   useEffect(() => {
     if (onTotalChange) {
       if (hasColumn("sheepGoatPrice")) {
-        onTotalChange(`Total Price: ${sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | Total sheepGoatNo: ${sheepGoatNo}`);
+        onTotalChange(`Total Price: ${sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | Total sheepGoatNo: ${sheepGoatNo} | Average: ${(sheepGoatPrice/sheepGoatNo).toFixed(2)}`);
 
       }
       if (hasColumn("maleGoats")) {
-        onTotalChange(totalGoats);
+        onTotalChange(`| Total Goats: ${totalGoats} | Total Farmers: ${table.getRowCount().toLocaleString()} `);
 
       }
 
