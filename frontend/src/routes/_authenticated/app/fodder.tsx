@@ -187,10 +187,10 @@ function RouteComponent() {
           <Widget title='Fodder Farmers' value={filteredfodder.length} />
         </Stack>      </Stack>
       <section className="n-stack n-grid-2">
-        <div>
-          <Doughnut width={30} data={data} options={options} />
+        <div className='h-72'>
+          <Doughnut id='fodder' data={data} options={options} />
         </div>
-        <div>
+        <div className='h-72'>
         {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} /> : <p>No regional data available.</p>}
 
         </div>
