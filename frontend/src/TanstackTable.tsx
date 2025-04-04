@@ -90,6 +90,13 @@ export function DataTable<TData extends object, TValue>({
     return sum + price;
   }, 0);
 
+  const carcassWeight = table.getFilteredRowModel().rows.reduce((sum, row) => {
+    const original = row.original as any;
+    const price =
+      hasColumn("sheepGoatPrice") ? parseInt(String(original.sheepGoatPrice)) || 0 : 0;
+    return sum + price;
+  }, 0);
+
   const sheepGoatNo = table.getFilteredRowModel().rows.reduce((sum, row) => {
     const original = row.original as any;
     const price =
@@ -189,12 +196,46 @@ export function DataTable<TData extends object, TValue>({
       setExportFn(() => exportData); // Store function reference, not execute it
     }
   }, [data, pricesQuery.data, setExportFn]);
+  const getAverages = (data) => {
+    const totals = data.reduce(
+      (acc, item) => {
+        acc.totalLiveWeight += Number(item.liveWeight);
+        acc.totalCarcassWeight += Number(item.carcassWeight);
+        acc.totalPrice += Number(item.pricePerGoatAndSheep);
+        acc.count += 1;
+        return acc;
+      },
+      { totalLiveWeight: 0, totalCarcassWeight: 0, totalPrice: 0, count: 0 }
+    );
 
+    return {
+      avgLiveWeight: totals.totalLiveWeight / totals.count,
+      avgCarcassWeight: totals.totalCarcassWeight / totals.count,
+      avgPricePerGoatAndSheep: totals.totalPrice / totals.count
+    };
+  };
 
   useEffect(() => {
     if (onTotalChange) {
+
       if (hasColumn("sheepGoatPrice")) {
-        onTotalChange(`Total Price: ${sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | Total Goats No: ${sheepGoatNo} | Average Price: ${(sheepGoatPrice/sheepGoatNo).toFixed(2)}`);
+
+        const data = table.getPrePaginationRowModel().rows.map((row) => row.original)
+
+        const flatMappedData = data.flatMap(farmer =>
+          farmer.carcassWeight.map((_, index) => ({
+            ...farmer, // Spread farmer details
+            carcassWeight: farmer.carcassWeight[index],
+            liveWeight: farmer.liveWeight[index],
+            pricePerGoatAndSheep: farmer.pricePerGoatAndSheep[index]
+          }))
+        );
+
+        const averages = getAverages(flatMappedData);
+        console.log(averages);
+
+
+        onTotalChange(`Total Price: ${sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | Total Goats No: ${sheepGoatNo} | Average Price: ${(averages.avgPricePerGoatAndSheep).toFixed(2)} | Average LW: ${(averages.avgLiveWeight).toFixed(2)} | Average CW: ${(averages.avgCarcassWeight).toFixed(2)}`);
 
       }
       if (hasColumn("maleGoats")) {
@@ -202,9 +243,8 @@ export function DataTable<TData extends object, TValue>({
 
       }
       if (hasColumn("landSize")) {
-        const totalFarmers = table.getPrePaginationRowModel().rows.flatMap((row) =>  row.original.farmers.map((farmer)=>({...farmer}))
-        )
-                
+        const totalFarmers = table.getPrePaginationRowModel().rows.flatMap((row) => row.original.farmers.map((farmer) => ({ ...farmer })))
+
         onTotalChange(`| Total Land Size: ${totalLandSize} | Total Farmers: ${totalFarmers.length} `);
 
       }
