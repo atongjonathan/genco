@@ -1,6 +1,6 @@
 import { Header, Select, Stack } from '@nordhealth/react';
 import { createFileRoute } from '@tanstack/react-router';
-import { Bar, Doughnut } from "react-chartjs-2";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { ChartData, ChartOptions, Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -111,7 +111,7 @@ function RouteComponent() {
 
   const farmersPerRegion = countFarmersByRegion(filteredfodder)
 
-  const barData: ChartData<"bar"> = {
+  const barData: ChartData<"line"> = {
     labels: Object.keys(farmersPerRegion),
     datasets: [
       {
@@ -124,7 +124,6 @@ function RouteComponent() {
   };
 
   const barOptions: ChartOptions<"bar"> = {
-    indexAxis: "y",
     responsive: true,
     plugins: {
       title: { display: true, text: "Farmers per Region" },
@@ -191,7 +190,7 @@ function RouteComponent() {
           <Doughnut id='fodder' data={data} options={options} />
         </div>
         <div className='h-72'>
-        {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} /> : <p>No regional data available.</p>}
+        {Object.keys(farmersPerRegion).length > 0 ? <Line data={barData} options={barOptions} /> : <p>No regional data available.</p>}
 
         </div>
       </section>

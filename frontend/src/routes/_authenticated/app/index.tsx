@@ -123,7 +123,7 @@ function RouteComponent() {
       y: { grid: { display: false } },
     },
   };
-
+  
   return (
     <>
       <Header slot="header">
