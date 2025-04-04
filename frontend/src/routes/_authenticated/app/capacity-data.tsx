@@ -47,19 +47,17 @@ export const dateFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
         return false;
     }
 
-    console.log(new Date(rowDate), new Date(startDate));
-    
 
     if (isNaN(startDate) && isNaN(endDate)) {
-        console.log("No filters applied");
+        // console.log("No filters applied");
         return true;
     } // 
-    if (!isNaN(startDate) && rowDate < startDate) {
-        console.log(" Before start date");
+    if (!isNaN(startDate) && (rowDate + 10800000) < startDate) {
+        // console.log(" Before start date", rowValue, startDate - (rowDate + 10800000));
         return false;
     }
-    if (!isNaN(endDate) && rowDate > endDate) {
-        console.log("After end date");
+    if (!isNaN(endDate) && (rowDate + 10800000) > endDate) {
+        // console.log("After end date");
         return false;
     }
     return true;
