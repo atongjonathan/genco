@@ -1,4 +1,4 @@
-import { Header, ProgressBar, Select, Stack, Table } from "@nordhealth/react";
+import { Card, Header, ProgressBar, Select, Stack, Table } from "@nordhealth/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Bar, Doughnut } from "react-chartjs-2";
 import type { ChartData, ChartOptions } from "chart.js";
@@ -202,8 +202,8 @@ function RouteComponent() {
           </div>
           {
             tableData.length > 0 && (
-              <div>
-                <Table>
+              <Card padding="s">
+                <Table >
                   <table>
                     <tr>
                       {
@@ -224,7 +224,7 @@ function RouteComponent() {
                     }
                   </table>
                 </Table>
-              </div>
+              </Card>
             )
           }
         </section>
