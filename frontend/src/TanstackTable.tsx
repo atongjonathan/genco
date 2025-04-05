@@ -232,7 +232,6 @@ export function DataTable<TData extends object, TValue>({
         );
 
         const averages = getAverages(flatMappedData);
-        console.log(averages);
 
 
         onTotalChange(`Total Price: ${sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} | Total Goats No: ${sheepGoatNo} | Average Price: ${(averages.avgPricePerGoatAndSheep).toFixed(2)} | Average LW: ${(averages.avgLiveWeight).toFixed(2)} | Average CW: ${(averages.avgCarcassWeight).toFixed(2)}`);
