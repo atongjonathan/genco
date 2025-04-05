@@ -202,7 +202,7 @@ function RouteComponent() {
           </div>
           {
             tableData.length > 0 && (
-              <Card padding="s">
+              <Card padding="xs">
                 <Table >
                   <table>
                     <tr>

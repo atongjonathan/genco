@@ -95,7 +95,7 @@ function RouteComponent() {
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
   return <>
-    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Offtake</h1>
+    <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Offtake</h1>
       {
         exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
       }</Header>

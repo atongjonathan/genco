@@ -33,7 +33,7 @@ function RouteComponent() {
       header: "#",
       cell: ({ row }: { row: { [k: string]: any } }) => (
         <ButtonGroup variant='spaced'>
-          <EditForm open={open} setOpen={setOpen} FormComponent={LivestockForm} row={currentRow} collection='Livestock Offtake Data' />
+          <EditForm open={open} setOpen={setOpen} FormComponent={LivestockForm} row={currentRow} collection='Livestock Farmers' />
 
           <Button onClick={() => {
             setOpen((prev) => !prev)
@@ -42,7 +42,7 @@ function RouteComponent() {
           }}>
             <Icon name='interface-edit' label='Edit' />
           </Button>
-          <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Livestock Offtake Data' />
+          <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Livestock Farmers' />
           <Button variant='danger' onClick={() => {
             setcCurrentRow(row.original)
             setDeleteOpen((prev) => !prev)
