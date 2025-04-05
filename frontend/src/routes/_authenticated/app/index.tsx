@@ -1,4 +1,4 @@
-import { Header, ProgressBar, Select, Stack } from "@nordhealth/react";
+import { Header, ProgressBar, Select, Stack, Table } from "@nordhealth/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Bar, Doughnut } from "react-chartjs-2";
 import type { ChartData, ChartOptions } from "chart.js";
@@ -76,6 +76,8 @@ function RouteComponent() {
   const femalePercentage = ((femaleLivestockFarmers / totalLivestockFarmers) * 100 || 0).toFixed(2);
   const totalGoats = malesLivestock + femalesLivestock;
 
+
+
   // 🟢 Gender Distribution Chart Data
   const genderData: ChartData<"doughnut"> = {
     labels: [`Male: ${maleLivestockFarmers} (${malePercentage}%)`, `Female: ${femaleLivestockFarmers} (${femalePercentage}%)`],
@@ -99,6 +101,26 @@ function RouteComponent() {
 
   // 🟢 Farmers per Region Chart Data
   const farmersPerRegion = countFarmersByRegion(filteredLivestock);
+  const officers = {
+    "Samburu North": "Lobuk J",
+    "Samburu East A": "Jonez",
+    "Samburu East B": "Perialo"
+  }
+  const farmers = Object.values(farmersPerRegion)
+  const tableData = Object.keys(farmersPerRegion).map((region, idx) => {
+
+    let data = {}    
+    data["Region"] = region
+    data["Field Officer"] = officers[region.trim()]
+    data["Registered Farmers"] = farmers[idx]
+    data["Balance"] = farmers[idx] - 117
+    data["Target Met"] = farmers[idx] >= 117 ? "Yes" : "No"
+
+    return data
+
+  })
+  console.log(tableData);
+
   const barData: ChartData<"bar"> = {
     labels: Object.keys(farmersPerRegion),
     datasets: [
@@ -123,7 +145,7 @@ function RouteComponent() {
       y: { grid: { display: false } },
     },
   };
-  
+
   return (
     <>
       <Header slot="header">
@@ -164,17 +186,49 @@ function RouteComponent() {
 
         {/* 📌 Charts Section */}
         <section className="n-grid-2">
-          <div>
+          <div className="h-60">
             {totalLivestockFarmers > 0 ? <Doughnut data={genderData} options={genderOptions} /> : <p>No data available.</p>}
           </div>
-          <div>
+          <div className="h-72">
             <GOTChart filteredLivestock={filteredLivestock} />
           </div>
+
+
+        </section>
+        <section className="flex items-center gap-5">
           <div>
-          {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} /> : <p>No regional data available.</p>}
+            {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} /> : <p>No regional data available.</p>}
 
           </div>
+          {
+            tableData.length > 0 && (
+              <div>
+                <Table>
+                  <table>
+                    <tr>
+                      {
+                        Object.keys(tableData[0]).map((header) => (<th>{header}</th>))
+                      }
+
+                    </tr>
+                    {
+                      tableData.map((data) => (
+                        <tr>
+                          {
+                            Object.values(data).map((value) => (
+                              <td>{value}</td>
+                            ))
+                          }
+                        </tr>
+                      ))
+                    }
+                  </table>
+                </Table>
+              </div>
+            )
+          }
         </section>
+
       </Stack>
     </>
   );

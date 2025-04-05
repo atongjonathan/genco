@@ -139,8 +139,9 @@ function RouteComponent() {
 
   useEffect(() => {
     if (fodderQuery.data) {
-      
-      setfilteredfodder(transformData(fodderQuery.data))
+      let fullData = transformData(fodderQuery.data)
+      const newData = filterDataByMonth(fullData, month)
+      setfilteredfodder(newData)
     }
 
 
