@@ -130,17 +130,17 @@ export function DataTable<TData extends object, TValue>({
       const exportData = () => {
         const rowData = table.getPrePaginationRowModel().rows.flatMap((row) => {
           const farmerData = row.original;
-
+      
           // 🟢 Step 1: Handle multiple farmers
           let farmersArray = [];
           try {
             farmersArray = Array.isArray(farmerData.farmers)
               ? farmerData.farmers
-              : JSON.parse(farmerData.farmers || "[]"); // Parse safely
+              : JSON.parse(farmerData.farmers || "[]");
           } catch (error) {
             console.error("Error parsing farmers field:", error);
           }
-
+      
           if (Array.isArray(farmersArray) && farmersArray.length > 0) {
             return farmersArray.map((farmer) => ({
               "Farmer Name": farmer.name || "Unknown",
@@ -156,15 +156,13 @@ export function DataTable<TData extends object, TValue>({
               "Total Bales": farmerData.totalBales,
             }));
           }
-
+      
           // 🟢 Step 2: Handle liveWeight & carcassWeight as multiple rows
           if (Array.isArray(farmerData.liveWeight) && Array.isArray(farmerData.carcassWeight)) {
-
-
-            return farmerData.liveWeight.map((weight, index) => {
+            const entries = farmerData.liveWeight.map((weight, index) => {
               const carcass = farmerData.carcassWeight[index] || "";
               const price = farmerData.pricePerGoatAndSheep[index] || "";
-
+          
               return {
                 "Date": farmerData.date,
                 "Farmer Name": farmerData.farmerName,
@@ -174,24 +172,42 @@ export function DataTable<TData extends object, TValue>({
                 liveWeight: weight,
                 carcassWeight: carcass,
                 price: price,
-                "Total Price": farmerData.sheepGoatPrice,
+                "Total Price": "", // left blank on each row
+                "Goat #": index + 1, // ➕ Goat counter
               };
             });
+          
+            const totalCount = farmerData.liveWeight.length;
+            const totalPrice = farmerData.sheepGoatPrice || "0";
+          
+            // 🔽 Summary row
+            entries.push({
+              "Goat #": `Total Goats: ${totalCount}`,
+              "Date": "",
+              "Farmer Name": "",
+              "Phone Number": "",
+              "Location": "",
+              "Region": "",
+              liveWeight: "",
+              carcassWeight: "",
+              price: `Total Price: ${totalPrice}`,
+              "Total Price": "",
+            });
+          
+            return entries;
           }
-
+          
+      
           // 🟢 Step 3: Return the row unchanged if no special conditions apply
           delete farmerData["id"];
           delete farmerData["timestamp"];
           return { ...farmerData };
         });
-
-
-        // Uncomment when ready to download:
-        // console.log(rowData);
-
+      
         const csv = generateCsv(csvConfig)(rowData);
         download(csvConfig)(csv);
       };
+      
 
       setExportFn(() => exportData); // Store function reference, not execute it
     }
