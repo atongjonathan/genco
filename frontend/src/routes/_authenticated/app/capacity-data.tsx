@@ -105,7 +105,10 @@ function RouteComponent() {
         },
         {
             accessorKey: "Name",
-            header: "Name"
+            header: "Name",
+            meta:{
+                className:"n-table-ellipsis"
+            }
         },
         {
             accessorKey: "Gender",
