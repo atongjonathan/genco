@@ -169,20 +169,20 @@ export function DataTable<TData extends object, TValue>({
                 "Phone Number": farmerData.phoneNumber,
                 "Location": farmerData.location,
                 "Region": farmerData.region,
+                "Count No": index + 1, // ➕ Goat counter
                 liveWeight: weight,
                 carcassWeight: carcass,
                 price: price,
                 "Total Price": "", // left blank on each row
-                "Goat #": index + 1, // ➕ Goat counter
               };
             });
           
             const totalCount = farmerData.liveWeight.length;
             const totalPrice = farmerData.sheepGoatPrice || "0";
-          
+            entries.push({})
             // 🔽 Summary row
             entries.push({
-              "Goat #": `Total Goats: ${totalCount}`,
+              "Count No": `Total: ${totalCount}`,
               "Date": "",
               "Farmer Name": "",
               "Phone Number": "",
@@ -190,9 +190,10 @@ export function DataTable<TData extends object, TValue>({
               "Region": "",
               liveWeight: "",
               carcassWeight: "",
-              price: `Total Price: ${totalPrice}`,
-              "Total Price": "",
+              price: `Total: ${totalPrice}`,
             });
+            entries.push({})
+            entries.push({})
           
             return entries;
           }
