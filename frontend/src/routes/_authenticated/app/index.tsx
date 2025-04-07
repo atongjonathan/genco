@@ -197,7 +197,7 @@ function RouteComponent() {
         </section>
         <section className="flex items-center gap-5">
           <div>
-            {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} /> : <p>No regional data available.</p>}
+            {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} className="n-border n-border-radius p-3" /> : <p>No regional data available.</p>}
 
           </div>
           {

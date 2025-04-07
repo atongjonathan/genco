@@ -25,7 +25,7 @@ import {
     createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { PricesT } from "./routes/_authenticated/app/prices";
-import { UsersRowData } from "./routes/_authenticated/app/users";
+import { UsersRowData } from "./routes/_authenticated/app/_admin/users";
 import { log } from "console";
 // import { getAnalytics } from "firebase/analytics";
 // import { buttonsdiv } from "./livestock.js";

@@ -13,6 +13,7 @@ export const Route = createFileRoute('/_authenticated/app/capacity-data')({
 })
 import { FilterFn } from '@tanstack/react-table';
 import DeleteModal from '@/DeleteModal';
+import { useAuth } from '@/AuthContext';
 
 const parseDate = (dateStr: string | Date) => {
     if (typeof dateStr !== "string") return new Date(dateStr).getTime(); // Handle Date objects
@@ -66,6 +67,7 @@ export const dateFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
 function RouteComponent() {
     const [open, setOpen] = useState(false);
 
+    const { user } = useAuth()
 
     const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
     const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
@@ -74,8 +76,8 @@ function RouteComponent() {
     const columns: ColumnDef<FarmerRecord>[] = [
         {
             accessorKey: "index",
-            header: "#",
-            cell: ({ row }: { row: { [k: string]: any } }) => (
+            header: "No",
+            cell: ({ row }: { row: { [k: string]: any } }) => user?.role === "chief-admin" ? (
                 <ButtonGroup variant='spaced'>
                     <EditForm open={open} setOpen={setOpen} FormComponent={CapacityForm} row={currentRow} collection='Capacity Building' />
 
@@ -95,6 +97,8 @@ function RouteComponent() {
                     </Button>
                 </ButtonGroup>
             )
+                : `${parseInt(row.id) + 1}.`
+                
 
             // Row number starts from 1
         },
@@ -106,8 +110,8 @@ function RouteComponent() {
         {
             accessorKey: "Name",
             header: "Name",
-            meta:{
-                className:"n-table-ellipsis"
+            meta: {
+                className: "n-table-ellipsis"
             }
         },
         {
@@ -149,7 +153,7 @@ function RouteComponent() {
     return <>
         <Header slot="header"><h1 className='n-typescale-m font-semibold'>Capacity Building</h1>
             {
-                exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+                exportFn &&  user?.role === "chief-admin" && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
             }
         </Header>
         {

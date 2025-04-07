@@ -10,6 +10,7 @@ import { dateFilterFn } from './capacity-data';
 import EditForm from '@/EditForm';
 import BoreholeForm from '@/BoreholeForm';
 import DeleteModal from '@/DeleteModal';
+import { useAuth } from '@/AuthContext';
 export const Route = createFileRoute('/_authenticated/app/borehole')({
   component: RouteComponent,
 })
@@ -24,19 +25,20 @@ function RouteComponent() {
 
   const [currentRow, setcCurrentRow] = useState<Record<string, any> | null>(null);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const { user } = useAuth()
 
 
   const columns: ColumnDef<FarmerRecord>[] = [
     {
       accessorKey: "index",
       header: "#",
-      cell: ({ row }: { row: { [k: string]: any } }) => (
+      cell: ({ row }: { row: { [k: string]: any } }) => user?.role === "chief-admin" ? (
         <ButtonGroup variant='spaced'>
           <EditForm open={open} setOpen={setOpen} FormComponent={BoreholeForm} row={currentRow} collection='BoreholeStorage' />
 
           <Button onClick={() => {
             setOpen((prev) => !prev)
-            
+
             setcCurrentRow(row)
           }}>
             <Icon name='interface-edit' label='Edit' />
@@ -49,7 +51,8 @@ function RouteComponent() {
             <Icon name='interface-delete' label='Delete' />
           </Button>
         </ButtonGroup>
-      )
+
+      ) : `${parseInt(row.id) + 1}.`
     },
     {
       accessorKey: "Date",
@@ -65,10 +68,10 @@ function RouteComponent() {
       header: "No of People Using",
 
     },
-   
+
     {
       accessorKey: "Water Used",
-      header: "Amount of Water Used per week" 
+      header: "Amount of Water Used per week"
     },
     {
       accessorKey: "Region",
@@ -89,7 +92,7 @@ function RouteComponent() {
   return <>
     <Header slot="header"><h1 className='n-typescale-m font-semibold'>Borehole</h1>
       {
-        exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+        exportFn && user?.role === "chief-admin" && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
       }</Header>
     {
       boreholeQuery.isFetching && <ProgressBar />

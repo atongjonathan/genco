@@ -11,6 +11,7 @@ import OfftakeModal from '@/OfftakeModal';
 import EditForm from '@/EditForm';
 import OfftakeForm from '@/OfftakeForm';
 import DeleteModal from '@/DeleteModal';
+import { useAuth } from '@/AuthContext';
 export const Route = createFileRoute('/_authenticated/app/off-take')({
   component: RouteComponent,
 })
@@ -40,13 +41,15 @@ function RouteComponent() {
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
 
+  const {user} = useAuth()
+
   document.title = "Offtake Data"
 
   const columns: ColumnDef<FarmerRecord>[] = [
     {
       accessorKey: "index",
       header: "#",
-      cell: ({ row }: { row: { [k: string]: any } }) => (
+      cell: ({ row }: { row: { [k: string]: any } }) =>  user?.role === "chief-admin" ? (
         <ButtonGroup variant='spaced'>
           <EditForm open={open} setOpen={setOpen} FormComponent={OfftakeForm} row={currentRow} collection='Livestock Offtake Data' />
 
@@ -65,7 +68,7 @@ function RouteComponent() {
             <Icon name='interface-delete' label='Delete' />
           </Button>
         </ButtonGroup>
-      )
+      )   : `${parseInt(row.id) + 1}.`
     },
     {
       accessorKey: "date",
@@ -141,7 +144,7 @@ function RouteComponent() {
         total != 0 && <span>| {total}</span>
       } </h1>
         {
-          exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+          exportFn && user?.role === "chief-admin" && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
         }</Header>
       {
         offtakeQuery.isFetching && <ProgressBar />

@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Input, Modal, Select, Stack, Toast } from '@nordhealth/react'
 import { useEffect, useState } from 'react'
-import { UsersRowData } from './routes/_authenticated/app/users'
+import { UsersRowData } from './routes/_authenticated/app/_admin/users'
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import {  deleteDocument } from './data';

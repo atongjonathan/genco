@@ -11,6 +11,7 @@ import EditForm from '@/EditForm';
 import FodderForm from '@/FodderForm';
 import DeleteModal from '@/DeleteModal';
 import { dateFilterFn } from './capacity-data';
+import { useAuth } from '@/AuthContext';
 
 export const Route = createFileRoute('/_authenticated/app/fodder-data')({
 
@@ -25,6 +26,7 @@ function RouteComponent() {
 
   const [farmopen, setfarmopen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const { user } = useAuth()
 
 
 
@@ -34,8 +36,8 @@ function RouteComponent() {
   const columns: ColumnDef<FarmerRecord>[] = [
     {
       accessorKey: "index",
-      header: "#",
-      cell: ({ row }: { row: { [k: string]: any } }) => (
+      header: "No.",
+      cell: ({ row }: { row: { [k: string]: any } }) => user?.role === "chief-admin" ? (
         <ButtonGroup variant='spaced'>
           <EditForm open={open} setOpen={setOpen} FormComponent={FodderForm} row={currentRow} collection='Fodder Farmers' />
 
@@ -55,6 +57,7 @@ function RouteComponent() {
           </Button>
         </ButtonGroup>
       )
+        : `${parseInt(row.id) + 1}.`
     },
 
     {
@@ -122,21 +125,21 @@ function RouteComponent() {
   document.title = "Fodder Data"
 
   const [total, settotal] = useState(0);
-  
+
 
 
   return <>
     <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Farmers Registration
-    {
+      {
         total != 0 && <span> {total}</span>
       }
     </h1>
-   
+
       {
-        exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+        exportFn && user?.role === "chief-admin" && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
       }
     </Header>
-    {
+    { 
       fodderQuery.isFetching && <ProgressBar />
     }
     {

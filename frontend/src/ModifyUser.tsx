@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Icon } from '@nordhealth/react'
 import React, { useCallback, useState } from 'react'
-import { UsersRowData } from './routes/_authenticated/app/users'
+import { UsersRowData } from './routes/_authenticated/app/_admin/users'
 import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
 

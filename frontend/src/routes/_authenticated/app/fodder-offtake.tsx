@@ -10,6 +10,7 @@ import { dateFilterFn } from './capacity-data';
 import EditForm from '@/EditForm';
 import FodderOftakeForm from '@/FodderOftakeForm';
 import DeleteModal from '@/DeleteModal';
+import { useAuth } from '@/AuthContext';
 
 export const Route = createFileRoute('/_authenticated/app/fodder-offtake')({
   component: RouteComponent,
@@ -28,36 +29,38 @@ function RouteComponent() {
   const [open, setOpen] = useState(false);
   const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const { user } = useAuth()
 
 
   document.title = "Fodder Offtake Data"
 
-  
+
 
   const columns: ColumnDef<FarmerRecord>[] = [
     {
       accessorKey: "index",
       header: "#",
-      cell: ({ row }: { row: { [k: string]: any } }) => (
+      cell: ({ row }: { row: { [k: string]: any } }) => user?.role === "chief-admin" ? (
         <ButtonGroup variant='spaced'>
-        <EditForm open={open} setOpen={setOpen} FormComponent={FodderOftakeForm} row={currentRow} collection='Fodder Offtake Data' />
+          <EditForm open={open} setOpen={setOpen} FormComponent={FodderOftakeForm} row={currentRow} collection='Fodder Offtake Data' />
 
-        <Button onClick={() => {
-          setOpen((prev) => !prev)
-          
-          setcCurrentRow(row)
-        }}>
-          <Icon name='interface-edit' label='Edit' />
-        </Button>
-        <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Fodder Offtake Data' />
-        <Button variant='danger' onClick={() => {
-          setcCurrentRow(row.original)
-          setDeleteOpen((prev) => !prev)
-        }}>
-          <Icon name='interface-delete' label='Delete' />
-        </Button>
-      </ButtonGroup>
-      )
+          <Button onClick={() => {
+            setOpen((prev) => !prev)
+
+            setcCurrentRow(row)
+          }}>
+            <Icon name='interface-edit' label='Edit' />
+          </Button>
+          <DeleteModal open={deleteOpen} setOpen={useCallback(setDeleteOpen, [deleteOpen])} row={currentRow} collection='Fodder Offtake Data' />
+          <Button variant='danger' onClick={() => {
+            setcCurrentRow(row.original)
+            setDeleteOpen((prev) => !prev)
+          }}>
+            <Icon name='interface-delete' label='Delete' />
+          </Button>
+        </ButtonGroup>
+        
+      )  : `${parseInt(row.id) + 1}.`
     },
     {
       accessorKey: "date",
@@ -90,14 +93,14 @@ function RouteComponent() {
     },
 
   ]
-  
+
 
   const [exportFn, setExportFn] = useState<(() => void) | null>(null);
 
   return <>
     <Header slot="header"><h1 className='n-typescale-m font-semibold'>Fodder Offtake</h1>
       {
-        exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+        exportFn && user?.role === "chief-admin" && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
       }</Header>
     {
       fodderOfftakeQuery.isFetching && <ProgressBar />

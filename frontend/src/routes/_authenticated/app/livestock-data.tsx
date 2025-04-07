@@ -10,6 +10,7 @@ import { dateFilterFn } from './capacity-data';
 import EditForm from '@/EditForm';
 import DeleteModal from '@/DeleteModal';
 import LivestockForm from '@/LivestockForm';
+import { useAuth } from '@/AuthContext';
 
 export const Route = createFileRoute('/_authenticated/app/livestock-data')({
 
@@ -23,15 +24,16 @@ function RouteComponent() {
   const [open, setOpen] = useState<boolean>(false);
 
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const { user } = useAuth()
 
-  
+
 
   const [currentRow, setcCurrentRow] = useState<{ [k: string]: any } | null>(null);
   const columns: ColumnDef<FarmerRecord>[] = [
     {
       accessorKey: "index",
       header: "#",
-      cell: ({ row }: { row: { [k: string]: any } }) => (
+      cell: ({ row }: { row: { [k: string]: any } }) =>  user?.role === "chief-admin" ? (
         <ButtonGroup variant='spaced'>
           <EditForm open={open} setOpen={setOpen} FormComponent={LivestockForm} row={currentRow} collection='Livestock Farmers' />
 
@@ -50,7 +52,7 @@ function RouteComponent() {
             <Icon name='interface-delete' label='Delete' />
           </Button>
         </ButtonGroup>
-      )
+      )   : `${parseInt(row.id) + 1}.`
     },
     {
       accessorKey: "dateSubmitted",
@@ -192,12 +194,12 @@ function RouteComponent() {
 
   return <>
     <Header slot="header"><h1 className='n-typescale-m font-semibold'>Livestock Farmers {
-        total != 0 && <span>{total}</span>
-      } </h1>
-        {
-          exportFn && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
-        }</Header>
- 
+      total != 0 && <span>{total}</span>
+    } </h1>
+      {
+        exportFn && user?.role === "chief-admin" && <Button onClick={exportFn} variant='primary' slot='end'>Export </Button>
+      }</Header>
+
     {
       livestockQuery.isFetching && <ProgressBar />
     }

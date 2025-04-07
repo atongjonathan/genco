@@ -20,8 +20,6 @@ import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app/route'
 import { Route as AuthenticatedAppIndexImport } from './routes/_authenticated/app/index'
-import { Route as AuthenticatedAppUsersImport } from './routes/_authenticated/app/users'
-import { Route as AuthenticatedAppUploadImport } from './routes/_authenticated/app/upload'
 import { Route as AuthenticatedAppPricesImport } from './routes/_authenticated/app/prices'
 import { Route as AuthenticatedAppOffTakeImport } from './routes/_authenticated/app/off-take'
 import { Route as AuthenticatedAppLivestockDataImport } from './routes/_authenticated/app/livestock-data'
@@ -29,10 +27,13 @@ import { Route as AuthenticatedAppHayImport } from './routes/_authenticated/app/
 import { Route as AuthenticatedAppFodderOfftakeImport } from './routes/_authenticated/app/fodder-offtake'
 import { Route as AuthenticatedAppFodderDataImport } from './routes/_authenticated/app/fodder-data'
 import { Route as AuthenticatedAppFodderImport } from './routes/_authenticated/app/fodder'
-import { Route as AuthenticatedAppCreateUserImport } from './routes/_authenticated/app/create-user'
 import { Route as AuthenticatedAppCapacityDataImport } from './routes/_authenticated/app/capacity-data'
 import { Route as AuthenticatedAppCapacityImport } from './routes/_authenticated/app/capacity'
 import { Route as AuthenticatedAppBoreholeImport } from './routes/_authenticated/app/borehole'
+import { Route as AuthenticatedAppAdminRouteImport } from './routes/_authenticated/app/_admin/route'
+import { Route as AuthenticatedAppAdminUsersImport } from './routes/_authenticated/app/_admin/users'
+import { Route as AuthenticatedAppAdminUploadImport } from './routes/_authenticated/app/_admin/upload'
+import { Route as AuthenticatedAppAdminCreateUserImport } from './routes/_authenticated/app/_admin/create-user'
 
 // Create/Update Routes
 
@@ -89,18 +90,6 @@ const AuthenticatedAppIndexRoute = AuthenticatedAppIndexImport.update({
   getParentRoute: () => AuthenticatedAppRouteRoute,
 } as any)
 
-const AuthenticatedAppUsersRoute = AuthenticatedAppUsersImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AuthenticatedAppRouteRoute,
-} as any)
-
-const AuthenticatedAppUploadRoute = AuthenticatedAppUploadImport.update({
-  id: '/upload',
-  path: '/upload',
-  getParentRoute: () => AuthenticatedAppRouteRoute,
-} as any)
-
 const AuthenticatedAppPricesRoute = AuthenticatedAppPricesImport.update({
   id: '/prices',
   path: '/prices',
@@ -147,14 +136,6 @@ const AuthenticatedAppFodderRoute = AuthenticatedAppFodderImport.update({
   getParentRoute: () => AuthenticatedAppRouteRoute,
 } as any)
 
-const AuthenticatedAppCreateUserRoute = AuthenticatedAppCreateUserImport.update(
-  {
-    id: '/create-user',
-    path: '/create-user',
-    getParentRoute: () => AuthenticatedAppRouteRoute,
-  } as any,
-)
-
 const AuthenticatedAppCapacityDataRoute =
   AuthenticatedAppCapacityDataImport.update({
     id: '/capacity-data',
@@ -173,6 +154,35 @@ const AuthenticatedAppBoreholeRoute = AuthenticatedAppBoreholeImport.update({
   path: '/borehole',
   getParentRoute: () => AuthenticatedAppRouteRoute,
 } as any)
+
+const AuthenticatedAppAdminRouteRoute = AuthenticatedAppAdminRouteImport.update(
+  {
+    id: '/_admin',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any,
+)
+
+const AuthenticatedAppAdminUsersRoute = AuthenticatedAppAdminUsersImport.update(
+  {
+    id: '/users',
+    path: '/users',
+    getParentRoute: () => AuthenticatedAppAdminRouteRoute,
+  } as any,
+)
+
+const AuthenticatedAppAdminUploadRoute =
+  AuthenticatedAppAdminUploadImport.update({
+    id: '/upload',
+    path: '/upload',
+    getParentRoute: () => AuthenticatedAppAdminRouteRoute,
+  } as any)
+
+const AuthenticatedAppAdminCreateUserRoute =
+  AuthenticatedAppAdminCreateUserImport.update({
+    id: '/create-user',
+    path: '/create-user',
+    getParentRoute: () => AuthenticatedAppAdminRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -234,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/app/_admin': {
+      id: '/_authenticated/app/_admin'
+      path: ''
+      fullPath: '/app'
+      preLoaderRoute: typeof AuthenticatedAppAdminRouteImport
+      parentRoute: typeof AuthenticatedAppRouteImport
+    }
     '/_authenticated/app/borehole': {
       id: '/_authenticated/app/borehole'
       path: '/borehole'
@@ -253,13 +270,6 @@ declare module '@tanstack/react-router' {
       path: '/capacity-data'
       fullPath: '/app/capacity-data'
       preLoaderRoute: typeof AuthenticatedAppCapacityDataImport
-      parentRoute: typeof AuthenticatedAppRouteImport
-    }
-    '/_authenticated/app/create-user': {
-      id: '/_authenticated/app/create-user'
-      path: '/create-user'
-      fullPath: '/app/create-user'
-      preLoaderRoute: typeof AuthenticatedAppCreateUserImport
       parentRoute: typeof AuthenticatedAppRouteImport
     }
     '/_authenticated/app/fodder': {
@@ -311,20 +321,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppPricesImport
       parentRoute: typeof AuthenticatedAppRouteImport
     }
-    '/_authenticated/app/upload': {
-      id: '/_authenticated/app/upload'
-      path: '/upload'
-      fullPath: '/app/upload'
-      preLoaderRoute: typeof AuthenticatedAppUploadImport
-      parentRoute: typeof AuthenticatedAppRouteImport
-    }
-    '/_authenticated/app/users': {
-      id: '/_authenticated/app/users'
-      path: '/users'
-      fullPath: '/app/users'
-      preLoaderRoute: typeof AuthenticatedAppUsersImport
-      parentRoute: typeof AuthenticatedAppRouteImport
-    }
     '/_authenticated/app/': {
       id: '/_authenticated/app/'
       path: '/'
@@ -332,16 +328,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppIndexImport
       parentRoute: typeof AuthenticatedAppRouteImport
     }
+    '/_authenticated/app/_admin/create-user': {
+      id: '/_authenticated/app/_admin/create-user'
+      path: '/create-user'
+      fullPath: '/app/create-user'
+      preLoaderRoute: typeof AuthenticatedAppAdminCreateUserImport
+      parentRoute: typeof AuthenticatedAppAdminRouteImport
+    }
+    '/_authenticated/app/_admin/upload': {
+      id: '/_authenticated/app/_admin/upload'
+      path: '/upload'
+      fullPath: '/app/upload'
+      preLoaderRoute: typeof AuthenticatedAppAdminUploadImport
+      parentRoute: typeof AuthenticatedAppAdminRouteImport
+    }
+    '/_authenticated/app/_admin/users': {
+      id: '/_authenticated/app/_admin/users'
+      path: '/users'
+      fullPath: '/app/users'
+      preLoaderRoute: typeof AuthenticatedAppAdminUsersImport
+      parentRoute: typeof AuthenticatedAppAdminRouteImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AuthenticatedAppAdminRouteRouteChildren {
+  AuthenticatedAppAdminCreateUserRoute: typeof AuthenticatedAppAdminCreateUserRoute
+  AuthenticatedAppAdminUploadRoute: typeof AuthenticatedAppAdminUploadRoute
+  AuthenticatedAppAdminUsersRoute: typeof AuthenticatedAppAdminUsersRoute
+}
+
+const AuthenticatedAppAdminRouteRouteChildren: AuthenticatedAppAdminRouteRouteChildren =
+  {
+    AuthenticatedAppAdminCreateUserRoute: AuthenticatedAppAdminCreateUserRoute,
+    AuthenticatedAppAdminUploadRoute: AuthenticatedAppAdminUploadRoute,
+    AuthenticatedAppAdminUsersRoute: AuthenticatedAppAdminUsersRoute,
+  }
+
+const AuthenticatedAppAdminRouteRouteWithChildren =
+  AuthenticatedAppAdminRouteRoute._addFileChildren(
+    AuthenticatedAppAdminRouteRouteChildren,
+  )
+
 interface AuthenticatedAppRouteRouteChildren {
+  AuthenticatedAppAdminRouteRoute: typeof AuthenticatedAppAdminRouteRouteWithChildren
   AuthenticatedAppBoreholeRoute: typeof AuthenticatedAppBoreholeRoute
   AuthenticatedAppCapacityRoute: typeof AuthenticatedAppCapacityRoute
   AuthenticatedAppCapacityDataRoute: typeof AuthenticatedAppCapacityDataRoute
-  AuthenticatedAppCreateUserRoute: typeof AuthenticatedAppCreateUserRoute
   AuthenticatedAppFodderRoute: typeof AuthenticatedAppFodderRoute
   AuthenticatedAppFodderDataRoute: typeof AuthenticatedAppFodderDataRoute
   AuthenticatedAppFodderOfftakeRoute: typeof AuthenticatedAppFodderOfftakeRoute
@@ -349,16 +384,14 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppLivestockDataRoute: typeof AuthenticatedAppLivestockDataRoute
   AuthenticatedAppOffTakeRoute: typeof AuthenticatedAppOffTakeRoute
   AuthenticatedAppPricesRoute: typeof AuthenticatedAppPricesRoute
-  AuthenticatedAppUploadRoute: typeof AuthenticatedAppUploadRoute
-  AuthenticatedAppUsersRoute: typeof AuthenticatedAppUsersRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
 }
 
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
+  AuthenticatedAppAdminRouteRoute: AuthenticatedAppAdminRouteRouteWithChildren,
   AuthenticatedAppBoreholeRoute: AuthenticatedAppBoreholeRoute,
   AuthenticatedAppCapacityRoute: AuthenticatedAppCapacityRoute,
   AuthenticatedAppCapacityDataRoute: AuthenticatedAppCapacityDataRoute,
-  AuthenticatedAppCreateUserRoute: AuthenticatedAppCreateUserRoute,
   AuthenticatedAppFodderRoute: AuthenticatedAppFodderRoute,
   AuthenticatedAppFodderDataRoute: AuthenticatedAppFodderDataRoute,
   AuthenticatedAppFodderOfftakeRoute: AuthenticatedAppFodderOfftakeRoute,
@@ -366,8 +399,6 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppLivestockDataRoute: AuthenticatedAppLivestockDataRoute,
   AuthenticatedAppOffTakeRoute: AuthenticatedAppOffTakeRoute,
   AuthenticatedAppPricesRoute: AuthenticatedAppPricesRoute,
-  AuthenticatedAppUploadRoute: AuthenticatedAppUploadRoute,
-  AuthenticatedAppUsersRoute: AuthenticatedAppUsersRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
 }
 
@@ -396,11 +427,10 @@ export interface FileRoutesByFullPath {
   '/logged-out': typeof LoggedOutRoute
   '/login': typeof LoginRoute
   '/oauth-callback': typeof OauthCallbackRoute
-  '/app': typeof AuthenticatedAppRouteRouteWithChildren
+  '/app': typeof AuthenticatedAppAdminRouteRouteWithChildren
   '/app/borehole': typeof AuthenticatedAppBoreholeRoute
   '/app/capacity': typeof AuthenticatedAppCapacityRoute
   '/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
-  '/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/app/fodder': typeof AuthenticatedAppFodderRoute
   '/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
   '/app/fodder-offtake': typeof AuthenticatedAppFodderOfftakeRoute
@@ -408,9 +438,10 @@ export interface FileRoutesByFullPath {
   '/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
   '/app/off-take': typeof AuthenticatedAppOffTakeRoute
   '/app/prices': typeof AuthenticatedAppPricesRoute
-  '/app/upload': typeof AuthenticatedAppUploadRoute
-  '/app/users': typeof AuthenticatedAppUsersRoute
   '/app/': typeof AuthenticatedAppIndexRoute
+  '/app/create-user': typeof AuthenticatedAppAdminCreateUserRoute
+  '/app/upload': typeof AuthenticatedAppAdminUploadRoute
+  '/app/users': typeof AuthenticatedAppAdminUsersRoute
 }
 
 export interface FileRoutesByTo {
@@ -421,10 +452,10 @@ export interface FileRoutesByTo {
   '/logged-out': typeof LoggedOutRoute
   '/login': typeof LoginRoute
   '/oauth-callback': typeof OauthCallbackRoute
+  '/app': typeof AuthenticatedAppIndexRoute
   '/app/borehole': typeof AuthenticatedAppBoreholeRoute
   '/app/capacity': typeof AuthenticatedAppCapacityRoute
   '/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
-  '/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/app/fodder': typeof AuthenticatedAppFodderRoute
   '/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
   '/app/fodder-offtake': typeof AuthenticatedAppFodderOfftakeRoute
@@ -432,9 +463,9 @@ export interface FileRoutesByTo {
   '/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
   '/app/off-take': typeof AuthenticatedAppOffTakeRoute
   '/app/prices': typeof AuthenticatedAppPricesRoute
-  '/app/upload': typeof AuthenticatedAppUploadRoute
-  '/app/users': typeof AuthenticatedAppUsersRoute
-  '/app': typeof AuthenticatedAppIndexRoute
+  '/app/create-user': typeof AuthenticatedAppAdminCreateUserRoute
+  '/app/upload': typeof AuthenticatedAppAdminUploadRoute
+  '/app/users': typeof AuthenticatedAppAdminUsersRoute
 }
 
 export interface FileRoutesById {
@@ -447,10 +478,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/oauth-callback': typeof OauthCallbackRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteRouteWithChildren
+  '/_authenticated/app/_admin': typeof AuthenticatedAppAdminRouteRouteWithChildren
   '/_authenticated/app/borehole': typeof AuthenticatedAppBoreholeRoute
   '/_authenticated/app/capacity': typeof AuthenticatedAppCapacityRoute
   '/_authenticated/app/capacity-data': typeof AuthenticatedAppCapacityDataRoute
-  '/_authenticated/app/create-user': typeof AuthenticatedAppCreateUserRoute
   '/_authenticated/app/fodder': typeof AuthenticatedAppFodderRoute
   '/_authenticated/app/fodder-data': typeof AuthenticatedAppFodderDataRoute
   '/_authenticated/app/fodder-offtake': typeof AuthenticatedAppFodderOfftakeRoute
@@ -458,9 +489,10 @@ export interface FileRoutesById {
   '/_authenticated/app/livestock-data': typeof AuthenticatedAppLivestockDataRoute
   '/_authenticated/app/off-take': typeof AuthenticatedAppOffTakeRoute
   '/_authenticated/app/prices': typeof AuthenticatedAppPricesRoute
-  '/_authenticated/app/upload': typeof AuthenticatedAppUploadRoute
-  '/_authenticated/app/users': typeof AuthenticatedAppUsersRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
+  '/_authenticated/app/_admin/create-user': typeof AuthenticatedAppAdminCreateUserRoute
+  '/_authenticated/app/_admin/upload': typeof AuthenticatedAppAdminUploadRoute
+  '/_authenticated/app/_admin/users': typeof AuthenticatedAppAdminUsersRoute
 }
 
 export interface FileRouteTypes {
@@ -477,7 +509,6 @@ export interface FileRouteTypes {
     | '/app/borehole'
     | '/app/capacity'
     | '/app/capacity-data'
-    | '/app/create-user'
     | '/app/fodder'
     | '/app/fodder-data'
     | '/app/fodder-offtake'
@@ -485,9 +516,10 @@ export interface FileRouteTypes {
     | '/app/livestock-data'
     | '/app/off-take'
     | '/app/prices'
+    | '/app/'
+    | '/app/create-user'
     | '/app/upload'
     | '/app/users'
-    | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -497,10 +529,10 @@ export interface FileRouteTypes {
     | '/logged-out'
     | '/login'
     | '/oauth-callback'
+    | '/app'
     | '/app/borehole'
     | '/app/capacity'
     | '/app/capacity-data'
-    | '/app/create-user'
     | '/app/fodder'
     | '/app/fodder-data'
     | '/app/fodder-offtake'
@@ -508,9 +540,9 @@ export interface FileRouteTypes {
     | '/app/livestock-data'
     | '/app/off-take'
     | '/app/prices'
+    | '/app/create-user'
     | '/app/upload'
     | '/app/users'
-    | '/app'
   id:
     | '__root__'
     | '/'
@@ -521,10 +553,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/oauth-callback'
     | '/_authenticated/app'
+    | '/_authenticated/app/_admin'
     | '/_authenticated/app/borehole'
     | '/_authenticated/app/capacity'
     | '/_authenticated/app/capacity-data'
-    | '/_authenticated/app/create-user'
     | '/_authenticated/app/fodder'
     | '/_authenticated/app/fodder-data'
     | '/_authenticated/app/fodder-offtake'
@@ -532,9 +564,10 @@ export interface FileRouteTypes {
     | '/_authenticated/app/livestock-data'
     | '/_authenticated/app/off-take'
     | '/_authenticated/app/prices'
-    | '/_authenticated/app/upload'
-    | '/_authenticated/app/users'
     | '/_authenticated/app/'
+    | '/_authenticated/app/_admin/create-user'
+    | '/_authenticated/app/_admin/upload'
+    | '/_authenticated/app/_admin/users'
   fileRoutesById: FileRoutesById
 }
 
@@ -605,10 +638,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/app/route.tsx",
       "parent": "/_authenticated",
       "children": [
+        "/_authenticated/app/_admin",
         "/_authenticated/app/borehole",
         "/_authenticated/app/capacity",
         "/_authenticated/app/capacity-data",
-        "/_authenticated/app/create-user",
         "/_authenticated/app/fodder",
         "/_authenticated/app/fodder-data",
         "/_authenticated/app/fodder-offtake",
@@ -616,9 +649,16 @@ export const routeTree = rootRoute
         "/_authenticated/app/livestock-data",
         "/_authenticated/app/off-take",
         "/_authenticated/app/prices",
-        "/_authenticated/app/upload",
-        "/_authenticated/app/users",
         "/_authenticated/app/"
+      ]
+    },
+    "/_authenticated/app/_admin": {
+      "filePath": "_authenticated/app/_admin/route.tsx",
+      "parent": "/_authenticated/app",
+      "children": [
+        "/_authenticated/app/_admin/create-user",
+        "/_authenticated/app/_admin/upload",
+        "/_authenticated/app/_admin/users"
       ]
     },
     "/_authenticated/app/borehole": {
@@ -631,10 +671,6 @@ export const routeTree = rootRoute
     },
     "/_authenticated/app/capacity-data": {
       "filePath": "_authenticated/app/capacity-data.tsx",
-      "parent": "/_authenticated/app"
-    },
-    "/_authenticated/app/create-user": {
-      "filePath": "_authenticated/app/create-user.tsx",
       "parent": "/_authenticated/app"
     },
     "/_authenticated/app/fodder": {
@@ -665,17 +701,21 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/app/prices.tsx",
       "parent": "/_authenticated/app"
     },
-    "/_authenticated/app/upload": {
-      "filePath": "_authenticated/app/upload.tsx",
-      "parent": "/_authenticated/app"
-    },
-    "/_authenticated/app/users": {
-      "filePath": "_authenticated/app/users.tsx",
-      "parent": "/_authenticated/app"
-    },
     "/_authenticated/app/": {
       "filePath": "_authenticated/app/index.tsx",
       "parent": "/_authenticated/app"
+    },
+    "/_authenticated/app/_admin/create-user": {
+      "filePath": "_authenticated/app/_admin/create-user.tsx",
+      "parent": "/_authenticated/app/_admin"
+    },
+    "/_authenticated/app/_admin/upload": {
+      "filePath": "_authenticated/app/_admin/upload.tsx",
+      "parent": "/_authenticated/app/_admin"
+    },
+    "/_authenticated/app/_admin/users": {
+      "filePath": "_authenticated/app/_admin/users.tsx",
+      "parent": "/_authenticated/app/_admin"
     }
   }
 }

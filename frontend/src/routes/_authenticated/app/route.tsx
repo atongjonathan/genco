@@ -38,7 +38,7 @@ export const Route = createFileRoute('/_authenticated/app')({
 
                         </NavItem>
 
-                        Livestock farmers registration
+                        Livestock Farmers Registration
 
                     </NavItem>
                     <NavItem>
@@ -54,7 +54,7 @@ export const Route = createFileRoute('/_authenticated/app')({
                             Data
 
                         </NavItem>
-                        Fodder farmers registration
+                        Fodder Farmers Registration
 
                     </NavItem>
 
@@ -106,30 +106,34 @@ export const Route = createFileRoute('/_authenticated/app')({
 
                     </NavItem>
 
-                    <NavItem>
-                        <NavItem slot='subnav' active={pathname === "/app/users"} onClick={() => navigate({
-                            to: "/app/users"
-                        })}>
-                            Users
 
-                        </NavItem>
-                        <NavItem slot='subnav' active={pathname === "/app/create-user"} onClick={() => navigate({
-                            to: "/app/create-user"
-                        })}>
-                            Create User
-                        </NavItem>
-                        Manage Users
-                    </NavItem>
-                    {/* <NavItem active={pathname === "/app/prices"} onClick={() => navigate({
-                        to: "/app/prices"
-                    })}>
-                        Prices Management
-                    </NavItem> */}
-                    <NavItem active={pathname === "/app/upload"} onClick={() => navigate({
-                        to: "/app/upload"
-                    })}>
-                        Upload
-                    </NavItem>
+                    {
+                        user.role === "chief-admin" && <>
+                            <NavItem>
+                                <NavItem slot='subnav' active={pathname === "/app/users"} onClick={() => navigate({
+                                    to: "/app/users"
+                                })}>
+                                    Users
+
+                                </NavItem>
+                                <NavItem slot='subnav' active={pathname === "/app/create-user"} onClick={() => navigate({
+                                    to: "/app/create-user"
+                                })}>
+                                    Create User
+                                </NavItem>
+                                Manage Users
+                            </NavItem>
+                            <NavItem active={pathname === "/app/upload"} onClick={() => navigate({
+                                to: "/app/upload"
+                            })}>
+                                Upload
+                            </NavItem>
+
+
+                        </>
+                    }
+
+
                     <Dropdown expand slot="footer">
                         <Button variant="plain" slot="toggle" aria-describedby="periUser-tooltip" expand>
                             <Avatar slot="start" src={user.picture} aria-hidden="true" name="Laura Williams"></Avatar>
