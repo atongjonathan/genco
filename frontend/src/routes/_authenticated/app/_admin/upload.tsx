@@ -107,43 +107,47 @@ function RouteComponent() {
         <h1 className="n-typescale-m font-semibold">Upload</h1>
       </Header>
 
-      {/* Progress Bar */}
-      {
-        uploadProgress && <ProgressBar value={uploadProgress} />
-      }
+      <section className='n-stack'>
 
 
-      {
-        error && <Banner variant={error.variant}>{error.message}</Banner>
-      }
+        {/* Progress Bar */}
+        {
+          uploadProgress && <ProgressBar value={uploadProgress} />
+        }
 
-      <form onSubmit={handleFileUpload}>
-        <Card>
-          <Stack>
 
-          <Select label='Category'
-            placeholder="Enter category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            required expand
-          >
-            <option value="prices">Prices</option>
-            <option value="BoreholeStorage">Borehole Storage</option>
-            <option value="Capacity Building">Capacity Building</option>
-            <option value="FodderFarmers">Fodder Farmers</option>
-            <option value="Fodder Offtake Data">Fodder Offtake Data</option>
-            <option value="FodderFarmers">Fodder Farmers</option>
-            <option value="HayStorage">Hay Storage</option>
-            <option value="Livestock Farmers">Livestock Farmers</option>
-            <option value="Livestock Offtake Data">Livestock Offtake Data</option>
+        {
+          error && <Banner variant={error.variant}>{error.message}</Banner>
+        }
 
-          </Select>
-          <input type="file" ref={fileInputRef} accept=".csv,.xls,.xlsx" required />
-          </Stack>
-          <Button slot='footer' expand variant='primary' type="submit">Upload</Button>
+        <form onSubmit={handleFileUpload}>
+          <Card>
+            <Stack>
 
-        </Card>
-      </form>
+              <Select label='Category'
+                placeholder="Enter category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                required expand
+              >
+                <option value="prices">Prices</option>
+                <option value="BoreholeStorage">Borehole Storage</option>
+                <option value="Capacity Building">Capacity Building</option>
+                <option value="FodderFarmers">Fodder Farmers</option>
+                <option value="Fodder Offtake Data">Fodder Offtake Data</option>
+                <option value="FodderFarmers">Fodder Farmers</option>
+                <option value="HayStorage">Hay Storage</option>
+                <option value="Livestock Farmers">Livestock Farmers</option>
+                <option value="Livestock Offtake Data">Livestock Offtake Data</option>
+
+              </Select>
+              <input type="file" ref={fileInputRef} accept=".csv,.xls,.xlsx" required />
+            </Stack>
+            <Button slot='footer' expand variant='primary' type="submit">Upload</Button>
+
+          </Card>
+        </form>
+      </section>
 
     </>
   );
