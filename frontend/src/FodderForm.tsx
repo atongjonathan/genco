@@ -17,6 +17,7 @@ const FodderForm = ({ formData, setFormData }:EditForm) => {
       <Input label="Model" name="model" value={formData?.model} onInput={handleChange} expand />
       <Input label='region' name='region' value={formData?.region} onInput={handleChange} expand />
       <Input label='totalBales' name='totalBales' value={formData?.totalBales} onInput={handleChange} expand />
+      <Input label='Yield Harvested Per Acre' name='yieldPerHarvest' value={formData?.yieldPerHarvest} onInput={handleChange} expand />
       <Input label='landSize' name='landSize' value={formData?.landSize} onInput={handleChange} expand />
     </>
   )

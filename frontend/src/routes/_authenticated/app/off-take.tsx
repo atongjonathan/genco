@@ -128,7 +128,7 @@ function RouteComponent() {
     },
     {
       accessorKey: "sheepGoatPrice",
-      header: "Total Price",
+      header: "Total Amount",
       cell: (({ row }) => (row.original as any).sheepGoatPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
     }
   ]

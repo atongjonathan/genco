@@ -31,10 +31,7 @@ function filterDataByMonth<T extends { dateSubmitted?: string | Date }>(data: T[
 
 
   return data.filter(item => {
-    if (!item.Date) return false;
-
-    console.log(item);
-    
+    if (!item.Date) return false;    
 
     const date = new Date(item.Date);
     return date.getMonth() === month;
