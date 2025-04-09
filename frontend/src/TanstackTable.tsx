@@ -238,14 +238,21 @@ export function DataTable<TData extends object, TValue>({
       if (hasColumn("sheepGoatPrice")) {
 
         const data = table.getPrePaginationRowModel().rows.map((row) => row.original)
+        // console.log(data, farmer.farmerName);
 
-        const flatMappedData = data.flatMap(farmer =>
-          farmer.carcassWeight.map((_, index) => ({
+
+        const flatMappedData = data.flatMap(farmer => {
+          if (typeof farmer.carcassWeight === "string")
+            console.log(`Issue with farmer ${farmer.farmerName}, date : ${farmer.date}`);
+          return farmer.carcassWeight.map((_, index) => ({
             ...farmer, // Spread farmer details
             carcassWeight: farmer.carcassWeight[index],
             liveWeight: farmer.liveWeight[index],
             pricePerGoatAndSheep: farmer.pricePerGoatAndSheep[index]
           }))
+
+        }
+
         );
 
         const averages = getAverages(flatMappedData);
