@@ -15,6 +15,7 @@ const FodderOftakeForm = ({ formData, setFormData }: EditForm) => {
             <Input label="Date" name="date" value={formData?.date} onInput={handleChange} expand />
             <Input label="Farmer Name" name="farmerName" value={formData?.farmerName} onInput={handleChange} expand />
             <Input label='Region' name='region' value={formData?.region} onInput={handleChange} expand />
+            <Input label='Phone Number' name='phoneNumber' value={formData?.phoneNumber} onInput={handleChange} expand />
             <Input label='Bale Price' name='balePrice' value={formData?.balePrice} onInput={handleChange} expand />
             <Input label="Location" type="text" name="location" value={formData?.location} onInput={handleChange} expand />
         </>

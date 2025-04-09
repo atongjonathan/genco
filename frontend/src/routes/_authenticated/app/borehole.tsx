@@ -60,17 +60,16 @@ function RouteComponent() {
       filterFn: dateFilterFn
     },
     {
-      accessorKey: "Borehole Location",
+      accessorKey: "BoreholeLocation",
       header: "Borehole Location"
     },
     {
-      accessorKey: "People Using Borehole",
+      accessorKey: "PeopleUsingBorehole",
       header: "No of People Using",
-
     },
 
     {
-      accessorKey: "Water Used",
+      accessorKey: "WaterUsed",
       header: "Amount of Water Used per week"
     },
     {
