@@ -57,7 +57,7 @@ export const dateFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
         // console.log(" Before start date", rowValue, startDate - (rowDate + 10800000));
         return false;
     }
-    if (!isNaN(endDate) && (rowDate) > endDate + (3600000 * 24)) {
+    if (!isNaN(endDate) && (rowDate + 10800000) > endDate ) {
         // console.log("After end date", rowValue, new Date(rowDate + 10800000), new Date(endDate)  );
         return false;
     }

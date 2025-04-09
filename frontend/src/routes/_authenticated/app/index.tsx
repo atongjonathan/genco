@@ -119,7 +119,6 @@ function RouteComponent() {
     return data
 
   })
-  console.log(tableData);
 
   const barData: ChartData<"bar"> = {
     labels: Object.keys(farmersPerRegion),
@@ -207,7 +206,7 @@ function RouteComponent() {
                   <table>
                     <tr>
                       {
-                        Object.keys(tableData[0]).map((header) => (<th>{header}</th>))
+                        Object.keys(tableData[0]).map((header) => (<th className="n-table-align-right">{header}</th>))
                       }
 
                     </tr>
@@ -216,7 +215,7 @@ function RouteComponent() {
                         <tr>
                           {
                             Object.values(data).map((value) => (
-                              <td>{value}</td>
+                              <td className="text-center">{value}</td>
                             ))
                           }
                         </tr>

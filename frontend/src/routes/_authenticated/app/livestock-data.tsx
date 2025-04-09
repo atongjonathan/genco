@@ -33,7 +33,7 @@ function RouteComponent() {
     {
       accessorKey: "index",
       header: "#",
-      cell: ({ row }: { row: { [k: string]: any } }) =>  user?.role === "chief-admin" ? (
+      cell: ({ row }: { row: { [k: string]: any } }) => user?.role === "chief-admin" ? (
         <ButtonGroup variant='spaced'>
           <EditForm open={open} setOpen={setOpen} FormComponent={LivestockForm} row={currentRow} collection='Livestock Farmers' />
 
@@ -52,7 +52,7 @@ function RouteComponent() {
             <Icon name='interface-delete' label='Delete' />
           </Button>
         </ButtonGroup>
-      )   : `${parseInt(row.id) + 1}.`
+      ) : `${parseInt(row.id) + 1}.`
     },
     {
       accessorKey: "dateSubmitted",
@@ -62,7 +62,10 @@ function RouteComponent() {
     },
     {
       accessorKey: "name",
-      header: "Farmer Name"
+      header: "Farmer Name",
+      meta: {
+        className: "n-table-ellipsis"
+      }
     },
     {
       accessorKey: "gender",
