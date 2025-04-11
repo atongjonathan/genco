@@ -28,6 +28,7 @@ import { useEffect } from 'react';
 import { getPriceForWeight } from './OfftakeModal';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDataFromCollection } from './data';
+import { useAuth } from './AuthContext';
 
 // Generic type constrained to object for safe property access
 interface DataTableProps<TData extends object, TValue> {
@@ -48,9 +49,13 @@ export function DataTable<TData extends object, TValue>({
   onTotalChange,
   setExportFn,
 }: DataTableProps<TData, TValue>) {
+  const { user } = useAuth()
+
+  let filterColumns = user?.role !== "chief-admin" ? columns.filter((column)=>column.accessorKey !== "index"): columns
+    
   const table = useReactTable({
     data,
-    columns,
+    columns:filterColumns,
     initialState: {
       pagination: { pageSize: 10 },
 
@@ -142,13 +147,14 @@ export function DataTable<TData extends object, TValue>({
           }
 
           if (Array.isArray(farmersArray) && farmersArray.length > 0) {
-            return farmersArray.map((farmer) => ({
+            return farmersArray.map((farmer, index) => ({
               "Farmer Name": farmer.name || "Unknown",
               "Phone Number": farmer.phoneNo || "N/A",
               "ID Number": farmer.idNo || "N/A",
               "Gender": farmer.gender || "N/A",
               "Location": farmerData.location,
               "Region": farmerData.region,
+              "Count No": index + 1,
               "Land Size": farmerData.landSize,
               "Yield Per Harvest": farmerData.yieldPerHarvest,
               "Model": farmerData.model,
@@ -166,6 +172,8 @@ export function DataTable<TData extends object, TValue>({
               return {
                 "Date": farmerData.date,
                 "Farmer Name": farmerData.farmerName,
+                "ID Number": farmerData.idNumber || "N/A",
+                "Gender": farmerData.gender || "N/A",
                 "Phone Number": farmerData.phoneNumber,
                 "Location": farmerData.location,
                 "Region": farmerData.region,

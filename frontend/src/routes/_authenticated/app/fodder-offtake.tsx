@@ -60,7 +60,7 @@ function RouteComponent() {
           </Button>
         </ButtonGroup>
         
-      )  : `${parseInt(row.id) + 1}.`
+      )  : `${parseInt(row.index) + 1}`
     },
     {
       accessorKey: "date",

@@ -52,7 +52,7 @@ function RouteComponent() {
             <Icon name='interface-delete' label='Delete' />
           </Button>
         </ButtonGroup>
-      ) : `${parseInt(row.id) + 1}.`
+      ) : `${parseInt(row.index) + 1}`
     },
     {
       accessorKey: "dateSubmitted",
