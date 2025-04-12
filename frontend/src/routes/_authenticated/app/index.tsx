@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/app/")({
 });
 
 // 🟢 Count farmers by gender efficiently
-function countFarmersByGender(data: FarmerRecord[]) {
+export function countFarmersByGender(data: FarmerRecord[]) {
   return data.reduce(
     (acc, item) => {
       const gender = item.gender?.toLowerCase();

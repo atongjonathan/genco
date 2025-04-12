@@ -29,6 +29,7 @@ import { getPriceForWeight } from './OfftakeModal';
 import { useQuery } from '@tanstack/react-query';
 import { fetchDataFromCollection } from './data';
 import { useAuth } from './AuthContext';
+import { countFarmersByGender } from './routes/_authenticated/app';
 
 // Generic type constrained to object for safe property access
 interface DataTableProps<TData extends object, TValue> {
@@ -51,11 +52,11 @@ export function DataTable<TData extends object, TValue>({
 }: DataTableProps<TData, TValue>) {
   const { user } = useAuth()
 
-  let filterColumns = user?.role !== "chief-admin" ? columns.filter((column)=>column.accessorKey !== "index"): columns
-    
+  let filterColumns = user?.role !== "chief-admin" ? columns.filter((column) => column.accessorKey !== "index") : columns
+
   const table = useReactTable({
     data,
-    columns:filterColumns,
+    columns: filterColumns,
     initialState: {
       pagination: { pageSize: 10 },
 
@@ -270,7 +271,14 @@ export function DataTable<TData extends object, TValue>({
 
       }
       if (hasColumn("maleGoats")) {
-        onTotalChange(`| Total Goats: ${totalGoats} | Total Farmers: ${table.getFilteredRowModel().rows.length.toLocaleString()} `);
+
+        const { rows } = table.getFilteredRowModel()
+        const data = rows.map((row) => row.original)
+
+        const { maleLivestockFarmers, femaleLivestockFarmers } = countFarmersByGender(data);
+
+
+        onTotalChange(`| Total Goats: ${totalGoats} | Total Farmers: ${rows.length.toLocaleString()} | Male Farmers: ${maleLivestockFarmers} | Female Farmers: ${femaleLivestockFarmers} `);
 
       }
       if (hasColumn("landSize")) {
