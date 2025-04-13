@@ -36,7 +36,7 @@ export function countFarmersByGender(data: FarmerRecord[]) {
 export function countFarmersByRegion(data: FarmerRecord[]) {
   return data.reduce((acc, item) => {
     const region = item.region || "Unknown";
-    acc[region] = (acc[region] || 0) + 1;
+    acc[region.trim()] = (acc[region.trim()] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 }
