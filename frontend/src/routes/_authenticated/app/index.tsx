@@ -199,17 +199,15 @@ function RouteComponent() {
         <GOTChart filteredLivestock={filteredLivestock} />
 
         <section className="flex items-center">
-          <div>
-
-          </div>
+          
           {
             tableData.length > 0 && (
-              <Card padding="xs">
+              <Card >
                 <Table >
                   <table>
                     <tr>
                       {
-                        Object.keys(tableData[0]).map((header) => (<th className="n-table-align-right">{header}</th>))
+                        Object.keys(tableData[0]).map((header) => (<th className="text-start">{header}</th>))
                       }
 
                     </tr>
@@ -218,7 +216,7 @@ function RouteComponent() {
                         <tr>
                           {
                             Object.values(data).map((value) => (
-                              <td className="text-center">{value}</td>
+                              <td className="text-start">{value}</td>
                             ))
                           }
                         </tr>

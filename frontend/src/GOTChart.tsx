@@ -153,7 +153,7 @@ export function GOTChart({ filteredLivestock }: { filteredLivestock: FarmerRecor
             plugins: {
                 title: {
                     display: true,
-                    text: 'Goats Over Time',
+                    text: 'Animal Census Over Time',
                 },
                 tooltip: {
                     enabled: true,
