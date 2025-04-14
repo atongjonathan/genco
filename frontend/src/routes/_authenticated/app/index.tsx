@@ -187,10 +187,14 @@ function RouteComponent() {
         {/* 📌 Charts Section */}
         <section className="n-grid-2  mt-3">
           <div className="h-60">
-            {totalLivestockFarmers > 0 ? <Doughnut data={genderData} options={genderOptions} /> : <p>No data available.</p>}
+            {totalLivestockFarmers > 0 ? <Stack>
+              <Doughnut data={genderData} options={genderOptions} />
+            </Stack> : <p>No data available.</p>}
           </div>
           <div className="h-72">
-          {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} className="n-border n-border-radius p-3" /> : <p>No regional data available.</p>}
+          {Object.keys(farmersPerRegion).length > 0 ? <Stack>
+            <Bar data={barData} options={barOptions} className="n-border n-border-radius p-3" /> 
+          </Stack>: <p>No regional data available.</p>}
 
           </div>
 
