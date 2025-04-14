@@ -14,6 +14,9 @@ const OfftakeForm = ({ formData, setFormData }: EditForm) => {
         <>
             <Input label="Date" name="date" value={formData?.date} onInput={handleChange} expand />
             <Input label="Farmer Name" name="farmerName" value={formData?.farmerName} onInput={handleChange} expand />
+            <Input label="Gender" name="gender" value={formData?.gender} onInput={handleChange} expand />
+            <Input label="ID No" name="idNumber" value={formData?.idNumber} onInput={handleChange} expand />
+            <Input label="Phone No" name="phoneNumber" value={formData?.phoneNumber} onInput={handleChange} expand />
             <Input label='Region' name='region' value={formData?.region} onInput={handleChange} expand />
             <Input label="Location" type="text" name="location" value={formData?.location} onInput={handleChange} expand />
         </>
