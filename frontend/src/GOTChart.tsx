@@ -10,6 +10,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import type { ChartData, ChartOptions } from 'chart.js';
+import { Card, Stack } from '@nordhealth/react';
 export interface FarmerRecord {
     id: string;
     vaccineType?: string;
@@ -83,6 +84,98 @@ function countFarmersAndGoatsPerWeek(data) {
 
 export function GOTChart({ filteredLivestock }: { filteredLivestock: FarmerRecord[] }) {
     const { weeks, farmersPerWeek, goatsPerWeek } = countFarmersAndGoatsPerWeek(filteredLivestock);
+
+    const farmersChart = {
+        data: {
+            labels: weeks,
+            datasets: [
+                {
+                    label: 'Number of Farmers',
+                    data: farmersPerWeek,
+                    borderColor: '#4BC0C0',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 1,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Farmers Over Time',
+                },
+                tooltip: {
+                    enabled: true,
+                },
+            },
+
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false,
+                    },
+                },
+            },
+        }
+    }
+    const goatsChart = {
+        data: {
+            labels: weeks,
+            datasets: [
+                {
+                    label: 'Number of Goats',
+                    data: goatsPerWeek,
+                    borderColor: '#FFCE56',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Goats Over Time',
+                },
+                tooltip: {
+                    enabled: true,
+                },
+            },
+
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false,
+                    },
+                },
+            },
+        }
+    }
+
     const data = {
         labels: weeks,
         datasets: [
@@ -107,7 +200,7 @@ export function GOTChart({ filteredLivestock }: { filteredLivestock: FarmerRecor
         ]
     }
 
-    const options:ChartOptions = {
+    const options: ChartOptions = {
         responsive: true,
         interaction: {
             mode: 'index',
@@ -121,7 +214,7 @@ export function GOTChart({ filteredLivestock }: { filteredLivestock: FarmerRecor
                 enabled: true,
             },
         },
- 
+
         scales: {
             x: {
                 grid: {
@@ -137,5 +230,20 @@ export function GOTChart({ filteredLivestock }: { filteredLivestock: FarmerRecor
         },
     }
 
-    return <Line options={options} data={data} />;
+    return (
+        <Card className=' ml-5'>
+            <Stack className='n-grid-2' direction='horizontal' justifyContent='center'>
+                <div className="h-60">
+                    <Line {...farmersChart} />
+
+                </div>
+                <div className="h-60">
+                    <Line {...goatsChart} />
+
+                </div>
+            </Stack>
+
+
+        </Card>
+    );
 }

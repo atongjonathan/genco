@@ -153,7 +153,7 @@ function RouteComponent() {
 
       {livestockQuery.isFetching && <ProgressBar />}
 
-      <Stack>
+      <Stack gap="m">
         {/* 📌 Month Selection */}
         <Select
           title="Month"
@@ -182,21 +182,24 @@ function RouteComponent() {
           <Widget title="Livestock Farmers" value={totalLivestockFarmers} />
           <Widget title="Total Goats" value={totalGoats} />
         </Stack>
+        
 
         {/* 📌 Charts Section */}
-        <section className="n-grid-2">
+        <section className="n-grid-2  mt-3">
           <div className="h-60">
             {totalLivestockFarmers > 0 ? <Doughnut data={genderData} options={genderOptions} /> : <p>No data available.</p>}
           </div>
           <div className="h-72">
-            <GOTChart filteredLivestock={filteredLivestock} />
+          {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} className="n-border n-border-radius p-3" /> : <p>No regional data available.</p>}
+
           </div>
 
 
         </section>
-        <section className="flex items-center gap-5">
+        <GOTChart filteredLivestock={filteredLivestock} />
+
+        <section className="flex items-center">
           <div>
-            {Object.keys(farmersPerRegion).length > 0 ? <Bar data={barData} options={barOptions} className="n-border n-border-radius p-3" /> : <p>No regional data available.</p>}
 
           </div>
           {
